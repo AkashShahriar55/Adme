@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">Adme</string>
     <string name="todo">TODO</string>
+    <string name="login">Login</string>
+    <string name="continue_with_facebook">Continue With Facebook</string>
+    <string name="continue_with_google">Continue With Google</string>
+    <string name="skip_now">Skip Now</string>
+    <string name="don_t_have_an_account">Don\'t Have An Account?</string>
+    <string name="create_an_account">Create An Account</string>
+    <string name="or">Or</string>
+    <string name="continue_txt">Continue</string>
+    <string name="give_your_email">Give Your Email</string>
+    <string name="username_email">Username/Email</string>
+    <string name="password">Password</string>
+    <string name="password_validity">8 characters oe longer. Combine Upper ans lowercase letters and number.</string>
+    <string name="join">Join</string>
+    <string name="privacy_policy">By joining,you agree to Adme\'s Terms of Service as well as to receive occasional emails from us.</string>
+    <string name="already_have_an">Already Have An</string>
+    <string name="account">Account</string>
+    <string name="username">Username</string>
 </resources>
