@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "559137624340",
+    "firebase_url": "https://adme-bf48a.firebaseio.com",
+    "project_id": "adme-bf48a",
+    "storage_bucket": "adme-bf48a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559137624340:android:b71bc3defd2d231a5a3201",
+        "android_client_info": {
+          "package_name": "com.example.adme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559137624340-aj18q9jd8njktu47bn2qjmvdc3r6bbjj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adme",
+            "certificate_hash": "379ae9c1462d8347dbc4596ba041ffa7a4cd7d53"
+          }
+        },
+        {
+          "client_id": "559137624340-5sdlvt9o0tbcl4lknp4ldbb9bheqs5pu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyl7C2Zp73Vcebld9tPgUuM6HvZ9cE3rc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559137624340-5sdlvt9o0tbcl4lknp4ldbb9bheqs5pu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
