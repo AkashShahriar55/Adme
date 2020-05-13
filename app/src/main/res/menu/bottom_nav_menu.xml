@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_today"
+        android:icon="@drawable/ic_today_gray"
+        android:title="@string/title_today" />
+
+    <item
+        android:id="@+id/navigation_leaderboard"
+        android:icon="@drawable/ic_leaderboard"
+        android:title="@string/title_leaderboard" />
+
+    <item
+        android:id="@+id/navigation_income"
+        android:icon="@drawable/ic_income"
+        android:title="@string/title_income" />
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/title_profile" />
+
+</menu>
