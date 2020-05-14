@@ -14,4 +14,7 @@
     <color name="skip_now_txt">#006DFF</color>
     <color name="privacy_policy_text">#C6BB24</color>
     <color name="input_hint">#8B4501</color>
+    <color name="light_blue">#848CA6</color>
+    <color name="dark_blue">#0C1639</color>
+    <color name="blue">#042693</color>
 </resources>
