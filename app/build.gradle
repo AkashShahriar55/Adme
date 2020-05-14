@@ -45,6 +45,9 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android.material:material:1.1.0'
 
+    // for circle image view
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
     //For CardView
     implementation "androidx.cardview:cardview:1.0.0"
 }
