@@ -8,6 +8,6 @@
         android:width="1dp"
         android:color="@color/skip_btn_border"/>
     <corners
-        android:radius="16dp"/>
+        android:radius="20dp"/>
 
 </shape>

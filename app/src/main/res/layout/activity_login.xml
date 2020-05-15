@@ -59,8 +59,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_email"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp"
             app:hintEnabled="false"
             app:layout_constraintBottom_toTopOf="@+id/login_password"
@@ -72,12 +72,12 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/login_edit_box"
                 android:hint="@string/username_email"
                 android:padding="8dp"
                 android:textColorHint="@color/input_hint"
-                android:textSize="16sp">
+                android:textSize="14sp">
 
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
@@ -95,12 +95,12 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:background="@drawable/login_edit_box"
                 android:hint="@string/password"
                 android:padding="8dp"
                 android:textColorHint="@color/input_hint"
-                android:textSize="16sp">
+                android:textSize="14sp">
 
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
@@ -108,18 +108,17 @@
         <Button
             android:id="@+id/login_btn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_height="45dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/login_btn"
             android:backgroundTint="@color/login_btn_color"
             android:text="@string/login"
             android:textColor="@color/white"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/textView5"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toBottomOf="@+id/login_password"
-            android:textSize="14sp">
+            app:layout_constraintTop_toBottomOf="@+id/login_password">
 
         </Button>
 
@@ -127,7 +126,6 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="@string/don_t_have_an_account"
             android:textSize="14sp"
@@ -158,6 +156,8 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/or"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -171,18 +171,18 @@
         <Button
             android:id="@+id/login_google_btn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/login_btn"
             android:backgroundTint="@color/continue_with_google"
             android:drawableStart="@drawable/ic_google_icon"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:text="@string/continue_with_google"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/login_facebook_btn"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -193,18 +193,18 @@
         <Button
             android:id="@+id/login_facebook_btn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/login_btn"
             android:backgroundTint="@color/continue_with_facebook"
             android:drawableStart="@drawable/ic_facebook_icon"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:text="@string/continue_with_facebook"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/login_skip_btn"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -215,7 +215,7 @@
         <Button
             android:id="@+id/login_skip_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/skip_now_btn"
             android:drawableEnd="@drawable/ic_arrow_forward_blue_24_dp"
@@ -223,6 +223,7 @@
             android:paddingEnd="16dp"
             android:text="@string/skip_now"
             android:textColor="@color/skip_now_txt"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline6"

@@ -36,6 +36,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -96,9 +97,25 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+
+                builder.setTitle("Location Permission").setMessage("Location permission is must for the map features")
+                        .setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // No explanation needed, we can request the permission.
+                                ActivityCompat.requestPermissions(requireActivity(),
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(requireActivity(),
@@ -130,7 +147,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
             LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
             mMap.addMarker(new MarkerOptions().position(currentLocation).title("Your Current Location").draggable(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
-        });
+        }).addOnFailureListener(requireActivity(), e -> Toast.makeText(requireContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show());
 
 
 

@@ -7,8 +7,8 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="login_btn_color">#FFCC00</color>
-    <color name="continue_with_google">#FF3D00</color>
-    <color name="continue_with_facebook">#039BE5</color>
+    <color name="continue_with_google">#B3FF3D00</color>
+    <color name="continue_with_facebook">#B3039BE5</color>
     <color name="login_edit_box">#FF6600</color>
     <color name="skip_btn_border">#707070</color>
     <color name="skip_now_txt">#006DFF</color>
