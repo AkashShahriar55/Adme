@@ -14,10 +14,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.adme.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class TodayFragment extends Fragment {
+public class TodayFragment extends Fragment implements OnMapReadyCallback {
 
     private TodayViewModel homeViewModel;
+    private GoogleMap mMap;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -29,10 +36,24 @@ public class TodayFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         Fragment bottomCardFragment = new BottomCardFragment();
 
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
         transaction.replace(R.id.bottom_card_fragment,bottomCardFragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }
