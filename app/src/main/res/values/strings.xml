@@ -1,4 +1,7 @@
 <resources>
+    <string name="facebook_app_id">2707965649529584</string>
+    <string name="fb_login_protocol_scheme">fb2707965649529584</string>
+
     <string name="app_name">Adme</string>
     <string name="todo">TODO</string>
     <string name="login">Login</string>
@@ -12,7 +15,7 @@
     <string name="give_your_email">Give Your Email</string>
     <string name="username_email">Username/Email</string>
     <string name="password">Password</string>
-    <string name="password_validity">8 characters oe longer. Combine Upper ans lowercase letters and number.</string>
+    <string name="password_validity">Six characters or longer. Must Contain one Uppercase and lowercase letter, number and special character.</string>
     <string name="join">Join</string>
     <string name="privacy_policy">By joining,you agree to Adme\'s Terms of Service as well as to receive occasional emails from us.</string>
     <string name="already_have_an">Already Have An</string>
@@ -24,4 +27,5 @@
     <string name="title_income">Income</string>
     <string name="title_profile">Profile</string>
     <string name="title_activity_map">Map</string>
+    <string name="please_wait">Please Wait</string>
 </resources>

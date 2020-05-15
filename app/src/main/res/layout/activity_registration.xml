@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_begin="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -43,6 +43,7 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+
         android:layout_marginTop="8dp"
         android:background="@drawable/login_background"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -56,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_begin="16dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline8"
@@ -73,7 +74,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             app:hintEnabled="false"
-            app:layout_constraintBottom_toTopOf="@+id/reg_continue_btn"
+            app:layout_constraintBottom_toTopOf="@+id/reg_password"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="parent"
@@ -87,108 +88,125 @@
                 android:hint="@string/give_your_email"
                 android:padding="8dp"
                 android:textColorHint="@color/input_hint"
-                android:textSize="16sp"/>
+                android:textCursorDrawable="@null"
+                android:textSize="16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/reg_continue_btn"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/reg_password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/login_btn"
-            android:backgroundTint="@color/login_btn_color"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:text="@string/continue_txt"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/password_validation_text"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/reg_email">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_edit_box"
+                android:hint="@string/password"
+                android:padding="8dp"
+                android:textColorHint="@color/input_hint"
+                android:textCursorDrawable="@null"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/password_validation_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/password_validity"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/reg_join_btn"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/reg_password" />
+
+        <Button
+            android:id="@+id/reg_join_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/login_btn"
+            android:backgroundTint="@color/login_btn_color"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/join"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/textView10"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/password_validation_text">
+
         </Button>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/privacy_policy"
+            android:textAlignment="center"
+            android:textColor="@color/privacy_policy_text"
+            app:layout_constraintBottom_toTopOf="@+id/textView11"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/reg_join_btn" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/already_have_an"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/goto_login_btn"
+            app:layout_constraintEnd_toStartOf="@+id/textView13"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/textView10">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/account"
+            android:textColor="@color/login_btn_color"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView11"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView11" />
+
+        <Button
+            android:id="@+id/goto_login_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/or"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/reg_google_btn"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/reg_continue_btn">
-
-        </TextView>
-
-        <Button
-            android:id="@+id/reg_google_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/login_btn"
-            android:backgroundTint="@color/continue_with_google"
-            android:drawableStart="@drawable/ic_google_icon"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/continue_with_google"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/reg_facebook_button"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/textView">
-
-        </Button>
-
-        <Button
-            android:id="@+id/reg_facebook_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/login_btn"
-            android:backgroundTint="@color/continue_with_facebook"
-            android:drawableStart="@drawable/ic_facebook_icon"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/continue_with_facebook"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/reg_skip"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/reg_google_btn">
-
-        </Button>
-
-        <Button
-            android:id="@+id/reg_skip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/skip_now_btn"
-            android:drawableEnd="@drawable/ic_arrow_forward_blue_24_dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/skip_now"
-            android:textColor="@color/skip_now_txt"
+            android:background="@drawable/go_to_login_btn"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/login"
+            android:textColor="@color/continue_with_google"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/reg_facebook_button">
-
-        </Button>
-
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
