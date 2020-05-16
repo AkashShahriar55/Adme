@@ -11,28 +11,28 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.example.adme.R;
-import com.google.android.material.badge.BadgeDrawable;
 
-public class BottomCardFragment extends Fragment {
+public class TodayBottomDetailsFragment extends Fragment {
 
-    private BottomCardViewModel mViewModel;
+    private TodayBottomDetailsViewModel mViewModel;
 
-    public static BottomCardFragment newInstance() {
-        return new BottomCardFragment();
+    public static TodayBottomDetailsFragment newInstance() {
+        return new TodayBottomDetailsFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.bottom_card_fragment, container, false);
+        return inflater.inflate(R.layout.today_bottom_details_fragment, container, false);
     }
-
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(TodayBottomDetailsViewModel.class);
+        // TODO: Use the ViewModel
     }
+
 }

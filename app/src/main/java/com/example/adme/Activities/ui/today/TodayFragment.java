@@ -11,6 +11,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.transition.TransitionInflater;
+import androidx.transition.TransitionSet;
 
 import com.example.adme.R;
 import com.google.android.gms.common.api.ApiException;
@@ -43,6 +46,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,14 +59,9 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "TodayFragment";
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int M_MAX_ENTRIES = 5;
     private static final float DEFAULT_ZOOM = 15;
     private TodayViewModel homeViewModel;
     private GoogleMap mMap;
-    private String[] mLikelyPlaceNames;
-    private String[] mLikelyPlaceAddresses;
-    private List[] mLikelyPlaceAttributions;
-    private LatLng[] mLikelyPlaceLatLngs;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -79,11 +78,32 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-        Fragment bottomCardFragment = new BottomCardFragment();
+        FloatingActionButton locationButton = view.findViewById(R.id.today_location_button);
 
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.bottom_card_fragment,bottomCardFragment);
-        transaction.commit();
+        locationButton.setOnClickListener(v -> checkPermission());
+
+        ImageView bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
+        bottomDetailsButton.setOnClickListener(v -> {
+            Fragment nextFragment = new TodayBottomDetailsFragment();
+            FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+            fragmentTransaction.addToBackStack(null);
+
+            // 2. Shared Elements Transition
+            TransitionSet enterTransitionSet = new TransitionSet();
+            enterTransitionSet.addTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+            enterTransitionSet.setDuration(100);
+            enterTransitionSet.setStartDelay(0);
+            nextFragment.setSharedElementEnterTransition(enterTransitionSet);
+
+            View toolbar = view.findViewById(R.id.bottom_details);
+            View bottomDetailsBack = view.findViewById(R.id.bottom_details_button);
+            View bottomDetailsIncome = view.findViewById(R.id.bottom_details_income);
+            fragmentTransaction.addSharedElement(toolbar, toolbar.getTransitionName());
+            fragmentTransaction.addSharedElement(bottomDetailsBack, bottomDetailsBack.getTransitionName());
+            fragmentTransaction.addSharedElement(bottomDetailsIncome, bottomDetailsIncome.getTransitionName());
+            fragmentTransaction.replace(R.id.nav_host_fragment, nextFragment);
+            fragmentTransaction.commit();
+        });
     }
 
     private void checkPermission() {
@@ -144,9 +164,12 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext());
         locationProviderClient.getLastLocation().addOnSuccessListener( requireActivity(), location -> {
-            LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(currentLocation).title("Your Current Location").draggable(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+            if(location != null){
+                LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(currentLocation).title("Your Current Location").draggable(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+            }
+
         }).addOnFailureListener(requireActivity(), e -> Toast.makeText(requireContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show());
 
 

@@ -28,4 +28,6 @@
     <string name="title_profile">Profile</string>
     <string name="title_activity_map">Map</string>
     <string name="please_wait">Please Wait</string>
+    <string name="offline_status">You\'re Offline</string>
+    <string name="online_status">You\'re Online</string>
 </resources>
