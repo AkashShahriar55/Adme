@@ -295,82 +295,6 @@
 
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/bottom_details_toolbar"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/profile_card_height"
-                android:layout_marginTop="8dp"
-                app:cardCornerRadius="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView3">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout5"
-                        android:layout_width="@dimen/in_card_image_size"
-                        android:layout_height="@dimen/in_card_image_size"
-                        android:layout_marginStart="16dp"
-                        android:background="@drawable/circle_image"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:layout_width="@dimen/inner_image_size"
-                            android:layout_height="@dimen/inner_image_size"
-                            android:background="@drawable/ic_services"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginBottom="16dp"
-                        android:text="My services"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/card_title_text_size"
-                        android:textStyle="normal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/constraintLayout5"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Electrician, home electric service"
-
-                        app:layout_constraintStart_toStartOf="@+id/textView8"
-                        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="@dimen/right_arrow_size"
-                        android:layout_height="@dimen/right_arrow_size"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/ic_right_arrow"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
                 android:id="@+id/cardView4"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/profile_card_height"
@@ -378,7 +302,7 @@
                 app:cardCornerRadius="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottom_details_toolbar">
+                app:layout_constraintTop_toBottomOf="@id/cardView3">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
