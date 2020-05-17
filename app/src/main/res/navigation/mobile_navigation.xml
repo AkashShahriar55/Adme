@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_leaderboard"
-        android:name="com.example.adme.Activities.ui.leaderboard.LeaderboardFragment"
+        android:name="com.example.adme.Activities.ui.leaderboard.LeaderBoardFragment"
         android:label="@string/title_leaderboard"
         tools:layout="@layout/fragment_leaderboard" />
 

@@ -24,4 +24,5 @@
     <color name="txt_Dark">#131313</color>
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
+    <color name="leader_board_profile_name">#3F5AA6</color>
 </resources>
