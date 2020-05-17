@@ -11,13 +11,16 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -62,6 +65,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private static final float DEFAULT_ZOOM = 15;
     private TodayViewModel homeViewModel;
     private GoogleMap mMap;
+    private boolean isOnline = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -79,31 +83,67 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
 
 
         FloatingActionButton locationButton = view.findViewById(R.id.today_location_button);
+        ImageView notificationButton = view.findViewById(R.id.today_notification_btn);
 
         locationButton.setOnClickListener(v -> checkPermission());
 
         ImageView bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
         bottomDetailsButton.setOnClickListener(v -> {
-            Fragment nextFragment = new TodayBottomDetailsFragment();
-            FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-            fragmentTransaction.addToBackStack(null);
-
-            // 2. Shared Elements Transition
-            TransitionSet enterTransitionSet = new TransitionSet();
-            enterTransitionSet.addTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
-            enterTransitionSet.setDuration(100);
-            enterTransitionSet.setStartDelay(0);
-            nextFragment.setSharedElementEnterTransition(enterTransitionSet);
-
-            View toolbar = view.findViewById(R.id.bottom_details);
-            View bottomDetailsBack = view.findViewById(R.id.bottom_details_button);
-            View bottomDetailsIncome = view.findViewById(R.id.bottom_details_income);
-            fragmentTransaction.addSharedElement(toolbar, toolbar.getTransitionName());
-            fragmentTransaction.addSharedElement(bottomDetailsBack, bottomDetailsBack.getTransitionName());
-            fragmentTransaction.addSharedElement(bottomDetailsIncome, bottomDetailsIncome.getTransitionName());
-            fragmentTransaction.replace(R.id.nav_host_fragment, nextFragment);
-            fragmentTransaction.commit();
+            goToBottomDetails(view);
         });
+
+        notificationButton.setOnClickListener(v -> {
+            goToNotificationFragment(view);
+        });
+
+        CardView bottomDetailsCard = view.findViewById(R.id.bottom_details_income);
+        bottomDetailsCard.setOnClickListener(v -> {
+            goToBottomDetails(view);
+        });
+
+        Switch todayStatusSwitch = view.findViewById(R.id.today_status_switch);
+        todayStatusSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                buttonView.setText(R.string.online_status);
+                buttonView.setTextColor(getResources().getColor(R.color.color_active));
+                isOnline = true;
+            }else{
+                buttonView.setText(R.string.offline_status);
+                buttonView.setTextColor(getResources().getColor(R.color.color_not_active));
+                isOnline = false;
+            }
+        });
+    }
+
+    private void goToNotificationFragment(View view) {
+        Fragment notificationFragment = new Notification_Fragment();
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.replace(R.id.nav_host_fragment, notificationFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void goToBottomDetails(View view) {
+        Fragment nextFragment = new TodayBottomDetailsFragment(isOnline);
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+
+        // 2. Shared Elements Transition
+        TransitionSet enterTransitionSet = new TransitionSet();
+        enterTransitionSet.addTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+        enterTransitionSet.setDuration(100);
+        enterTransitionSet.setStartDelay(0);
+        nextFragment.setSharedElementEnterTransition(enterTransitionSet);
+
+        View toolbar = view.findViewById(R.id.bottom_details);
+        View bottomDetailsBack = view.findViewById(R.id.bottom_details_button);
+        View bottomDetailsIncome = view.findViewById(R.id.bottom_details_income);
+        fragmentTransaction.addSharedElement(toolbar, toolbar.getTransitionName());
+        fragmentTransaction.addSharedElement(bottomDetailsBack, bottomDetailsBack.getTransitionName());
+        fragmentTransaction.addSharedElement(bottomDetailsIncome, bottomDetailsIncome.getTransitionName());
+        fragmentTransaction.replace(R.id.nav_host_fragment, nextFragment);
+        fragmentTransaction.commit();
     }
 
     private void checkPermission() {
@@ -166,7 +206,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
         locationProviderClient.getLastLocation().addOnSuccessListener( requireActivity(), location -> {
             if(location != null){
                 LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(currentLocation).title("Your Current Location").draggable(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+                mMap.addMarker(new MarkerOptions().position(currentLocation).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
             }
 

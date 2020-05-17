@@ -123,6 +123,7 @@
                         android:text="@string/offline_status"
                         android:textColor="@color/color_not_active"
                         android:textStyle="bold"
+                        android:transitionName="todayStatusSwitch"
                         app:layout_constraintBottom_toBottomOf="@+id/bottom_details_button"
                         app:layout_constraintEnd_toStartOf="@+id/today_notification_btn"
                         app:layout_constraintStart_toEndOf="@+id/bottom_details_button"

@@ -30,6 +30,7 @@
     <string name="please_wait">Please Wait</string>
     <string name="offline_status">You\'re Offline</string>
     <string name="online_status">You\'re Online</string>
+    <string name="your_current_location">Your Current Location</string>
     <string name="profile">Profile</string>
     <string name="leaderboard">LeaderBoard</string>
 </resources>

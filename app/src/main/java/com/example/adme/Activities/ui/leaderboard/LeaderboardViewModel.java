@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class LeaderboardViewModel extends ViewModel {
+public class LeaderBoardViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public LeaderboardViewModel() {
+    public LeaderBoardViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is dashboard fragment");
     }
