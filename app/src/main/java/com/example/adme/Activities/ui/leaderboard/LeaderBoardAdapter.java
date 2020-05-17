@@ -14,7 +14,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LeaderBoardAdapter extends RecyclerView.Adapter<LeaderBoardAdapter.LeaderBoardViewHolder> {
 
-    public LeaderBoardAdapter() {
+    LeaderBoardAdapter() {
     }
 
     @NonNull
