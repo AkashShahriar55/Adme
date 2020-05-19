@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
+
+<!--    <color name="colorPrimary">#6200EE</color>-->
+    <color name="colorPrimary">#3F5AA6</color>
+
     <color name="colorPrimaryDark">#e0e0e0</color>
     <color name="colorAccent">#4CAF50</color>
     <color name="color_active">#4CAF50</color>
@@ -27,4 +30,7 @@
     <color name="txt_highlight">#3f5aa6</color>
     <color name="border_ash">#cdcdcd</color>
     <color name="leader_board_profile_name">#3F5AA6</color>
+
+<!--    service provider primary color-->
+    <color name="sv_primary">#3F5AA6</color>
 </resources>
