@@ -10,7 +10,7 @@ public class IncomeViewModel extends ViewModel {
 
     public IncomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("This is IncomeFragment");
     }
 
     public LiveData<String> getText() {

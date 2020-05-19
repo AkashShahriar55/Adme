@@ -1,33 +1,116 @@
 package com.example.adme.Activities.ui.income;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.adme.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+
 public class IncomeFragment extends Fragment {
 
-    private IncomeViewModel notificationsViewModel;
+    private Calendar myCalendar;
+    private TextView tv_calender1,tv_calender2;
+    private ImageView img_calender1, img_calender2;
+    private int mYear, mMonth, mDay;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel = ViewModelProviders.of(this).get(IncomeViewModel.class);
+        IncomeViewModel notificationsViewModel = new ViewModelProvider(this).get(IncomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_income, container, false);
-//        final TextView textView = root.findViewById(R.id.text_notifications);
+
+//        final TextView textView = root.findViewById(R.id.tv_history);
 //        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override
 //            public void onChanged(@Nullable String s) {
 //                textView.setText(s);
 //            }
 //        });
+
+        initializeFields(root);
         return root;
+    }
+
+    private void initializeFields(View root) {
+        img_calender1 = (ImageView) root.findViewById(R.id.img_calender1);
+        img_calender2 = (ImageView) root.findViewById(R.id.img_calender2);
+        tv_calender1 = (TextView) root.findViewById(R.id.tv_calender1);
+        tv_calender2 = (TextView) root.findViewById(R.id.tv_calender2);
+
+        myCalendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener date1 = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDate1();
+            }
+        };
+        DatePickerDialog.OnDateSetListener date2 = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDate2();
+            }
+        };
+
+        img_calender1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog mDatePickerDialog1 =new DatePickerDialog(getContext(), date1,
+                        myCalendar.get(Calendar.YEAR),
+                        myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+//                mDatePickerDialog1.getDatePicker().setMaxDate(myCalendar.get(Calendar.DAY_OF_MONTH));
+//                mDatePickerDialog1.getDatePicker().setMinDate((myCalendar.get(Calendar.DAY_OF_MONTH)-10));
+                mDatePickerDialog1.show();
+            }
+        });
+        img_calender2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog mDatePickerDialog2 =new DatePickerDialog(getContext(), date2,
+                        myCalendar.get(Calendar.YEAR),
+                        myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                mDatePickerDialog2.show();
+            }
+        });
+
+    }
+
+
+    private void updateDate1() {
+        String myFormat = "dd MMM''yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        tv_calender1.setText(sdf.format(myCalendar.getTime()));
+//        Toast.makeText(getApplicationContext(), "date : "+sdf.format(myCalendar.getTime()), Toast.LENGTH_SHORT).show();
+    }
+    private void updateDate2() {
+        String myFormat = "dd MMM''yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        tv_calender2.setText(sdf.format(myCalendar.getTime()));
+//        Toast.makeText(getApplicationContext(), "date : "+sdf.format(myCalendar.getTime()), Toast.LENGTH_SHORT).show();
     }
 }
