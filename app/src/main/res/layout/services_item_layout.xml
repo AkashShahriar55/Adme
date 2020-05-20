@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/login_edit_box"
+        android:background="@drawable/view_details_btn"
         android:text="View"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

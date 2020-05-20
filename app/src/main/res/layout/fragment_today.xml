@@ -1,61 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.ui.today.TodayFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="250dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="@dimen/toolbar_height" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline21"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <FrameLayout
+            android:id="@+id/map"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_optimizationLevel="standard"
+            app:layout_constraintBottom_toTopOf="@+id/guideline18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/today_location_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        app:fabCustomSize="50dp"
         android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/ic_location"
         app:backgroundTint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/guideline18"
-        app:layout_constraintEnd_toStartOf="@+id/guideline19" />
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="225dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_anchor="@id/bottom_details"
+        app:layout_anchorGravity="end|top"
+        app:fabCustomSize="50dp"
+        android:focusable="true" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_details"
-        android:layout_width="0dp"
-        android:layout_height="700dp"
-        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:transitionName="bottom_details"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_hideable = "false"
+        app:behavior_peekHeight = "95dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline18">
@@ -63,6 +74,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
+            android:layout_marginTop="45dp"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -70,7 +83,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/bottom_details_toolbar"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/toolbar_height"
                 android:transitionName="bootm_details_toolbar"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -85,11 +98,14 @@
                         android:id="@+id/bottom_details_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         android:src="@drawable/ic_up_icon"
                         android:transitionName="bottom_details_back"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline25"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="TODO" />
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline25"
@@ -109,10 +125,13 @@
                         android:id="@+id/today_notification_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         android:src="@drawable/ic_notification_bell"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/guideline26"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="TODO" />
 
                     <Switch
                         android:id="@+id/today_status_switch"
@@ -172,8 +191,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout14"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white">
+                    android:layout_height="match_parent">
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline27"
@@ -204,10 +222,12 @@
                         app:layout_constraintGuide_percent="0.55" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout6"
+                        android:id="@+id/today_income"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/border_ash_today"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:layout_constraintBottom_toTopOf="@+id/guideline24"
                         app:layout_constraintEnd_toStartOf="@+id/guideline13"
                         app:layout_constraintStart_toStartOf="parent"
@@ -244,6 +264,7 @@
                             android:id="@+id/imageView14"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="TODO"
                             android:src="@drawable/ic_dollar_sign"
                             app:layout_constraintBottom_toTopOf="@+id/textView19"
                             app:layout_constraintEnd_toStartOf="@+id/textView19"
@@ -251,9 +272,12 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/today_due"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/border_ash_today"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:layout_constraintBottom_toTopOf="@+id/guideline24"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline13"
@@ -297,9 +321,12 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/today_pressed"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/border_ash_today"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/guideline20"
                         app:layout_constraintStart_toStartOf="parent"
@@ -333,9 +360,12 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/today_requested"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/border_ash_today"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/guideline27"
                         app:layout_constraintStart_toStartOf="@+id/guideline20"
@@ -370,9 +400,12 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/today_completed"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/border_ash_today"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline27"
@@ -410,5 +443,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

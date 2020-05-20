@@ -1,5 +1,7 @@
 package com.example.adme.Activities.ui.today;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.example.adme.R;
 
@@ -76,6 +79,7 @@ public class TodayBottomDetailsFragment extends Fragment {
         ImageView bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
         bottomDetailsButton.setOnClickListener(v -> {
             requireActivity().onBackPressed();
+
         });
     }
 

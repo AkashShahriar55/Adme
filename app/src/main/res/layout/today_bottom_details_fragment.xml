@@ -16,7 +16,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/bottom_details_toolbar"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/toolbar_height"
             android:transitionName="bootm_details"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -150,8 +150,10 @@
                                 app:layout_constraintGuide_percent="0.55" />
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/constraintLayout6"
+                                android:id="@+id/today_income"
                                 android:layout_width="0dp"
+                                android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:layout_height="0dp"
                                 android:background="@drawable/border_ash_today"
                                 app:layout_constraintBottom_toTopOf="@+id/guideline24"
@@ -199,6 +201,8 @@
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
+                                android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/border_ash_today"
                                 app:layout_constraintBottom_toTopOf="@+id/guideline24"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -244,6 +248,8 @@
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="0dp"
+                                android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:layout_height="0dp"
                                 android:background="@drawable/border_ash_today"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -281,6 +287,8 @@
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
+                                android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/border_ash_today"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline27"
@@ -318,6 +326,8 @@
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
+                                android:clickable="true"
+                                android:foreground="?attr/selectableItemBackground"
                                 android:background="@drawable/border_ash_today"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -380,6 +390,8 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
                             android:background="@drawable/border_ash_today">
 
                             <ImageView
@@ -443,8 +455,9 @@
                     <Button
                         android:id="@+id/button3"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/view_details_btn"
                         android:text="Add"
                         app:layout_constraintBottom_toBottomOf="@+id/textView37"
                         app:layout_constraintEnd_toStartOf="@+id/guideline12"
