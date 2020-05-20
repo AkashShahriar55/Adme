@@ -67,4 +67,7 @@ dependencies {
 
     //RecyclerView
     implementation 'androidx.recyclerview:recyclerview'
+
+    //Bar Chart
+    implementation 'com.github.hadiidbouk:ChartProgressBar-Android:2.0.6'
 }

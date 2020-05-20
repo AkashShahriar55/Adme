@@ -17,8 +17,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.adme.R;
+import com.hadiidbouk.charts.BarData;
+import com.hadiidbouk.charts.ChartProgressBar;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -30,6 +33,7 @@ public class IncomeFragment extends Fragment {
     private Calendar myCalendar;
     private TextView tv_calender1,tv_calender2;
     private ImageView img_calender1, img_calender2;
+    ChartProgressBar mChart;
     private int mYear, mMonth, mDay;
 
 
@@ -50,6 +54,7 @@ public class IncomeFragment extends Fragment {
     }
 
     private void initializeFields(View root) {
+        createChart(root);
         img_calender1 = (ImageView) root.findViewById(R.id.img_calender1);
         img_calender2 = (ImageView) root.findViewById(R.id.img_calender2);
         tv_calender1 = (TextView) root.findViewById(R.id.tv_calender1);
@@ -100,7 +105,6 @@ public class IncomeFragment extends Fragment {
 
     }
 
-
     private void updateDate1() {
         String myFormat = "dd MMM''yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -111,6 +115,36 @@ public class IncomeFragment extends Fragment {
         String myFormat = "dd MMM''yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         tv_calender2.setText(sdf.format(myCalendar.getTime()));
+//        Toast.makeText(getApplicationContext(), "date : "+sdf.format(myCalendar.getTime()), Toast.LENGTH_SHORT).show();
+    }
+
+    private void createChart(View root) {
+        ArrayList<BarData> dataList = new ArrayList<>();
+
+        BarData data = new BarData("Sep", 30.4f, "300.4$");
+        dataList.add(data);
+
+        data = new BarData("Oct", 42f, "420$");
+        dataList.add(data);
+
+        data = new BarData("Nov", 10.8f, "100.8$");
+        dataList.add(data);
+
+        data = new BarData("Dec", 87.3f, "870.3$");
+        dataList.add(data);
+
+        data = new BarData("Jan", 36.2f, "360.2$");
+        dataList.add(data);
+
+        data = new BarData("Feb", 99.3f, "990.3$");
+        dataList.add(data);
+
+        data = new BarData("Nov", 71.8f, "710.8$");
+        dataList.add(data);
+
+        mChart = (ChartProgressBar) root.findViewById(R.id.ChartProgressBar);
+        mChart.setDataList(dataList);
+        mChart.build();
 //        Toast.makeText(getApplicationContext(), "date : "+sdf.format(myCalendar.getTime()), Toast.LENGTH_SHORT).show();
     }
 }
