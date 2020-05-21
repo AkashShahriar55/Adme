@@ -43,7 +43,7 @@ public class TodayBottomDetailsFragment extends Fragment {
         appointmentRecyclerView.setHasFixedSize(true);
         appointmentRecyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter adapter = new AppointmentAdapter(getContext());
+        RecyclerView.Adapter adapter = new AppointmentAdapter(getContext(),getParentFragmentManager());
         appointmentRecyclerView.setAdapter(adapter);
 
         RecyclerView serviceRecyclerView = view.findViewById(R.id.service_container);
