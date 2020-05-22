@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.adme.Activities.LoginActivity;
+import com.example.adme.Activities.MainActivity;
 import com.example.adme.Activities.RegistrationActivity;
 import com.example.adme.R;
 import com.facebook.AccessToken;
@@ -34,7 +35,7 @@ import java.util.Objects;
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
-    private CardView card_logout ;
+    private CardView cardLogout, cardContacts, cardPrivacySettings, cardNotification, cardAccount, cardChangeMode, cardHelp;
     private GoogleSignInClient mGoogleSignInClient;
 
     public static ProfileFragment newInstance() {
@@ -48,7 +49,14 @@ public class ProfileFragment extends Fragment {
 
         initializeFields(root);
 
-        card_logout.setOnClickListener(v -> {
+        cardContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), Contacts.class));
+            }
+        });
+
+        cardLogout.setOnClickListener(v -> {
 
             FirebaseAuth.getInstance().signOut();
             GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity());
@@ -78,7 +86,13 @@ public class ProfileFragment extends Fragment {
 
     private void initializeFields(View root) {
 
-        card_logout = root.findViewById(R.id.card_logout);
+        cardContacts = root.findViewById(R.id.cardContacts);
+        cardPrivacySettings = root.findViewById(R.id.cardPrivacySettings);
+        cardNotification = root.findViewById(R.id.cardNotification);
+        cardAccount = root.findViewById(R.id.cardAccount);
+        cardChangeMode = root.findViewById(R.id.cardChangeMode);
+        cardLogout = root.findViewById(R.id.cardLogout);
+        cardHelp = root.findViewById(R.id.cardHelp);
 
         //For Google SignUp
         // Configure sign-in to request the user's ID, email address, and basic

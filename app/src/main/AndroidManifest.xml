@@ -36,7 +36,17 @@
             android:label="@string/title_activity_landing" />
         <activity android:name=".Activities.RegistrationActivity" />
         <activity android:name=".Activities.LoginActivity" />
+
+        <!--
+             for handling profile starts
+        -->
+        <activity android:name=".Activities.ui.profile.Contacts"/>
+        <activity android:name=".Activities.ui.profile.PrivacySettings"/>
+        <!--
+             for handling profile ends
+        -->
         <activity android:name=".Activities.MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
