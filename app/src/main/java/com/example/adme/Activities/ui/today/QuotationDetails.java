@@ -14,10 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -27,10 +29,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 
 public class QuotationDetails extends Fragment implements OnMapReadyCallback {
+
+    private static final String TAG = "QuotationDetails";
 
     private QuotationDetailsViewModel mViewModel;
 
@@ -132,8 +137,28 @@ public class QuotationDetails extends Fragment implements OnMapReadyCallback {
                         requireActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+                                //mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+                                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+                                //24.819978, 88.323079
+                                //24.820738, 88.319482
+                                LatLng origin = new LatLng(24.819978,88.323079);
+                                LatLng dest = new LatLng(24.820738,88.319482);
+                                mMap.addMarker(new MarkerOptions().position(origin).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.service_provider)));
+                                mMap.addMarker(new MarkerOptions().position(dest).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.client)));
+                                LatLngBounds zoomBound = LatLngBounds.builder().include(origin).include(dest).build();
+
+                                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin,17));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 10));
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBound, 100));
+                                GoogleMapHelper helper = new GoogleMapHelper(mMap);
+
+                                // Getting URL to the Google Directions API
+                                String url = helper.getDirectionsUrl(origin, dest);
+
+                                Log.i(TAG, "run: " + url);
+
+                                helper.downloadJson(url);
+
                             }
                         });
 

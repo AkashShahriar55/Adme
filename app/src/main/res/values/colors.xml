@@ -28,6 +28,7 @@
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
     <color name="txt_highlight">#3f5aa6</color>
+    <color name="material_green">#3db24b</color>
     <color name="border_ash">#cdcdcd</color>
     <color name="leader_board_profile_name">#3F5AA6</color>
 

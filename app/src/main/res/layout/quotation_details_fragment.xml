@@ -92,6 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You:"
+                        android:textColor="@color/txt_highlight"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -280,6 +281,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$125"
+                    android:textColor="@color/material_green"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline32"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -289,6 +291,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3 PM,12 Jan 2020"
+                    android:textColor="@color/txt_highlight"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline32"
                     app:layout_constraintStart_toStartOf="@+id/guideline33"
