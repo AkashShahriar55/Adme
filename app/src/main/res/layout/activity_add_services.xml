@@ -19,18 +19,18 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/add_service_1_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView56"
+                app:layout_constraintEnd_toStartOf="@+id/add_service_overview_text"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/guideline36"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_1_blue" />
 
             <TextView
-                android:id="@+id/textView56"
+                android:id="@+id/add_service_overview_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
@@ -39,22 +39,22 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView31"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView6"
+                app:layout_constraintStart_toEndOf="@+id/add_service_1_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView27"
+                android:id="@+id/add_service_2_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView57"
+                app:layout_constraintEnd_toStartOf="@+id/add_service_services_text"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageView31"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_2_gray" />
 
             <TextView
-                android:id="@+id/textView57"
+                android:id="@+id/add_service_services_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
@@ -62,22 +62,22 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView32"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView27"
+                app:layout_constraintStart_toEndOf="@+id/add_service_2_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView29"
+                android:id="@+id/add_service_3_image"
                 android:layout_width="11dp"
                 android:layout_height="17dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView58"
+                app:layout_constraintEnd_toStartOf="@+id/add_service_gallery_text"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageView32"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_3_gray" />
 
             <TextView
-                android:id="@+id/textView58"
+                android:id="@+id/add_service_gallery_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
@@ -85,22 +85,22 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView33"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView29"
+                app:layout_constraintStart_toEndOf="@+id/add_service_3_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView30"
+                android:id="@+id/add_service_4_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView59"
+                app:layout_constraintEnd_toStartOf="@+id/add_service_location_text"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageView33"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_4_gray" />
 
             <TextView
-                android:id="@+id/textView59"
+                android:id="@+id/add_service_location_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
@@ -108,7 +108,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline37"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView30"
+                app:layout_constraintStart_toEndOf="@+id/add_service_4_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -116,9 +116,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView27"
+                app:layout_constraintEnd_toStartOf="@+id/add_service_2_image"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView56"
+                app:layout_constraintStart_toEndOf="@+id/add_service_overview_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_next_icon" />
 
@@ -127,9 +127,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView29"
+                app:layout_constraintEnd_toStartOf="@+id/add_service_3_image"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView57"
+                app:layout_constraintStart_toEndOf="@+id/add_service_services_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_next_icon" />
 
@@ -138,9 +138,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView30"
+                app:layout_constraintEnd_toStartOf="@+id/add_service_4_image"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView58"
+                app:layout_constraintStart_toEndOf="@+id/add_service_gallery_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_next_icon" />
 
@@ -173,6 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:background="@drawable/add_service_save_btn"
+            android:onClick="saveButtonClicked"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="Save and continue"
@@ -209,7 +210,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/add_service_fragment_host"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout15"

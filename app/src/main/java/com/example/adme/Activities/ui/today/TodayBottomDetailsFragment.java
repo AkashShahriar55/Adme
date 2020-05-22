@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -38,6 +40,9 @@ public class TodayBottomDetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        Button todayAddService = view.findViewById(R.id.today_add_service);
+
         RecyclerView appointmentRecyclerView = view.findViewById(R.id.appointment_container);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         appointmentRecyclerView.setHasFixedSize(true);
@@ -80,6 +85,14 @@ public class TodayBottomDetailsFragment extends Fragment {
         bottomDetailsButton.setOnClickListener(v -> {
             requireActivity().onBackPressed();
 
+        });
+
+        todayAddService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addServiceActivityIntent = new Intent(requireContext(),AddServicesActivity.class);
+                requireContext().startActivity(addServiceActivityIntent);
+            }
         });
     }
 
