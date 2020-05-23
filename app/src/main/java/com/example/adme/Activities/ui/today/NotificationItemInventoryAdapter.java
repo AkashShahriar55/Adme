@@ -1,12 +1,12 @@
-package com.example.adme.Activities;
+package com.example.adme.Activities.ui.today;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.adme.Activities.Notification_class;
 import com.example.adme.R;
 
 import java.util.List;
