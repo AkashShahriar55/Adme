@@ -75,7 +75,11 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private TodayViewModel homeViewModel;
     private GoogleMap mMap;
     private boolean isOnline = false;
-
+    private ConstraintLayout todayIncome,todayDue,todayPressed,todayRequested,todayCompleted;
+    private ImageView bottomDetailsButton,notificationButton;
+    private View bottomSheet;
+    private FloatingActionButton locationButton;
+    private Switch todayStatusSwitch;
     private BottomSheetBehavior bottomSheetBehavior ;
 
 
@@ -87,34 +91,9 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        checkPermission();
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        View toolbar = view.findViewById(R.id.bottom_details);
-        ImageView bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
-        ConstraintLayout todayIncome,todayDue,todayPressed,todayRequested,todayCompleted;
-
-        View bottomSheet = view.findViewById(R.id.bottom_details);
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        todayCompleted = view.findViewById(R.id.today_completed);
-        todayIncome = view.findViewById(R.id.today_income);
-        todayDue = view.findViewById(R.id.today_due);
-        todayPressed = view.findViewById(R.id.today_pressed);
-        todayRequested = view.findViewById(R.id.today_requested);
-
-
         todayCompleted.setOnClickListener(v -> goToBottomDetails());
         todayIncome.setOnClickListener(v -> goToBottomDetails());
         todayDue.setOnClickListener(v -> goToBottomDetails());
@@ -123,19 +102,18 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
         bottomDetailsButton.setOnClickListener(v -> goToBottomDetails());
 
 
-        FloatingActionButton locationButton = view.findViewById(R.id.today_location_button);
-        ImageView notificationButton = view.findViewById(R.id.today_notification_btn);
+
 
         locationButton.setOnClickListener(v -> checkPermission());
 
 
 
         notificationButton.setOnClickListener(v -> {
-            goToNotificationFragment(view);
+            goToNotificationFragment();
         });
 
 
-        Switch todayStatusSwitch = view.findViewById(R.id.today_status_switch);
+
         todayStatusSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 buttonView.setText(R.string.online_status);
@@ -147,9 +125,34 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
                 isOnline = false;
             }
         });
+
+       checkPermission();
+
+        super.onActivityCreated(savedInstanceState);
     }
 
-    private void goToNotificationFragment(View view) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
+
+
+        bottomSheet = view.findViewById(R.id.bottom_details);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        todayCompleted = view.findViewById(R.id.today_completed);
+        todayIncome = view.findViewById(R.id.today_income);
+        todayDue = view.findViewById(R.id.today_due);
+        todayPressed = view.findViewById(R.id.today_pressed);
+        todayRequested = view.findViewById(R.id.today_requested);
+        locationButton = view.findViewById(R.id.today_location_button);
+        notificationButton = view.findViewById(R.id.today_notification_btn);
+        todayStatusSwitch = view.findViewById(R.id.today_status_switch);
+
+
+    }
+
+
+    private void goToNotificationFragment() {
 
         Fragment notificationFragment = new Notification_Fragment();
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();

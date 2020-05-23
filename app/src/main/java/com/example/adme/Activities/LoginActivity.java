@@ -2,12 +2,15 @@ package com.example.adme.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -100,6 +103,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeFields() {
+        ConstraintLayout container = findViewById(R.id.login_container);
+        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.animate);
+        container.startAnimation(hyperspaceJumpAnimation);
+
         txt_create_account = findViewById(R.id.txt_create_account);
         login_skip_btn = findViewById(R.id.login_skip_btn);
         login_google_btn = findViewById(R.id.login_google_btn);
