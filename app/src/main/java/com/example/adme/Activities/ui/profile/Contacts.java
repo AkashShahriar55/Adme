@@ -6,6 +6,8 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.adme.R;
 
@@ -13,6 +15,8 @@ public class Contacts extends AppCompatActivity {
 
 
     Button backBtn;
+    ConstraintLayout addContactLayout;
+    CardView addContactBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -20,6 +24,18 @@ public class Contacts extends AppCompatActivity {
         setContentView(R.layout.activity_contacts);
 
         backBtn = findViewById(R.id.backBtn);
+        addContactBtn = findViewById(R.id.addContactBtn);
+        addContactLayout = findViewById(R.id.addContactLayout);
+
+        addContactBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
