@@ -30,17 +30,28 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <Button
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/backBtn"
-            android:foreground="?selectableItemBackground"
-            android:layout_width="@dimen/right_arrow_size"
-            android:layout_height="@dimen/right_arrow_size"
+            android:layout_width="@dimen/back_button_size"
+            android:layout_height="@dimen/back_button_size"
             android:layout_marginStart="24dp"
-
-            android:background="@drawable/left_arrow"
+            android:clickable="true"
+            android:foreground="?selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="@dimen/right_arrow_size"
+                android:layout_height="@dimen/right_arrow_size"
+                android:background="@drawable/left_arrow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView

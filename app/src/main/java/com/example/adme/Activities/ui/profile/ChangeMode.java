@@ -6,12 +6,13 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.adme.R;
 
 public class ChangeMode extends AppCompatActivity {
 
-    Button backBtn;
+    ConstraintLayout backBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
