@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ui.today.AddServiceOverview">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="overview" />
+    <CheckBox
+        android:id="@+id/overview_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Overview" />
 
 </FrameLayout>

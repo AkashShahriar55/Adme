@@ -32,6 +32,8 @@
     <color name="border_ash">#cdcdcd</color>
     <color name="leader_board_profile_name">#3F5AA6</color>
 
+    <color name="add_service_step_txt_gray">#d2d2d2</color>
+
 <!--    service provider primary color-->
     <color name="sv_primary">#3F5AA6</color>
 </resources>

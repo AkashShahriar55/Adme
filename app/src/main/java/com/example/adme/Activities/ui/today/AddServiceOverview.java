@@ -11,12 +11,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.example.adme.R;
 
-public class AddServiceOverview extends Fragment {
+public class AddServiceOverview extends Fragment implements AddServicesActivity.SaveFragmentListener {
 
     private AddServiceOverviewViewModel mViewModel;
+    private boolean isValidationChecked= false;
+    private boolean isDataSaved = false;
+    private CheckBox testCheckbox;
+
 
     public static AddServiceOverview newInstance() {
         return new AddServiceOverview();
@@ -29,10 +35,32 @@ public class AddServiceOverview extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AddServiceOverviewViewModel.class);
-        // TODO: Use the ViewModel
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        testCheckbox = view.findViewById(R.id.overview_checkbox);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        testCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isValidationChecked = isChecked;
+
+            }
+        });
+    }
+
+    @Override
+    public boolean isDataSaved() {
+        return isDataSaved;
+    }
+
+    @Override
+    public void saveData() {
+        if(isValidationChecked){
+            isDataSaved = true;
+        }
+    }
 }

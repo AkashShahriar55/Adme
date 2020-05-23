@@ -27,6 +27,7 @@ public class TodayBottomDetailsFragment extends Fragment {
 
     private TodayBottomDetailsViewModel mViewModel;
     private boolean isOnline;
+    private View view;
 
     public TodayBottomDetailsFragment(boolean isOnline) {
         this.isOnline = isOnline;
@@ -42,22 +43,8 @@ public class TodayBottomDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         Button todayAddService = view.findViewById(R.id.today_add_service);
+        this.view = view;
 
-        RecyclerView appointmentRecyclerView = view.findViewById(R.id.appointment_container);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        appointmentRecyclerView.setHasFixedSize(true);
-        appointmentRecyclerView.setLayoutManager(layoutManager);
-
-        RecyclerView.Adapter adapter = new AppointmentAdapter(getContext(),getParentFragmentManager());
-        appointmentRecyclerView.setAdapter(adapter);
-
-        RecyclerView serviceRecyclerView = view.findViewById(R.id.service_container);
-        RecyclerView.LayoutManager serviceLayoutManager = new LinearLayoutManager(getContext());
-        serviceRecyclerView.setHasFixedSize(true);
-        serviceRecyclerView.setLayoutManager(serviceLayoutManager);
-
-        RecyclerView.Adapter serviceAdapter = new ServiceAdapter(getContext());
-        serviceRecyclerView.setAdapter(serviceAdapter);
 
 
         Switch todayStatusSwitch = view.findViewById(R.id.today_status_switch);
@@ -98,9 +85,31 @@ public class TodayBottomDetailsFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+        RecyclerView appointmentRecyclerView = view.findViewById(R.id.appointment_container);
+        RecyclerView serviceRecyclerView = view.findViewById(R.id.service_container);
+
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(TodayBottomDetailsViewModel.class);
-        // TODO: Use the ViewModel
+
+        new Thread(() -> {
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+            appointmentRecyclerView.setHasFixedSize(true);
+            appointmentRecyclerView.setLayoutManager(layoutManager);
+
+            RecyclerView.Adapter adapter = new AppointmentAdapter(getContext(),getParentFragmentManager());
+            appointmentRecyclerView.setAdapter(adapter);
+
+
+            RecyclerView.LayoutManager serviceLayoutManager = new LinearLayoutManager(getContext());
+            serviceRecyclerView.setHasFixedSize(true);
+            serviceRecyclerView.setLayoutManager(serviceLayoutManager);
+
+            RecyclerView.Adapter serviceAdapter = new ServiceAdapter(getContext());
+            serviceRecyclerView.setAdapter(serviceAdapter);
+        }).start();
+
+
+
     }
 
 }

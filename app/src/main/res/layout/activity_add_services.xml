@@ -34,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
+                android:onClick="stepNavigationButtonClicked"
                 android:text="Overview"
                 android:textColor="@color/txt_highlight"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -58,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
+                android:onClick="stepNavigationButtonClicked"
                 android:text="Services"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView32"
@@ -67,8 +69,8 @@
 
             <ImageView
                 android:id="@+id/add_service_3_image"
-                android:layout_width="11dp"
-                android:layout_height="17dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/add_service_gallery_text"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -81,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
+                android:onClick="stepNavigationButtonClicked"
                 android:text="Gallery"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView33"
@@ -104,6 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
+                android:onClick="stepNavigationButtonClicked"
                 android:text="Location"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline37"
@@ -157,6 +161,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.95" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -169,7 +175,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/add_service_save_button"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:background="@drawable/add_service_save_btn"
@@ -184,7 +190,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView55"
+            android:id="@+id/add_service_cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@android:string/cancel"
