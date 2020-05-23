@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.adme.R;
 
-public class Contacts extends AppCompatActivity {
+public class NotificationSettings extends AppCompatActivity {
 
 
     Button backBtn;
@@ -17,7 +17,8 @@ public class Contacts extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+        setContentView(R.layout.activaty_notification_settings);
+
 
         backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {

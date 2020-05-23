@@ -31,6 +31,8 @@
 
 
         <Button
+            android:id="@+id/backBtn"
+            android:foreground="?selectableItemBackground"
             android:layout_width="@dimen/right_arrow_size"
             android:layout_height="@dimen/right_arrow_size"
             android:layout_marginStart="24dp"

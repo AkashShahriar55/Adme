@@ -42,6 +42,10 @@
         -->
         <activity android:name=".Activities.ui.profile.Contacts"/>
         <activity android:name=".Activities.ui.profile.PrivacySettings"/>
+        <activity android:name=".Activities.ui.profile.AccountSubscriptions"/>
+        <activity android:name=".Activities.ui.profile.ChangeMode"/>
+        <activity android:name=".Activities.ui.profile.Helps"/>
+        <activity android:name=".Activities.ui.profile.NotificationSettings"/>
         <!--
              for handling profile ends
         -->

@@ -9,15 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.adme.R;
 
-public class Contacts extends AppCompatActivity {
-
+public class AccountSubscriptions extends AppCompatActivity {
 
     Button backBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+        setContentView(R.layout.activity_account_subscriptions);
 
         backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {

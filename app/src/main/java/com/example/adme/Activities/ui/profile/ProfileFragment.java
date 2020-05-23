@@ -56,6 +56,37 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        cardPrivacySettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), PrivacySettings.class));
+            }
+        });
+        cardNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), NotificationSettings.class));
+            }
+        });
+        cardAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), AccountSubscriptions.class));
+            }
+        });
+        cardChangeMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), ChangeMode.class));
+            }
+        });
+        cardHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), Helps.class));
+            }
+        });
+
         cardLogout.setOnClickListener(v -> {
 
             FirebaseAuth.getInstance().signOut();
