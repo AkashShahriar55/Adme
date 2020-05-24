@@ -18,14 +18,14 @@ import com.example.adme.R;
 
 public class LeaderBoardFragment extends Fragment {
 
-    private LeaderBoardViewModel dashboardViewModel;
+    private LeaderboardViewModel dashboardViewModel;
     private RecyclerView recyclerView;
     private LeaderBoardAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel = ViewModelProviders.of(this).get(LeaderBoardViewModel.class);
+        dashboardViewModel = ViewModelProviders.of(this).get(LeaderboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_leaderboard, container, false);
         /*final TextView textView = root.findViewById(R.id.text_dashboard);
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
