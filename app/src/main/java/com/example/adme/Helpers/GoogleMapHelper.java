@@ -1,14 +1,26 @@
 package com.example.adme.Helpers;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.example.adme.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.gson.internal.$Gson$Preconditions;
 import com.google.maps.android.PolyUtil;
 
@@ -25,6 +37,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class GoogleMapHelper {
 
@@ -32,6 +45,7 @@ public class GoogleMapHelper {
 
     GoogleMap mMap;
     LatLng origin,dest;
+    private static final float DEFAULT_ZOOM = 15;
 
     public GoogleMapHelper(GoogleMap mMap) {
         this.mMap = mMap;
@@ -233,6 +247,66 @@ public class GoogleMapHelper {
         }
 
         return routes;
+    }
+
+    public static void markCurrentLocation(Context context, GoogleMap mMap){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+                locationProviderClient.getLastLocation().addOnSuccessListener((Activity) context, location -> {
+                    if(location != null){
+                        LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(context.getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+                        Log.i(TAG, "run: "+location.getLongitude() + " " + location.getLatitude());
+                    }
+
+                }).addOnFailureListener((Activity) context, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+            }
+        }).start();
+    }
+
+
+    public static void getCurrentLocationAddress(Context context,OnLocationAddressCallback callback){
+        OnLocationAddressCallback addressCallback =  callback;
+        FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        locationProviderClient.getLastLocation().addOnSuccessListener((Activity) context, location -> {
+            if(location != null){
+                Geocoder geocoder;
+                List<Address> addresses;
+                geocoder = new Geocoder(context, Locale.getDefault());
+
+                try {
+                    addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    String city = addresses.get(0).getLocality();
+                    String state = addresses.get(0).getAdminArea();
+                    String country = addresses.get(0).getCountryName();
+                    String postalCode = addresses.get(0).getPostalCode();
+                    String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL'
+                    Log.i(TAG, "getCurrentLocationAddress: "+ address);
+                    addressCallback.locationAddressFetched(addresses.get(0));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+        });
+
+
+    }
+
+    public interface OnLocationAddressCallback{
+        void locationAddressFetched(Address address);
     }
 
 }
