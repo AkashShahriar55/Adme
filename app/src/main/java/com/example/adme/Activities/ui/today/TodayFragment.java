@@ -90,6 +90,8 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
 
         Log.i(TAG, "onCreateView: git practice");
 
+        Log.i(TAG, "onCreateView: new branch");
+
         return root;
     }
 
