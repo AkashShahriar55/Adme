@@ -36,4 +36,6 @@
 
 <!--    service provider primary color-->
     <color name="sv_primary">#3F5AA6</color>
+
+    <color name="android_default_layout_color">#FAFAFA</color>
 </resources>
