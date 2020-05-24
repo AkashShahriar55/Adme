@@ -21,31 +21,29 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
     private AddServiceGalleryViewModel mViewModel;
     private boolean isValidationChecked= false;
     private boolean isDataSaved = false;
-    private CheckBox testCheckbox;
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.add_service_gallery_fragment, container, false);
+        View root = inflater.inflate(R.layout.add_service_gallery_fragment, container, false);
+
+        initializeFields(root);
+        return root;
+    }
+
+    private void initializeFields(View root) {
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        testCheckbox = view.findViewById(R.id.gallery_checkbox);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        testCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isValidationChecked = isChecked;
-
-            }
-        });
     }
 
     @Override
