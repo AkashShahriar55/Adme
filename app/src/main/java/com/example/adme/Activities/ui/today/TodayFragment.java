@@ -88,6 +88,8 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_today, container, false);
 
+        Log.i(TAG, "onCreateView: git practice");
+
         return root;
     }
 
