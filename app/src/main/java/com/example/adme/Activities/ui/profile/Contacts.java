@@ -14,8 +14,7 @@ import com.example.adme.R;
 public class Contacts extends AppCompatActivity {
 
 
-    Button backBtn;
-    ConstraintLayout addContactLayout;
+    ConstraintLayout addContactLayout,backBtn;
     CardView addContactBtn;
 
     @Override

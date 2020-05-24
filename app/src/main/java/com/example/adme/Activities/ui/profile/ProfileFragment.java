@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.adme.Activities.LoginActivity;
 import com.example.adme.Activities.MainActivity;
@@ -35,8 +37,13 @@ import java.util.Objects;
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
-    private CardView cardLogout, cardContacts, cardPrivacySettings, cardNotification, cardAccount, cardChangeMode, cardHelp;
+    private CardView cardLogout, cardContacts, cardPrivacySettings, cardNotification, cardAccount, cardChangeMode, cardHelp, cardSaveProfile;
     private GoogleSignInClient mGoogleSignInClient;
+
+    Button editProfileBtn;
+    TextView txtProfileName,txtSinceTime;
+    EditText editProfileName;
+
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -48,6 +55,31 @@ public class ProfileFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         initializeFields(root);
+
+
+        editProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtProfileName.setVisibility(View.GONE);
+                txtSinceTime.setVisibility(View.GONE);
+
+                editProfileName.setVisibility(View.VISIBLE);
+                cardSaveProfile.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        cardSaveProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtProfileName.setText(editProfileName.getText().toString());
+                txtProfileName.setVisibility(View.VISIBLE);
+                txtSinceTime.setVisibility(View.VISIBLE);
+
+                editProfileName.setVisibility(View.GONE);
+                cardSaveProfile.setVisibility(View.GONE);
+            }
+        });
 
         cardContacts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +148,12 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initializeFields(View root) {
+
+        editProfileBtn = root.findViewById(R.id.editProfileBtn);
+        cardSaveProfile = root.findViewById(R.id.saveProfileNameBtn);
+        txtProfileName = root.findViewById(R.id.profileName);
+        editProfileName = root.findViewById(R.id.editProfileName);
+        txtSinceTime = root.findViewById(R.id.sinceTime);
 
         cardContacts = root.findViewById(R.id.cardContacts);
         cardPrivacySettings = root.findViewById(R.id.cardPrivacySettings);
