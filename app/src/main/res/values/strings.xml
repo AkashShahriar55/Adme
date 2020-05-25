@@ -31,6 +31,11 @@
     <string name="offline_status">You\'re Offline</string>
     <string name="online_status">You\'re Online</string>
     <string name="your_current_location">Your Current Location</string>
+
+
     <string name="profile">Profile</string>
+    <string name="contactModePrivate">This contact info is private</string>
+    <string name="contactModePublic">This contact info is public</string>
+
     <string name="leaderboard">LeaderBoard</string>
 </resources>
