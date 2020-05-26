@@ -37,14 +37,14 @@
     <string name="please_choose_category_for_your_service">Please choose category for your service</string>
     <string name="service_description">Service Description</string>
     <string name="this_is_your_service_description_choose_wisely_the_words_that_will_attract_the_clients">This is your service description. Choose wisely the words that will attract the clients</string>
-    <string name="i_will_provide_with_some_service_ni_am_expert_at">I will provide with some service\nI am expert at</string>
+    <string name="i_will_provide_with_some_service_ni_am_expert_at">I will provide with some service\nI am expert at \u0020</string>
     <string name="working_hour">Working Hour</string>
     <string name="please_specify_your_working_hour_for_this_service_so_that_user_can_know_your_availability">Please specify your working hour for this service so that user can know your availability</string>
     <string name="to">To</string>
     <string name="_10_00_am">10:00 AM</string>
     <string name="_04_00_pm">04:00 PM</string>
     <string name="service_photos">Service Photos</string>
-    <string name="upload_photos_that_describe_or_are_related_to_your_serviceew">Upload photos that describe or are related to your serviceew</string>
+    <string name="upload_photos_that_describe_or_are_related_to_your_services">Upload photos that describe or are related to your services</string>
     <string name="services">Services</string>
     <string name="add">Add</string>
 

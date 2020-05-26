@@ -53,10 +53,12 @@
         android:background="@drawable/service_category_spinner">
 
         <ImageView
+            android:id="@+id/service_image_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_avatar"
-            android:contentDescription="@string/todo"/>
+            android:contentDescription="@string/todo"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_upload" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -74,9 +76,11 @@
         android:background="@drawable/service_category_spinner">
 
         <ImageView
+            android:id="@+id/service_image_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_avatar"
+            android:src="@drawable/ic_upload"
+            android:scaleType="centerInside"
             android:contentDescription="@string/todo"/>
     </androidx.cardview.widget.CardView>
 
@@ -95,9 +99,11 @@
         android:background="@drawable/service_category_spinner">
 
         <ImageView
+            android:id="@+id/service_image_3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_avatar"
+            android:src="@drawable/ic_upload"
+            android:scaleType="centerInside"
             android:contentDescription="@string/todo" />
     </androidx.cardview.widget.CardView>
 
@@ -108,7 +114,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="@string/upload_photos_that_describe_or_are_related_to_your_serviceew"
+        android:text="@string/upload_photos_that_describe_or_are_related_to_your_services"
         android:textColor="@color/sv_primary"
         android:textSize="16sp"
         app:layout_constraintDimensionRatio="1:1"
