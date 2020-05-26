@@ -82,39 +82,184 @@
             android:layout_height="match_parent">
 
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="@dimen/inner_image_size"
+                android:layout_height="@dimen/inner_image_size"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/ic_phone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:text="Contact Numbers:"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/card_title_text_size"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="@dimen/semi_titte_size"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="@+id/imageView" />
 
             <TextView
                 android:id="@+id/textView56"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:text="1.  +8801784783001"
-                app:layout_constraintEnd_toEndOf="@+id/textView2"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <Button
+                android:id="@+id/firstContactEdit"
+                android:layout_width="@dimen/inner_image_size"
+                android:layout_height="@dimen/inner_image_size"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/ic_contact_edit"
+                android:foreground="?selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="@+id/textView56"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+
+            <TextView
+                android:id="@+id/firstContactMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:switchPadding="10dp"
+                android:text="@string/contactModePrivate"
+                android:textColor="@color/color_not_active"
+                android:textStyle="normal"
+                android:transitionName="todayStatusSwitch"
+                app:layout_constraintStart_toStartOf="@+id/textView56"
+                app:layout_constraintTop_toBottomOf="@+id/textView56" />
+
+
+
+            <Switch
+                android:id="@+id/firstContactModeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:switchPadding="10dp"
+                android:text="@string/contactModePrivate"
+                android:textColor="@color/color_not_active"
+                android:textStyle="normal"
+                android:visibility="invisible"
+                android:transitionName="todayStatusSwitch"
+                app:layout_constraintStart_toStartOf="@+id/textView56"
+                app:layout_constraintTop_toBottomOf="@+id/textView56" />
+
+
+            <TextView
+                android:id="@+id/secondContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="2.  +8801784783001"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/textView56"
+                app:layout_constraintTop_toBottomOf="@+id/firstContactModeSwitch" />
+
+
+            <Button
+                android:id="@+id/secondContactEdit"
+                android:layout_width="@dimen/inner_image_size"
+                android:layout_height="@dimen/inner_image_size"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/ic_contact_edit"
+                android:foreground="?selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="@+id/secondContact"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/secondContact" />
+
+
+            <TextView
+                android:id="@+id/secondContactMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:switchPadding="10dp"
+                android:text="@string/contactModePrivate"
+                android:textColor="@color/color_not_active"
+                android:textStyle="normal"
+                android:transitionName="todayStatusSwitch"
+                app:layout_constraintStart_toStartOf="@+id/secondContact"
+                app:layout_constraintTop_toBottomOf="@+id/secondContact" />
+
+
+
+            <Switch
+                android:id="@+id/secondContactModeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:switchPadding="10dp"
+                android:text="@string/contactModePrivate"
+                android:textColor="@color/color_not_active"
+                android:textStyle="normal"
+                android:visibility="invisible"
+                android:transitionName="todayStatusSwitch"
+                app:layout_constraintStart_toStartOf="@+id/textView56"
+                app:layout_constraintTop_toBottomOf="@+id/secondContact" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/saveChangesBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:foreground="?selectableItemBackground"
+                android:visibility="gone"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addContactLayout">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_backgound">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Save Changes"
+                        android:textSize="@dimen/card_title_text_size"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/addContactBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:foreground="?selectableItemBackground"
                 android:visibility="visible"
                 app:cardCornerRadius="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/addContactLayout">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -145,16 +290,17 @@
                 android:id="@+id/addContactLayout"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/addContactBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView56">
+                app:layout_constraintTop_toBottomOf="@+id/secondContactModeSwitch">
 
                 <com.hbb20.CountryCodePicker
                     android:id="@+id/ccp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     app:ccp_defaultNameCode="BD"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +308,7 @@
 
                 <EditText
                     android:id="@+id/phoneText"
-                    android:layout_width="0dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:hint="Phone Number"
