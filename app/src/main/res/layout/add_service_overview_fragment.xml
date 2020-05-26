@@ -96,35 +96,39 @@
         app:layout_constraintTop_toBottomOf="@+id/textView58" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/edt_service_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline43"
         app:layout_constraintStart_toStartOf="@+id/guideline42"
         app:layout_constraintTop_toBottomOf="@+id/textView59"
-        app:hintEnabled="false">
+        app:hintEnabled="false"
+        app:counterEnabled="true"
+        app:counterMaxLength="200">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:hint="@string/i_will_provide_with_some_service_ni_am_expert_at"
+            android:layout_height="90dp"
             android:background="@drawable/service_category_spinner"
-            android:padding="8dp"/>
+            android:gravity="top"
+            android:hint="@string/i_will_provide_with_some_service_ni_am_expert_at"
+            android:maxLength="200"
+            android:padding="8dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/textView60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="@string/working_hour"
         android:textColor="@color/sv_primary"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline43"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline42"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_service_description" />
 
     <TextView
         android:id="@+id/textView62"
@@ -148,7 +152,8 @@
         android:drawableStart="@drawable/ic_clock"
         android:drawablePadding="8dp"
         android:paddingStart="24dp"
-        android:paddingEnd="24dp"/>
+        android:paddingEnd="24dp"
+        android:minHeight="40dp"/>
 
     <TextView
         android:id="@+id/textView63"
@@ -176,6 +181,7 @@
         android:drawableStart="@drawable/ic_clock"
         android:drawablePadding="8dp"
         android:paddingStart="24dp"
-        android:paddingEnd="24dp"/>
+        android:paddingEnd="24dp"
+        android:minHeight="40dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

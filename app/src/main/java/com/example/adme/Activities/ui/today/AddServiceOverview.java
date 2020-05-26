@@ -20,8 +20,10 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.adme.R;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -34,6 +36,7 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
     private boolean isDataSaved = false;
     private Spinner service_category_spinner;
     private Button start_time_btn,end_time_btn;
+    private TextInputLayout edt_service_description;
 
 
 
@@ -57,32 +60,19 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
         service_category_spinner.setAdapter(adapter);
         start_time_btn = root.findViewById(R.id.start_time_btn);
         end_time_btn = root.findViewById(R.id.end_time_btn);
+        edt_service_description = root.findViewById(R.id.edt_service_description);
+
+        Objects.requireNonNull(edt_service_description.getEditText()).setOnFocusChangeListener((v, hasFocus) -> {
+
+            if (hasFocus){
+                edt_service_description.getEditText().setText(R.string.i_will_provide_with_some_service_ni_am_expert_at);
+            }
+
+        });
+
+
+
         Calendar c = Calendar.getInstance();
-
-
-        /*DatePickerDialog.OnDateSetListener date2 = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateDate2();
-            }
-        };
-
-        img_calender1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerDialog mDatePickerDialog1 =new DatePickerDialog(getContext(), date1,
-                        myCalendar.get(Calendar.YEAR),
-                        myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH));
-//                mDatePickerDialog1.getDatePicker().setMaxDate(myCalendar.get(Calendar.DAY_OF_MONTH));
-//                mDatePickerDialog1.getDatePicker().setMinDate((myCalendar.get(Calendar.DAY_OF_MONTH)-10));
-                mDatePickerDialog1.show();
-            }
-        });*/
-
         start_time_btn.setOnClickListener(v -> {
 
             c.set(Calendar.HOUR_OF_DAY,10);
