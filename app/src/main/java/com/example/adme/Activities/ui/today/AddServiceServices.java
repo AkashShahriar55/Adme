@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 import com.example.adme.Helpers.AdServiceDialog;
 import com.example.adme.R;
 
-public class AddServiceServices extends Fragment implements AddServicesActivity.SaveFragmentListener {
+public class AddServiceServices extends Fragment implements AddServicesActivity.SaveFragmentListener, AdServiceDialog.AdServiceDialogListener {
 
     private AddServiceServicesViewModel mViewModel;
     private boolean isValidationChecked= false;
@@ -56,6 +57,7 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
     private void openDialog() {
 
         AdServiceDialog dialog = new AdServiceDialog();
+        dialog.setTargetFragment(AddServiceServices.this,1);
         dialog.show(getParentFragmentManager(),"Ad Service Dialog");
     }
 
@@ -81,5 +83,14 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
         if(isValidationChecked){
             isDataSaved = true;
         }
+    }
+
+    @Override
+    public void dialogText(String service_name, String service_description, String service_charge) {
+
+        Log.i("service_name",service_name);
+        Log.i("service_description",service_description);
+        Log.i("service_charge",service_charge);
+
     }
 }
