@@ -1,9 +1,11 @@
 package com.example.adme.Activities.ui.today;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.adme.Activities.Notification_class;
@@ -30,6 +32,15 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
     @Override
     public void onBindViewHolder(@NonNull InventoryViewHolder holder, int position) {
 
+        Notification_class notificationClass = itemList.get(position);
+        holder.layout_notificationItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,QuotationDetailsViewModel.class);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -40,12 +51,13 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
     public class InventoryViewHolder extends RecyclerView.ViewHolder {
         CircleImageView imageView_profilePic;
         TextView time,notification_text;
-
+        LinearLayout layout_notificationItem;
         public InventoryViewHolder(View view) {
             super(view);
             time = view.findViewById(R.id.notification_time);
             notification_text = view.findViewById(R.id.notification_text);
             imageView_profilePic = view.findViewById(R.id.profile_image);
+            layout_notificationItem = view.findViewById(R.id.linearLayout);
         }
 
 
