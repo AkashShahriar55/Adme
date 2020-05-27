@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/textView57"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/please_choose_category_for_your_service"
         app:layout_constraintEnd_toStartOf="@+id/guideline43"
@@ -87,7 +87,7 @@
 
     <TextView
         android:id="@+id/textView59"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/this_is_your_service_description_choose_wisely_the_words_that_will_attract_the_clients"
         app:layout_constraintEnd_toStartOf="@+id/guideline43"
@@ -104,16 +104,18 @@
         app:layout_constraintStart_toStartOf="@+id/guideline42"
         app:layout_constraintTop_toBottomOf="@+id/textView59"
         app:hintEnabled="false"
+
         app:counterEnabled="true"
-        app:counterMaxLength="200">
+        app:counterTextColor="@color/txt_highlight"
+        app:counterMaxLength="100">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:background="@drawable/service_category_spinner"
             android:gravity="top"
-            android:hint="@string/i_will_provide_with_some_service_ni_am_expert_at"
-            android:maxLength="200"
+            android:hint="@string/i_will_provide_with_hint"
+            android:maxLength="100"
             android:padding="8dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -183,5 +185,17 @@
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:minHeight="40dp"/>
+
+    <TextView
+        android:id="@+id/timeError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:text="Start time can not be ahead of end time"
+        android:textColor="@color/color_negative"
+        app:layout_constraintStart_toStartOf="@+id/start_time_btn"
+        app:layout_constraintTop_toBottomOf="@+id/start_time_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

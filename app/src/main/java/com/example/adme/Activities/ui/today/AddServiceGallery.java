@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -20,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.adme.Helpers.MyReader;
 import com.example.adme.R;
 
 import static android.app.Activity.RESULT_OK;
@@ -32,6 +35,7 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
     private AddServiceGalleryViewModel mViewModel;
     private boolean isValidationChecked= false;
     private boolean isDataSaved = false;
+    private Uri imageUris[] = new Uri[3];
 
     private ImageView service_image_1,service_image_2,service_image_3;
     private int code;
@@ -179,20 +183,32 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
 
             if (requestCode == IMAGE_PICK_CODE_1){
                 assert data != null;
-                service_image_1.setImageURI(data.getData());
-
+                imageUris[0] = data.getData();
+                Glide.with(requireContext())
+                        .load(data.getData())
+                        .fitCenter()
+                        .into(service_image_1);
+                isValidationChecked = true;
             }
 
             else if (requestCode == IMAGE_PICK_CODE_2){
                 assert data != null;
-                service_image_2.setImageURI(data.getData());
-
+                imageUris[1] = data.getData();
+                Glide.with(requireContext())
+                        .load(data.getData())
+                        .fitCenter()
+                        .into(service_image_2);
+                isValidationChecked = true;
             }
 
             else if (requestCode == IMAGE_PICK_CODE_3){
                 assert data != null;
-                service_image_3.setImageURI(data.getData());
-
+                imageUris[2] = data.getData();
+                Glide.with(requireContext())
+                        .load(data.getData())
+                        .fitCenter()
+                        .into(service_image_3);
+                isValidationChecked = true;
             }
 
         }
@@ -206,6 +222,25 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if(imageUris[0]!= null){
+            Glide.with(requireContext())
+                    .load(imageUris[0])
+                    .fitCenter()
+                    .into(service_image_1);
+        }
+        if (imageUris[1]!=null){
+            Glide.with(requireContext())
+                    .load(imageUris[1])
+                    .fitCenter()
+                    .into(service_image_2);
+        }
+        if (imageUris[2]!=null){
+            Glide.with(requireContext())
+                    .load(imageUris[2])
+                    .fitCenter()
+                    .into(service_image_3);
+        }
     }
 
     @Override

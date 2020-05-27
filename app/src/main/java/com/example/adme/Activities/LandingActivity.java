@@ -1,7 +1,10 @@
 package com.example.adme.Activities;
 
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -15,20 +18,31 @@ import com.example.adme.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.List;
+
 public class LandingActivity extends AppCompatActivity {
+
+    private static final String TAG = "LandingActivity";
+
+    private static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
+    private long mBackPressed;
+    private NavController navController;
+    private String label = null;
 
     private static final String FRAGMENT_TODAY = "TODAY";
     private static final String FRAGMENT_GAMES = "Lead";
-    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,30 +52,44 @@ public class LandingActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
 
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                label = String.valueOf(destination.getLabel());
+            }
+        });
+
     }
+
+
+
+
     @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+    public void onBackPressed()
+    {
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        Fragment currentFragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+
+        if(currentFragment instanceof TodayFragment){
+            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis())
+            {
+                if(Build.VERSION.SDK_INT>=16){
+                    finishAffinity();
+                } else{
+                    finish();
+                    System.exit(0);
+                }
+                return;
+            }
+            else { Toast.makeText(getBaseContext(), "Tap back again to exit", Toast.LENGTH_SHORT).show(); }
+
+            mBackPressed = System.currentTimeMillis();
+        }else{
             super.onBackPressed();
-            return;
         }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
     }
-
-
-
-
 }

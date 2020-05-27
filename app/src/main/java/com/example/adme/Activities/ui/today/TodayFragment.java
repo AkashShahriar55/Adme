@@ -135,7 +135,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
                 Fragment nextFragment = new TodayBottomDetailsFragment(isOnline);
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.add(R.id.nav_host_fragment, nextFragment);
+                fragmentTransaction.replace(R.id.nav_host_fragment, nextFragment);
                 fragmentTransaction.commit();
 
             }
