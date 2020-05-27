@@ -1,7 +1,5 @@
 package com.example.adme.Activities.ui.today;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,10 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.TextView;
 
-import com.example.adme.Activities.ui.leaderboard.LeaderBoardAdapter;
+import com.example.adme.Helpers.AdServiceDialog;
 import com.example.adme.R;
 
 public class AddServiceServices extends Fragment implements AddServicesActivity.SaveFragmentListener {
@@ -24,10 +21,9 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
     private AddServiceServicesViewModel mViewModel;
     private boolean isValidationChecked= false;
     private boolean isDataSaved = false;
+    private TextView ad_service_btn;
 
-    private RecyclerView ad_service_recyclerView;;
-    private AdServiceAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    ;
 
     public static AddServiceServices newInstance() {
         return new AddServiceServices();
@@ -43,13 +39,24 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
 
     private void initializeFields(View root) {
 
-        ad_service_recyclerView = root.findViewById(R.id.ad_service_recyclerView);
-        layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView ad_service_recyclerView = root.findViewById(R.id.ad_service_recyclerView);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         ad_service_recyclerView.setLayoutManager(layoutManager);
         ad_service_recyclerView.setHasFixedSize(true);
-        adapter = new AdServiceAdapter();
+        AdServiceAdapter adapter = new AdServiceAdapter();
         ad_service_recyclerView.setAdapter(adapter);
+        ad_service_btn = root.findViewById(R.id.ad_service_btn);
 
+        ad_service_btn.setOnClickListener(v -> {
+            openDialog();
+        });
+
+    }
+
+    private void openDialog() {
+
+        AdServiceDialog dialog = new AdServiceDialog();
+        dialog.show(getParentFragmentManager(),"Ad Service Dialog");
     }
 
     @Override

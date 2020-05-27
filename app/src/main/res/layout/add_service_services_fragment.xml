@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/services"
-        app:layout_constraintEnd_toStartOf="@+id/textView65"
+        app:layout_constraintEnd_toStartOf="@+id/ad_service_btn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@+id/guideline48"
@@ -41,7 +41,7 @@
         android:textColor="@color/sv_primary"/>
 
     <TextView
-        android:id="@+id/textView65"
+        android:id="@+id/ad_service_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add"
