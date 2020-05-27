@@ -65,7 +65,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
         goto_login_btn.setOnClickListener(v -> {
-            startActivity(new Intent(RegistrationActivity.this,LoginActivity.class));
+            onBackPressed();
         });
 
         Objects.requireNonNull(reg_password.getEditText()).addTextChangedListener(new TextWatcher() {
