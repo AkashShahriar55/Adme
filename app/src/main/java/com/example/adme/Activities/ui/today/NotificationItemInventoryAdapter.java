@@ -14,6 +14,7 @@ import com.example.adme.R;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,7 +37,7 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
         holder.layout_notificationItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,QuotationDetailsViewModel.class);
+                Intent intent = new Intent(context,QuotationDetails.class);
                 context.startActivity(intent);
             }
         });
@@ -51,7 +52,7 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
     public class InventoryViewHolder extends RecyclerView.ViewHolder {
         CircleImageView imageView_profilePic;
         TextView time,notification_text;
-        LinearLayout layout_notificationItem;
+        ConstraintLayout layout_notificationItem;
         public InventoryViewHolder(View view) {
             super(view);
             time = view.findViewById(R.id.notification_time);
