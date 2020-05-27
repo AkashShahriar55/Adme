@@ -1,9 +1,10 @@
 package com.example.adme.Activities;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.adme.Activities.ui.income.IncomeFragment;
 import com.example.adme.Activities.ui.leaderboard.LeaderBoardFragment;
@@ -27,6 +28,7 @@ public class LandingActivity extends AppCompatActivity {
 
     private static final String FRAGMENT_TODAY = "TODAY";
     private static final String FRAGMENT_GAMES = "Lead";
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,24 @@ public class LandingActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
 

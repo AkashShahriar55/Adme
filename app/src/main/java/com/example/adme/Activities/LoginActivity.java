@@ -74,7 +74,10 @@ public class LoginActivity extends AppCompatActivity {
         //Goto Registration page when click on create an account text
         txt_create_account.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegistrationActivity.class)));
 
-        login_skip_btn.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, LandingActivity.class)));
+        login_skip_btn.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, LandingActivity.class));
+            finish();
+        });
 
         login_google_btn.setOnClickListener(v -> signInWithGoogle());
 
