@@ -189,7 +189,12 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
             }
         } else {
             // Permission has already been granted
-            setUpMap();
+            if(mMap == null){
+                setUpMap();
+            }else{
+                GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+            }
+
         }
     }
 
@@ -226,7 +231,12 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setUpMap();
+                    if(mMap == null){
+                        setUpMap();
+                    }else{
+                        GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+                    }
+
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
