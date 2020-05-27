@@ -1,71 +1,32 @@
 package com.example.adme.Activities.ui.today;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.transition.TransitionInflater;
-import androidx.transition.TransitionSet;
 
+import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.R;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "TodayFragment";
@@ -87,10 +48,6 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_today, container, false);
-
-        Log.i(TAG, "onCreateView: git practice");
-
-        Log.i(TAG, "onCreateView: new branch");
 
         return root;
     }
@@ -178,7 +135,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
                 Fragment nextFragment = new TodayBottomDetailsFragment(isOnline);
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.add(R.id.nav_host_fragment, nextFragment);
+                fragmentTransaction.replace(R.id.nav_host_fragment, nextFragment);
                 fragmentTransaction.commit();
 
             }
@@ -232,7 +189,12 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
             }
         } else {
             // Permission has already been granted
-            setUpMap();
+            if(mMap == null){
+                setUpMap();
+            }else{
+                GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+            }
+
         }
     }
 
@@ -254,37 +216,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext());
-                locationProviderClient.getLastLocation().addOnSuccessListener( requireActivity(), location -> {
-                    if(location != null){
-                        LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
-                        requireActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
-                            }
-                        });
-
-                    }
-
-                }).addOnFailureListener(requireActivity(), new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-                
-            }
-        }).start();
-
-
-
-
+        GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
     }
 
 
@@ -299,7 +231,12 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setUpMap();
+                    if(mMap == null){
+                        setUpMap();
+                    }else{
+                        GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+                    }
+
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.

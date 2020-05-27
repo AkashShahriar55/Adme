@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         //Goto Registration page when click on create an account text
         txt_create_account.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegistrationActivity.class)));
 
-        login_skip_btn.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, LandingActivity.class)));
+        login_skip_btn.setOnClickListener(v -> startLandingActivity());
 
         login_google_btn.setOnClickListener(v -> signInWithGoogle());
 
@@ -97,8 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            startActivity(new Intent(LoginActivity.this,LandingActivity.class));
-            finish();
+            startLandingActivity();
         }
     }
 
@@ -236,8 +235,7 @@ public class LoginActivity extends AppCompatActivity {
                     // User is already exist in database
                     //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     dialog.dismissDialog();
-                    startActivity(new Intent(LoginActivity.this,LandingActivity.class));
-                    finish();
+                    startLandingActivity();
                 } else {
                     // User hasn't created yet
                     // create new user in database
@@ -256,8 +254,7 @@ public class LoginActivity extends AppCompatActivity {
                     /*** Insert into fireStore database**/
                     userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
                         dialog.dismissDialog();
-                        startActivity(new Intent(LoginActivity.this,LandingActivity.class));
-                        finish();
+                        startLandingActivity();
                     });
                 }
             } else {
@@ -293,6 +290,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    private  void startLandingActivity(){
+        Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+
     private void signInWithEmailAndPassword(String email, String password) {
 
         mAuth.signInWithEmailAndPassword(email, password)
@@ -303,8 +308,7 @@ public class LoginActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         //updateUI(user);
                         dialog.dismissDialog();
-                        startActivity(new Intent(LoginActivity.this,LandingActivity.class));
-                        finish();
+                        startLandingActivity();
 
                     } else {
                         // If sign in fails, display a message to the user.

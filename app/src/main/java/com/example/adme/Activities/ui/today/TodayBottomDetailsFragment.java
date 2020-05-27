@@ -45,7 +45,13 @@ public class TodayBottomDetailsFragment extends Fragment {
         Button todayAddService = view.findViewById(R.id.today_add_service);
         this.view = view;
 
-
+        ImageView notificationButton = view.findViewById(R.id.today_notification_btn);
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToNotificationFragment();
+            }
+        });
 
         Switch todayStatusSwitch = view.findViewById(R.id.today_status_switch);
         todayStatusSwitch.setChecked(isOnline);
@@ -82,6 +88,17 @@ public class TodayBottomDetailsFragment extends Fragment {
             }
         });
     }
+
+    private void goToNotificationFragment() {
+
+        Fragment notificationFragment = new Notification_Fragment();
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.replace(R.id.nav_host_fragment, notificationFragment);
+        fragmentTransaction.commit();
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
