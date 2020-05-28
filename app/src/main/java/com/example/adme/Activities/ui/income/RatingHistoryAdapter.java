@@ -15,7 +15,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RatingHistoryAdapter extends RecyclerView.Adapter<RatingHistoryAdapter.RatingHistoryViewHolder> {
 
     public RatingHistoryAdapter() {
-
     }
 
     @NonNull
@@ -27,9 +26,6 @@ public class RatingHistoryAdapter extends RecyclerView.Adapter<RatingHistoryAdap
 
     @Override
     public void onBindViewHolder(@NonNull RatingHistoryViewHolder holder, int position) {
-
-
-
     }
 
     @Override
