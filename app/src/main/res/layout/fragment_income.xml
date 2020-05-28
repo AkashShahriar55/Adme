@@ -166,7 +166,7 @@
                 app:hdPinBackgroundColor="@color/pin_background"
                 app:hdPinDrawable="@drawable/ic_pin"
                 app:hdPinMarginBottom="22dp"
-                app:hdPinMarginEnd="12dp"
+                app:hdPinMarginEnd="11dp"
                 app:hdPinMarginTop="0dp"
                 app:hdPinPaddingBottom="5dp"
                 app:hdPinTextColor="@color/white"
@@ -596,7 +596,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

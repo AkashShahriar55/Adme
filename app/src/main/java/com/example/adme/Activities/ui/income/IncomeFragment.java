@@ -1,6 +1,7 @@
 package com.example.adme.Activities.ui.income;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +9,16 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.adme.Activities.LoginActivity;
+import com.example.adme.Activities.RegistrationActivity;
 import com.example.adme.R;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
@@ -25,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 
 public class IncomeFragment extends Fragment {
 
@@ -34,6 +35,7 @@ public class IncomeFragment extends Fragment {
     private TextView tv_calender1,tv_calender2;
     private ImageView img_calender1, img_calender2;
     ChartProgressBar mChart;
+    CardView cv_money,cv_rating;
     private int mYear, mMonth, mDay;
 
 
@@ -54,6 +56,8 @@ public class IncomeFragment extends Fragment {
     }
 
     private void initializeFields(View root) {
+        cv_money = (CardView) root.findViewById(R.id.cv_1);
+        cv_rating = (CardView) root.findViewById(R.id.cv_2);
         createChart(root);
         img_calender1 = (ImageView) root.findViewById(R.id.img_calender1);
         img_calender2 = (ImageView) root.findViewById(R.id.img_calender2);
@@ -102,6 +106,9 @@ public class IncomeFragment extends Fragment {
                 mDatePickerDialog2.show();
             }
         });
+
+        cv_rating.setOnClickListener(v -> startActivity(new Intent(getContext(), RatingAndHistoryActicity.class)));
+        cv_money.setOnClickListener(v -> startActivity(new Intent(getContext(), MoneyHistoryActicity.class)));
 
     }
 
