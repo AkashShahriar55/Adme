@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
@@ -57,7 +56,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Privacy Settings"
+            android:text="Manage Profile"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -67,6 +66,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
@@ -80,112 +80,45 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+            <!-- for manage profile -->
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/manageProfileBtnLay"
-                android:layout_width="0dp"
+                android:id="@+id/manageProfileLayout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:foreground="?selectableItemBackground"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="@dimen/inner_image_size"
-                    android:layout_height="@dimen/inner_image_size"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/ic_avatar"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView72"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView71" />
-
-                <TextView
-                    android:id="@+id/textView71"
+                <Switch
+                    android:id="@+id/profileMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Manage your profile"
-                    android:textColor="@color/blue"
+                    android:backgroundTint="@color/green"
+                    android:switchPadding="10dp"
+                    android:text="@string/profileModePrvate"
+                    android:textColor="@color/color_not_active"
                     android:textSize="@dimen/semi_titte_size"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/imageView5"
+                    android:textStyle="normal"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView72"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Change your profile privacy, like who can see your profile"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/textView71"
-                    app:layout_constraintTop_toBottomOf="@+id/textView71" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/changePassBtnLay"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:clickable="true"
-                android:foreground="?selectableItemBackground"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageProfileBtnLay">
-
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="@dimen/inner_image_size"
-                    android:layout_height="@dimen/inner_image_size"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/ic_key"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView74"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView73" />
-
-                <TextView
-                    android:id="@+id/textView73"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Change password"
-                    android:textColor="@color/blue"
-                    android:textSize="@dimen/semi_titte_size"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/imageView6"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView74"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Change your account's current password"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/textView73"
-                    app:layout_constraintTop_toBottomOf="@+id/textView73" />
+                    android:text="@string/profileModePrvateMsg"
+                    app:layout_constraintStart_toStartOf="@+id/profileMode"
+                    app:layout_constraintTop_toBottomOf="@+id/profileMode" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </androidx.cardview.widget.CardView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

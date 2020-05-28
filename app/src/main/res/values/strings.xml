@@ -36,6 +36,10 @@
     <string name="profile">Profile</string>
     <string name="contactModePrivate">This contact info is private</string>
     <string name="contactModePublic">This contact info is public</string>
+    <string name="profileModePrvate">Your profile is private</string>
+    <string name="profileModePublic">Your profile is public</string>
+    <string name="profileModePrvateMsg">Your profile will not be shown to others</string>
+    <string name="profileModePublicMsg">Your profile will be shown to others</string>
 
     <string name="leaderboard">LeaderBoard</string>
     <string name="select_service_category">Select Service Category</string>
