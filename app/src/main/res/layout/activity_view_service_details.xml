@@ -35,7 +35,8 @@
                 app:sliderIndicatorRadius="2dp"
                 app:sliderIndicatorSelectedColor="#5A5A5A"
                 app:sliderIndicatorUnselectedColor="#FFF"
-                app:sliderScrollTimeInSec="1">
+                app:sliderScrollTimeInSec="1"
+                android:background="@color/android_default_layout_color">
 
             </com.smarteist.autoimageslider.SliderView>
 
@@ -44,12 +45,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/android_default_layout_color"
-                android:paddingStart="8dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="8dp"
+                android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageSlider">
 
@@ -252,7 +249,7 @@
                     android:layout_marginBottom="8dp"
                     android:text="Rohonpur,Gomostapur,Chapainawabganj,Rajshahi"
                     android:textColor="@color/black"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toTopOf="@+id/barrier9"
                     app:layout_constraintEnd_toStartOf="@+id/barrier10"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
