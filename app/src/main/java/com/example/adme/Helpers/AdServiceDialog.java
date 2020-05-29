@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,11 @@ import java.util.Objects;
 public class AdServiceDialog extends AppCompatDialogFragment {
     private TextInputLayout edt_service_name,edt_service_description,edt_service_charge;
     private AdServiceDialogListener listener;
+    private String calledFrom;
+
+    public AdServiceDialog(String calledFrom) {
+        this.calledFrom = calledFrom;
+    }
 
     @NonNull
     @Override
@@ -52,9 +58,10 @@ public class AdServiceDialog extends AppCompatDialogFragment {
 
             if (validate(service_name,service_description,service_charge)){
                 listener.dialogText(service_name,service_description,service_charge);
+                dialog.dismiss();
 
             }
-            dialog.dismiss();
+
 
         });
 
@@ -66,7 +73,12 @@ public class AdServiceDialog extends AppCompatDialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (AdServiceDialogListener) getTargetFragment();
+            if (calledFrom.equals("fragment")){
+                listener = (AdServiceDialogListener) getTargetFragment();
+            }
+            else{
+                listener = (AdServiceDialogListener) getActivity();
+            }
         } catch (ClassCastException e) {
             Log.e("Error AdServiceDialog", Objects.requireNonNull(e.getMessage()));
         }
