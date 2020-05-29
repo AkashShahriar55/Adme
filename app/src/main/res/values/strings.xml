@@ -60,6 +60,7 @@
     <string name="_50">$50</string>
     <string name="location">Location</string>
     <string name="miles">Miles</string>
+    <string name="reviews">Reviews</string>
 
     <string-array name="service_category">
         <item>Paint Job</item>
