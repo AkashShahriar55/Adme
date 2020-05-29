@@ -23,8 +23,7 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
     private boolean isValidationChecked= false;
     private boolean isDataSaved = false;
     private TextView ad_service_btn;
-
-    ;
+    private final String calledFrom = "fragment";
 
     public static AddServiceServices newInstance() {
         return new AddServiceServices();
@@ -49,14 +48,14 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
         ad_service_btn = root.findViewById(R.id.ad_service_btn);
 
         ad_service_btn.setOnClickListener(v -> {
-            openDialog();
+            openDialogFromFragment();
         });
 
     }
 
-    private void openDialog() {
+    private void openDialogFromFragment() {
 
-        AdServiceDialog dialog = new AdServiceDialog();
+        AdServiceDialog dialog = new AdServiceDialog(calledFrom);
         dialog.setTargetFragment(AddServiceServices.this,1);
         dialog.show(getParentFragmentManager(),"Ad Service Dialog");
     }
