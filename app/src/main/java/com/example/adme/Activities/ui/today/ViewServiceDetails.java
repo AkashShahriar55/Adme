@@ -14,7 +14,10 @@ import android.graphics.Color;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.adme.Helpers.AdServiceDialog;
@@ -23,6 +26,7 @@ import com.example.adme.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -33,6 +37,7 @@ public class ViewServiceDetails extends AppCompatActivity implements OnMapReadyC
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private GoogleMap mMap;
     private final String calledFrom = "activity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,49 @@ public class ViewServiceDetails extends AppCompatActivity implements OnMapReadyC
             openDialogFromActivity();
 
         });
+
+
+        //review adapter setting
+
+        RecyclerView review_recyclerView = findViewById(R.id.review_recyclerView);
+        RecyclerView.LayoutManager review_layoutManager =  new LinearLayoutManager(ViewServiceDetails.this);
+        review_recyclerView.setLayoutManager(review_layoutManager);
+        review_recyclerView.setHasFixedSize(true);
+        ReviewAdapter reviewAdapter = new ReviewAdapter();
+        review_recyclerView.setAdapter(reviewAdapter);
+
+        //handle Floating action button to scroll up
+        FloatingActionButton fab_scroll_up = findViewById(R.id.fab_scroll_up);
+        ScrollView scrollView = findViewById(R.id.scrollView);
+
+        fab_scroll_up.setOnClickListener(v -> {
+
+            scrollView.fullScroll(ScrollView.FOCUS_UP);
+        });
+
+
+
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            int lastScroll=0;
+            @Override
+            public void onScrollChanged() {
+                int scrollY = scrollView.getScrollY(); // For ScrollView
+                //int scrollX = rootScrollView.getScrollX(); // For HorizontalScrollView
+                // DO SOMETHING WITH THE SCROLL COORDINATES
+                if (scrollY > lastScroll ) {
+                    //Log.e("scroll","down scroll"+scrollY);
+                    fab_scroll_up.setVisibility(View.VISIBLE);
+                } else if (scrollY < lastScroll ) {
+                    //Log.e("scroll","up scroll"+scrollY);
+                    fab_scroll_up.setVisibility(View.GONE);
+                }
+                lastScroll=scrollY;
+            }
+
+
+        });
+
+
     }
 
 
@@ -160,4 +208,6 @@ public class ViewServiceDetails extends AppCompatActivity implements OnMapReadyC
         Log.i("service_description",service_description);
         Log.i("service_charge",service_charge);
     }
+
+
 }
