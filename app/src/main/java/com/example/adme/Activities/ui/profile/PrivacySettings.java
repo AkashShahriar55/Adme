@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.adme.R;
@@ -14,7 +15,8 @@ import com.example.adme.R;
 public class PrivacySettings extends AppCompatActivity {
 
 
-    ConstraintLayout backBtn,manageProfileBtnLay, changePassBtnLay;
+    ConstraintLayout backBtn;
+    CardView manageProfileBtnLay, changePassBtnLay;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

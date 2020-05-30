@@ -69,10 +69,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/manageProfileBtnLay"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="@dimen/setting_section_card_size"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:foreground="?selectableItemBackground"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline28"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
@@ -83,24 +85,33 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/manageProfileBtnLay"
+
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:foreground="?selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="@dimen/inner_image_size"
-                    android:layout_height="@dimen/inner_image_size"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout7"
+                    android:layout_width="@dimen/in_card_image_size"
+                    android:layout_height="@dimen/in_card_image_size"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/ic_avatar"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView72"
+                    android:background="@drawable/circle_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView71" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="@dimen/inner_image_size"
+                        android:layout_height="@dimen/inner_image_size"
+                        android:background="@drawable/ic_avatar"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/textView71"
@@ -112,13 +123,14 @@
                     android:textColor="@color/blue"
                     android:textSize="@dimen/semi_titte_size"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/imageView5"
+                    app:layout_constraintStart_toEndOf="@+id/constraintLayout7"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView72"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
                     android:layout_marginBottom="8dp"
                     android:text="Change your profile privacy, like who can see your profile"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -126,29 +138,68 @@
                     app:layout_constraintStart_toStartOf="@+id/textView71"
                     app:layout_constraintTop_toBottomOf="@+id/textView71" />
 
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="@dimen/right_arrow_size"
+                    android:layout_height="@dimen/right_arrow_size"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/changePassBtnLay"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/setting_section_card_size"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:foreground="?selectableItemBackground"
+        app:layout_constraintEnd_toStartOf="@+id/guideline29"
+        app:layout_constraintStart_toStartOf="@+id/guideline28"
+        app:layout_constraintTop_toBottomOf="@+id/manageProfileBtnLay">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/changePassBtnLay"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:clickable="true"
-                android:foreground="?selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageProfileBtnLay">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="@dimen/inner_image_size"
-                    android:layout_height="@dimen/inner_image_size"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout8"
+                    android:layout_width="@dimen/in_card_image_size"
+                    android:layout_height="@dimen/in_card_image_size"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/ic_key"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView74"
+                    android:background="@drawable/circle_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView73" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="@dimen/inner_image_size"
+                        android:layout_height="@dimen/inner_image_size"
+                        android:background="@drawable/ic_key"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/textView73"
@@ -160,7 +211,7 @@
                     android:textColor="@color/blue"
                     android:textSize="@dimen/semi_titte_size"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/imageView6"
+                    app:layout_constraintStart_toEndOf="@+id/constraintLayout8"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -174,18 +225,23 @@
                     app:layout_constraintStart_toStartOf="@+id/textView73"
                     app:layout_constraintTop_toBottomOf="@+id/textView73" />
 
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="@dimen/right_arrow_size"
+                    android:layout_height="@dimen/right_arrow_size"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </androidx.cardview.widget.CardView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
