@@ -48,6 +48,7 @@ public class IncomeFragment extends Fragment {
 //                textView.setText(s);
 //            }
 //        });
+        //check
 
         initializeFields(root);
         return root;
