@@ -45,6 +45,8 @@
         <activity android:name=".Activities.ui.profile.ChangeMode" />
         <activity android:name=".Activities.ui.profile.Helps" />
         <activity android:name=".Activities.ui.profile.NotificationSettings" />
+        <activity android:name=".Activities.ui.profile.ManageProfile"/>
+        <activity android:name=".Activities.ui.profile.ChangePassword"/>
         <!--              for handling profile ends -->
         <activity android:name=".Activities.MainActivity">
             <intent-filter>
@@ -74,9 +76,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <!--        for income      -->
-        <activity android:name=".Activities.ui.income.RatingAndHistoryActicity" />
-        <activity android:name=".Activities.ui.income.MoneyHistoryActicity" />
     </application>
 
 </manifest>
