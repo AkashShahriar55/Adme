@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,7 +76,9 @@ public class LoginActivity extends AppCompatActivity {
         //Goto Registration page when click on create an account text
         txt_create_account.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegistrationActivity.class)));
 
-        login_skip_btn.setOnClickListener(v -> startLandingActivity());
+        login_skip_btn.setOnClickListener(v ->{
+            signInAnonymousGuest();
+        });
 
         login_google_btn.setOnClickListener(v -> signInWithGoogle());
 
@@ -92,6 +96,22 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void signInAnonymousGuest() {
+        dialog.startLoadingDialog();
+        mAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInAnonymously:success");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    assert user != null;
+                    PerformDatabaseOperation(user);
+                }
+            }
+        });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -99,6 +119,12 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null){
             startLandingActivity();
         }
+    }
+
+    private void startLandingActivity() {
+        Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void initializeFields() {
@@ -235,7 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                     // User is already exist in database
                     //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     dialog.dismissDialog();
-                    startLandingActivity();
+                    startLocationActivity();
                 } else {
                     // User hasn't created yet
                     // create new user in database
@@ -249,12 +275,11 @@ public class LoginActivity extends AppCompatActivity {
                     else{
                         username = "Adme_User";
                     }
-
-                    User new_user = new User(username,NULL,NULL,"client","online");
+                    User new_user = new User(username,null,"client","online");
                     /*** Insert into fireStore database**/
                     userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
                         dialog.dismissDialog();
-                        startLandingActivity();
+                        startLocationActivity();
                     });
                 }
             } else {
@@ -290,9 +315,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private  void startLandingActivity(){
-        Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    private  void startLocationActivity(){
+        
+        Intent intent = new Intent(LoginActivity.this, AccessLocationActivity.class);
         startActivity(intent);
         finish();
     }
@@ -305,10 +330,10 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
+                         FirebaseUser user = mAuth.getCurrentUser();
                         //updateUI(user);
                         dialog.dismissDialog();
-                        startLandingActivity();
+                        startLocationActivity();
 
                     } else {
                         // If sign in fails, display a message to the user.
@@ -321,5 +346,15 @@ public class LoginActivity extends AppCompatActivity {
 
                     // ...
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(Build.VERSION.SDK_INT>=16){
+            finishAffinity();
+        } else{
+            finish();
+            System.exit(0);
+        }
     }
 }

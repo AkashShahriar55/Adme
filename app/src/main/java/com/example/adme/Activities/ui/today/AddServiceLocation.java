@@ -147,6 +147,7 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
         } else {
             // Permission has already been granted
             setUpMap();
+
         }
     }
 

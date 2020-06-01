@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.adme.Activities.ui.home.HomeFragment;
 import com.example.adme.Activities.ui.income.IncomeFragment;
 import com.example.adme.Activities.ui.leaderboard.LeaderBoardFragment;
 import com.example.adme.Activities.ui.profile.ProfileFragment;
@@ -40,27 +41,30 @@ public class LandingActivity extends AppCompatActivity {
     private long mBackPressed;
     private NavController navController;
     private String label = null;
-
-    private static final String FRAGMENT_TODAY = "TODAY";
-    private static final String FRAGMENT_GAMES = "Lead";
+    private boolean isClient = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupWithNavController(navView, navController);
+        if(isClient){
+            setContentView(R.layout.activity_landing_client);
+            BottomNavigationView navView = findViewById(R.id.nav_view);
+            // Passing each menu ID as a set of Ids because each
+            // menu should be considered as top level destinations.
 
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                label = String.valueOf(destination.getLabel());
-            }
-        });
+            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            NavigationUI.setupWithNavController(navView, navController);
+        }else{
+            setContentView(R.layout.activity_landing);
+            BottomNavigationView navView = findViewById(R.id.nav_view);
+            // Passing each menu ID as a set of Ids because each
+            // menu should be considered as top level destinations.
+
+            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            NavigationUI.setupWithNavController(navView, navController);
+        }
+
 
     }
 
@@ -73,7 +77,7 @@ public class LandingActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         Fragment currentFragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
 
-        if(currentFragment instanceof TodayFragment){
+        if((currentFragment instanceof TodayFragment) || (currentFragment instanceof HomeFragment) ){
             if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis())
             {
                 if(Build.VERSION.SDK_INT>=16){

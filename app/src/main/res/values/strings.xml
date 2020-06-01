@@ -65,6 +65,8 @@
     <string name="location">Location</string>
     <string name="miles">Miles</string>
     <string name="reviews">Reviews</string>
+    <string name="title_home">Home</string>
+    <string name="title_service_history">Service history</string>
 
     <string-array name="service_category">
         <item>Paint Job</item>

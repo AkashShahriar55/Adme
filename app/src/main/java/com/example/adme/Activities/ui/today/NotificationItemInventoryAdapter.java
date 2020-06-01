@@ -33,7 +33,6 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
     @Override
     public void onBindViewHolder(@NonNull InventoryViewHolder holder, int position) {
 
-        Notification_class notificationClass = itemList.get(position);
         holder.layout_notificationItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,7 +40,6 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
                 context.startActivity(intent);
             }
         });
-
     }
 
     @Override

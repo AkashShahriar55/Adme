@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.ui.today.ViewServiceDetails"></activity>
+        <activity android:name=".Activities.AccessLocationActivity"></activity>
+        <activity android:name=".Activities.ui.today.ViewServiceDetails" />
         <activity android:name=".Activities.ui.today.AddServicesActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -37,17 +38,15 @@
             android:name=".Activities.LandingActivity"
             android:label="@string/title_activity_landing" />
         <activity android:name=".Activities.RegistrationActivity" />
-        <activity android:name=".Activities.LoginActivity" />
-        <!--              for handling profile starts -->
+        <activity android:name=".Activities.LoginActivity" /> <!-- for handling profile starts -->
         <activity android:name=".Activities.ui.profile.Contacts" />
         <activity android:name=".Activities.ui.profile.PrivacySettings" />
         <activity android:name=".Activities.ui.profile.AccountSubscriptions" />
         <activity android:name=".Activities.ui.profile.ChangeMode" />
         <activity android:name=".Activities.ui.profile.Helps" />
         <activity android:name=".Activities.ui.profile.NotificationSettings" />
-        <activity android:name=".Activities.ui.profile.ManageProfile"/>
-        <activity android:name=".Activities.ui.profile.ChangePassword"/>
-        <!--              for handling profile ends -->
+        <activity android:name=".Activities.ui.profile.ManageProfile" />
+        <activity android:name=".Activities.ui.profile.ChangePassword" /> <!-- for handling profile ends -->
         <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

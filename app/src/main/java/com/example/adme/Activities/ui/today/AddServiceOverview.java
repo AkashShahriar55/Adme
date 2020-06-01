@@ -44,6 +44,7 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
     private Calendar endTime;
     private TextView timeErrorTextView;
     private String descriptionText = "";
+    private int previousSpinnerPosition = 0;
 
 
 
@@ -88,6 +89,7 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if(s.length() != 0){
                     isDataSaved = false;
+                    Log.i(TAG, "beforeTextChanged: "+isDataSaved);
                 }
             }
 
@@ -116,13 +118,17 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
                 }
             }
         });
-        
-        int previousSpinnerPosition = service_category_spinner.getSelectedItemPosition();
+
+
         service_category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(TAG, "onItemSelected: "+isDataSaved+" "+previousSpinnerPosition + " "+position);
+                Log.i(TAG, "onItemSelected: "+(position == previousSpinnerPosition));
                 if(previousSpinnerPosition != position){
+                    previousSpinnerPosition = position;
                     isDataSaved = false;
+                    Log.i(TAG, "onItemSelected: "+isDataSaved+" "+previousSpinnerPosition + " "+position);
                 }
             }
 
@@ -174,6 +180,7 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
                     String s = new DecimalFormat("00").format(hourOfDay) + ":" + new DecimalFormat("00").format(minute) + " " + AM_PM;
                     start_time_btn.setText(s);
                     isDataSaved = false;
+                    Log.i(TAG, "onTimeSet: "+isDataSaved);
 
                 }
             },startTime.get(Calendar.HOUR_OF_DAY),startTime.get(Calendar.MINUTE),false);
@@ -211,6 +218,7 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
                     String s = new DecimalFormat("00").format(hourOfDay) + ":" + new DecimalFormat("00").format(minute) + " " + AM_PM;
                     end_time_btn.setText(s);
                     isDataSaved = false;
+                    Log.i(TAG, "onTimeSet: "+isDataSaved);
 
                 }
             },endTime.get(Calendar.HOUR_OF_DAY),endTime.get(Calendar.MINUTE),false);

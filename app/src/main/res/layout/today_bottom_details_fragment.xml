@@ -29,36 +29,24 @@
 
                 <ImageView
                     android:id="@+id/bottom_details_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="0dp"
                     android:rotation="-90"
+                    android:scaleType="center"
                     android:src="@drawable/ic_up_icon"
                     android:transitionName="bottom_details_back"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline25"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline25"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.05109489" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline26"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.95" />
 
                 <ImageView
                     android:id="@+id/today_notification_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="0dp"
+                    android:scaleType="center"
                     android:src="@drawable/ic_notification_bell"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline26"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Switch
@@ -80,10 +68,12 @@
                     android:id="@+id/today_notification_badge"
                     android:layout_width="6dp"
                     android:layout_height="6dp"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="20dp"
                     app:cardBackgroundColor="@color/colorPrimary"
                     app:cardCornerRadius="3dp"
-                    app:layout_constraintBottom_toTopOf="@+id/today_notification_btn"
+                    app:layout_constraintBottom_toBottomOf="@+id/today_notification_btn"
+                    app:layout_constraintEnd_toEndOf="@+id/today_notification_btn"
                     app:layout_constraintStart_toStartOf="@+id/today_notification_btn"
                     app:layout_constraintTop_toTopOf="@+id/today_notification_btn" />
 

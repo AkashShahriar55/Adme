@@ -1,23 +1,34 @@
 package com.example.adme.Helpers;
 
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.GeoPoint;
+
 public class User {
 
     private String username;
-    private String latitude;
-    private String longitude;
     private String mode;
     private String status;
+    private GeoPoint langLat;
+    private String userId;
 
     public User() {
     }
 
 
-    public User(String username, String latitude, String longitude, String mode, String status) {
+    public User(String username, GeoPoint langLat, String mode, String status) {
         this.username = username;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.langLat = langLat;
         this.mode = mode;
         this.status = status;
+    }
+
+    @Exclude
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -28,20 +39,12 @@ public class User {
         this.username = username;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public GeoPoint getLangLat() {
+        return langLat;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setLangLat(GeoPoint langLat) {
+        this.langLat = langLat;
     }
 
     public String getMode() {

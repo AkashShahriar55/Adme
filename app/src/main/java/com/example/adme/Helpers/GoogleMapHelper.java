@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -257,6 +259,7 @@ public class GoogleMapHelper {
                 locationProviderClient.getLastLocation().addOnSuccessListener((Activity) context, location -> {
                     if(location != null){
                         LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+                        mMap.clear();
                         mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(context.getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
                         Log.i(TAG, "run: "+location.getLongitude() + " " + location.getLatitude());
@@ -303,6 +306,18 @@ public class GoogleMapHelper {
         });
 
 
+    }
+
+    public static void markLocationOnMap(Context context,Location location,GoogleMap mMap){
+        LatLng currentLocation;
+        if(location == null){
+            currentLocation = new LatLng(37.4220,-122.0840);
+        }else{
+            currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+        }
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(context.getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
     }
 
     public interface OnLocationAddressCallback{

@@ -163,7 +163,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             username = "Adme_User";
                         }
 
-                        User new_user = new User(username,NULL,NULL,"client","online");
+                        User new_user = new User(username,null,"client","online");
                         /*** Insert into fireStore database**/
                         userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
                             dialog.dismissDialog();

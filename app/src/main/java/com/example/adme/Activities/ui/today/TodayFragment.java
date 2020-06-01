@@ -3,6 +3,7 @@ package com.example.adme.Activities.ui.today;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,13 +21,22 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.adme.Helpers.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.type.LatLng;
 
 public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "TodayFragment";
@@ -43,6 +53,13 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private Switch todayStatusSwitch;
     private BottomSheetBehavior bottomSheetBehavior ;
 
+    private Location location;
+
+    //create database reference
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static CollectionReference userRef = db.collection("Adme_User");
+    private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private static FirebaseUser currentUser =mAuth.getCurrentUser();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -87,9 +104,34 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-       checkPermission();
+        if(requireActivity().getIntent() == null){
+            Bundle bundle = requireActivity().getIntent().getExtras();
+            location = (Location) (bundle != null ? bundle.get("Location") : null);
+        }
+
+        if(location != null){
+            setUpMap();
+        }else{
+            getLocationFromDatabase();
+        }
+
 
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private void getLocationFromDatabase() {
+        userRef.document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                GeoPoint point = documentSnapshot.getGeoPoint(FirebaseUtilClass.LOCATION);
+                if (point != null) {
+                    location = new Location("none");
+                    location.setLatitude(point.getLatitude());
+                    location.setLongitude(point.getLongitude());
+                }
+                setUpMap();
+            }
+        });
     }
 
     @Override
@@ -216,8 +258,11 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+        //GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+        GoogleMapHelper.markLocationOnMap(requireContext(),location,mMap);
     }
+
+
 
 
 

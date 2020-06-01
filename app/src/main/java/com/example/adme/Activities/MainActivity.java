@@ -31,9 +31,8 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,bannerLogo,"banner_logo");
                             Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
-                            loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(loginActivity,activityOptionsCompat.toBundle());
-                            finish();
                         }
                     });
 
