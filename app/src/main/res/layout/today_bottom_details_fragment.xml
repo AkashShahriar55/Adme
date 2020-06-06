@@ -40,7 +40,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/today_notification_btn"
+                    android:id="@+id/client_notification_btn"
                     android:layout_width="60dp"
                     android:layout_height="0dp"
                     android:scaleType="center"
@@ -60,7 +60,7 @@
                     android:textStyle="bold"
                     android:transitionName="todayStatusSwitch"
                     app:layout_constraintBottom_toBottomOf="@+id/bottom_details_button"
-                    app:layout_constraintEnd_toStartOf="@+id/today_notification_btn"
+                    app:layout_constraintEnd_toStartOf="@+id/client_notification_btn"
                     app:layout_constraintStart_toEndOf="@+id/bottom_details_button"
                     app:layout_constraintTop_toTopOf="@+id/bottom_details_button" />
 
@@ -72,10 +72,10 @@
                     android:layout_marginBottom="20dp"
                     app:cardBackgroundColor="@color/colorPrimary"
                     app:cardCornerRadius="3dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/today_notification_btn"
-                    app:layout_constraintEnd_toEndOf="@+id/today_notification_btn"
-                    app:layout_constraintStart_toStartOf="@+id/today_notification_btn"
-                    app:layout_constraintTop_toTopOf="@+id/today_notification_btn" />
+                    app:layout_constraintBottom_toBottomOf="@+id/client_notification_btn"
+                    app:layout_constraintEnd_toEndOf="@+id/client_notification_btn"
+                    app:layout_constraintStart_toStartOf="@+id/client_notification_btn"
+                    app:layout_constraintTop_toTopOf="@+id/client_notification_btn" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

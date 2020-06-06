@@ -38,7 +38,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.type.LatLng;
 
 public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "TodayFragment";
@@ -154,7 +153,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
         todayPressed = view.findViewById(R.id.today_pressed);
         todayRequested = view.findViewById(R.id.today_requested);
         locationButton = view.findViewById(R.id.today_location_button);
-        notificationButton = view.findViewById(R.id.today_notification_btn);
+        notificationButton = view.findViewById(R.id.client_notification_btn);
         todayStatusSwitch = view.findViewById(R.id.today_status_switch);
 
 

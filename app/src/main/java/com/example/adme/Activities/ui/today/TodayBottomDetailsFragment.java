@@ -1,8 +1,6 @@
 package com.example.adme.Activities.ui.today;
 
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.example.adme.R;
 
@@ -45,7 +42,7 @@ public class TodayBottomDetailsFragment extends Fragment {
         Button todayAddService = view.findViewById(R.id.today_add_service);
         this.view = view;
 
-        ImageView notificationButton = view.findViewById(R.id.today_notification_btn);
+        ImageView notificationButton = view.findViewById(R.id.client_notification_btn);
         notificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
