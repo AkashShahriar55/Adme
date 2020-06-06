@@ -109,6 +109,8 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
             @Override
             public void onClick(View v) {
                 dialog.show();
+
+
                 updateUserLocation(currentPlace);
             }
         });
