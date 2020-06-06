@@ -67,6 +67,7 @@
     <string name="reviews">Reviews</string>
     <string name="title_home">Home</string>
     <string name="title_service_history">Service history</string>
+    <string name="services_available_in_your_area">Services available in your area</string>
 
     <string-array name="service_category">
         <item>Paint Job</item>
