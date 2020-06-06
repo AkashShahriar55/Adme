@@ -36,6 +36,8 @@ apply plugin: 'com.google.gms.google-services' // Google Services Gradle plugin
 // Apply the Crashlytics Gradle plugin
 apply plugin: 'com.google.firebase.crashlytics'
 
+def lottieVersion = '3.4.0'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -100,4 +102,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
+
+    //for loading animation
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }

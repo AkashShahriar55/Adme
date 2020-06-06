@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.gson.JsonObject;
 import com.google.gson.internal.$Gson$Preconditions;
 import com.google.maps.android.PolyUtil;
 
@@ -35,22 +36,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MulticastSocket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class GoogleMapHelper {
 
     private static final String TAG = "GoogleMapHelper";
+
+    public static final String API_KEY = "AIzaSyBX7S1-Ra-VAaas4ZdFUSWhPGLvFdxDMU0";
+
+    private Context context;
 
     GoogleMap mMap;
     LatLng origin,dest;
     private static final float DEFAULT_ZOOM = 15;
 
+    private GoogleMapHelperCommunicator communicator;
+
     public GoogleMapHelper(GoogleMap mMap) {
         this.mMap = mMap;
+    }
+
+    public GoogleMapHelper(Context context,GoogleMapHelperCommunicator communicator) {
+        this.context = context;
+        this.communicator = communicator;
     }
 
     public String getDirectionsUrl(LatLng origin, LatLng dest) {
@@ -72,7 +87,7 @@ public class GoogleMapHelper {
         String output = "json";
 
         // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters +"&key=AIzaSyBX7S1-Ra-VAaas4ZdFUSWhPGLvFdxDMU0";
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters +"&key="+API_KEY;
 
         this.origin  = origin;
         this.dest = dest;
@@ -116,11 +131,11 @@ public class GoogleMapHelper {
     public String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
-        HttpURLConnection urlConnection = null;
+        HttpsURLConnection urlConnection = null;
         try {
             URL url = new URL(strUrl);
 
-            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection = (HttpsURLConnection) url.openConnection();
 
             urlConnection.connect();
 
@@ -322,6 +337,118 @@ public class GoogleMapHelper {
 
     public interface OnLocationAddressCallback{
         void locationAddressFetched(Address address);
+    }
+
+
+
+    public void searchPlaces(String text_search,String current_location_lat,String current_location_lang){
+        String[] tokens = text_search.split("\\s+");
+        String query = "";
+        for (int i = 0; i < tokens.length; i++) {
+            if(i == (tokens.length-1)){
+                query+=tokens[i];
+            }else{
+                query+=tokens[i]+"+";
+            }
+        }
+        String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+query+"&location="+current_location_lat+","+current_location_lang+"&radius=10000&key="+API_KEY;
+        Log.d(TAG, "searchPlaces: "+url);
+        new DownloadTaskForPlaceSearch().execute(url);
+
+    }
+
+    private class DownloadTaskForPlaceSearch extends AsyncTask<String,Void,String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            String data = "";
+
+            try {
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.i(TAG, "onPostExecute: " + result);
+            new ParsePlacesTask().execute(result);
+        }
+    }
+
+
+    private class ParsePlacesTask extends AsyncTask<String,Void,List<MyPlaces>>{
+
+        @Override
+        protected List<MyPlaces> doInBackground(String... jsonData) {
+            List<MyPlaces> places = parsePlaces(jsonData);
+            return places;
+        }
+
+        @Override
+        protected void onPostExecute(List<MyPlaces> places) {
+            communicator.onPlacesSearchComplete(places);
+        }
+    }
+
+    private List<MyPlaces> parsePlaces(String[] jsonData) {
+        List<MyPlaces> places = new ArrayList<>();
+        try {
+
+            JSONObject mainObj = new JSONObject(jsonData[0]);
+            JSONArray resultArray = mainObj.getJSONArray("results");
+            for (int i = 0; i < resultArray.length(); i++) {
+                JSONObject placeObj = resultArray.getJSONObject(i);
+                String formatted_address = placeObj.getString("formatted_address");
+                String name = placeObj.getString("name");
+                JSONObject geometryObj = placeObj.getJSONObject("geometry");
+                JSONObject locationObj = geometryObj.getJSONObject("location");
+                String latitude = locationObj.getString("lat");
+                String longitude = locationObj.getString("lng");
+                MyPlaces place = new MyPlaces(formatted_address,name,latitude,longitude);
+                places.add(place);
+                Log.d(TAG, "parsePlaces: "+formatted_address+" "+name+" "+latitude+" "+longitude);
+            }
+
+        } catch (JSONException e) {
+            Log.e(TAG, "parsePlaces: ",e );
+        }
+        return places;
+    }
+
+    public void getCurrentLocationAddress(String latitude,String longitude){
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(context, Locale.getDefault());
+
+        try {
+            double lat = Double.parseDouble(latitude);
+            double lng = Double.parseDouble(longitude);
+            addresses = geocoder.getFromLocation(lat,lng,1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL'
+            Log.i(TAG, "getCurrentLocationAddress: "+ address);
+            MyPlaces place = new MyPlaces(address,knownName,latitude,longitude);
+            communicator.onCurrentLocationAddressFetched(place);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    public interface GoogleMapHelperCommunicator{
+        void onPlacesSearchComplete(List<MyPlaces> placesList);
+        void onCurrentLocationAddressFetched(MyPlaces place);
     }
 
 }

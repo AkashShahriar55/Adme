@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.adme.Helpers.FirebaseUtilClass;
 import com.example.adme.Helpers.LoadingDialog;
 import com.example.adme.Helpers.User;
 import com.example.adme.Helpers.Validation;
@@ -58,7 +59,7 @@ public class RegistrationActivity extends AppCompatActivity {
             String pass = Objects.requireNonNull(reg_password.getEditText()).getText().toString();
 
             if(validateForm(email,pass)){
-                dialog.startLoadingDialog();
+                dialog.show();
                 signUpWithEmailAndPass(email,pass);
             }
 
@@ -163,18 +164,18 @@ public class RegistrationActivity extends AppCompatActivity {
                             username = "Adme_User";
                         }
 
-                        User new_user = new User(username,null,"client","online");
+                        User new_user = new User(username,"client","online",null,null);
+                        new_user.setUserId(user.getUid());
                         /*** Insert into fireStore database**/
                         userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
-                            dialog.dismissDialog();
-                            startActivity(new Intent(RegistrationActivity.this,LandingActivity.class));
-                            finish();
+                            dialog.dismiss();
+                            startLandingActivity(new_user);
                         });
 
 
                     } else {
                         // If sign in fails, display a message to the user.
-                        dialog.dismissDialog();
+                        dialog.dismiss();
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                         Toast.makeText(RegistrationActivity.this, "Authentication failed\n"+ task.getException(),
                                 Toast.LENGTH_SHORT).show();
@@ -183,6 +184,11 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     // ...
                 });
+    }
+    private void startLandingActivity(User currentUser) {
+        Intent intent = new Intent(RegistrationActivity.this, LandingActivity.class);
+        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,currentUser);
+        startActivity(intent);
     }
 
 
@@ -193,7 +199,7 @@ public class RegistrationActivity extends AppCompatActivity {
         reg_password = findViewById(R.id.reg_password);
         password_validation_text = findViewById(R.id.password_validation_text);
         mAuth = FirebaseAuth.getInstance();
-        dialog = new LoadingDialog(RegistrationActivity.this);
+        dialog = new LoadingDialog(this,"Logging in");
         goto_login_btn = findViewById(R.id.goto_login_btn);
 
         /** To hide the keyboard after clicking a  button**/
