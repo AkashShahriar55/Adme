@@ -123,7 +123,6 @@ public class TodayBottomDetailsFragment extends Fragment {
         }).start();
 
 
-
     }
 
 }
