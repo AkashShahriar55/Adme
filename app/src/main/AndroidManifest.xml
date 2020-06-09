@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.AccessLocationActivity"></activity>
+        <activity android:name=".Activities.FindLocationActivity"></activity>
+        <activity android:name=".Activities.AccessLocationActivity" />
         <activity android:name=".Activities.ui.today.ViewServiceDetails" />
         <activity android:name=".Activities.ui.today.AddServicesActivity" />
         <!--
@@ -74,8 +75,7 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>
-        <!--        for income      -->
+        </activity> <!-- for income -->
         <activity android:name=".Activities.ui.income.RatingAndHistoryActicity" />
         <activity android:name=".Activities.ui.income.MoneyHistoryActicity" />
     </application>

@@ -7,5 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirebaseUtilClass {
     public static final String LOCATION = "langLat";
+    public static final String CURRENT_USER_ID = "current_user";
+    public static final String USER_COLLECTION_ID ="Adme_User";
 
 }

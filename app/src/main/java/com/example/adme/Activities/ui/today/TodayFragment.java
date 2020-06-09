@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.adme.Helpers.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -59,6 +61,8 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private static CollectionReference userRef = db.collection("Adme_User");
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static FirebaseUser currentUser =mAuth.getCurrentUser();
+
+    private User mCurrentUser ;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -103,9 +107,11 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        if(requireActivity().getIntent() == null){
-            Bundle bundle = requireActivity().getIntent().getExtras();
-            location = (Location) (bundle != null ? bundle.get("Location") : null);
+        if(requireActivity().getIntent() != null){
+            mCurrentUser = (User) requireActivity().getIntent().getSerializableExtra(FirebaseUtilClass.CURRENT_USER_ID);
+            if(mCurrentUser != null){
+                Toast.makeText(getContext(),mCurrentUser.getUsername(),Toast.LENGTH_LONG).show();
+            }
         }
 
         if(location != null){
