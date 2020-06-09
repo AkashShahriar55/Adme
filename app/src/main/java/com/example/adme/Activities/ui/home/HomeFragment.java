@@ -4,7 +4,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -18,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +25,7 @@ import android.widget.ImageView;
 
 import com.example.adme.Activities.ui.today.AdServiceAdapter;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
+import com.example.adme.Activities.ui.today.TodayBottomDetailsFragment;
 import com.example.adme.Activities.ui.today.TodayFragment;
 import com.example.adme.Activities.ui.today.TodayViewModel;
 import com.example.adme.Activities.ui.today.ViewServiceDetails;
@@ -35,6 +36,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static androidx.constraintlayout.motion.widget.MotionScene.TAG;
+
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private HomeViewModel mViewModel;
@@ -44,7 +47,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private TodayViewModel homeViewModel;
     private GoogleMap mMap;
     private FloatingActionButton locationButton;
-    private ImageView client_notification_btn;
+    private ImageView client_notification_btn, bottomDetailsButton;
 
 
     public static HomeFragment newInstance() {
@@ -66,7 +69,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         available_service_rv.setLayoutManager(layoutManager);
         available_service_rv.setHasFixedSize(true);
-        AvailableServiceAdapter available_service_adapter = new AvailableServiceAdapter();
+        AvailableServiceAdapter available_service_adapter = new AvailableServiceAdapter("home");
         available_service_rv.setAdapter(available_service_adapter);
     }
 
@@ -75,19 +78,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         locationButton = view.findViewById(R.id.client_location_button);
         client_notification_btn = view.findViewById(R.id.client_notification_btn);
+        bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         // TODO: Use the ViewModel
 
         locationButton.setOnClickListener(v -> checkPermission());
 
-        client_notification_btn.setOnClickListener(v -> {
-            goToNotificationFragment();
-        });
+        client_notification_btn.setOnClickListener(v -> goToNotificationFragment());
+
+        bottomDetailsButton.setOnClickListener(v -> goToBottomDetails());
     }
 
 
@@ -174,6 +177,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         fragmentTransaction.replace(R.id.nav_host_fragment, notificationFragment);
         fragmentTransaction.commit();
+    }
+
+    private void goToBottomDetails() {
+        new Thread(() -> {
+            Log.i(TAG, "run: "+Thread.currentThread().getName());
+            Fragment nextFragment = new HomeBottomDetailsFragment();
+            FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.replace(R.id.nav_host_fragment, nextFragment);
+            fragmentTransaction.commit();
+
+        }).start();
+
+        Log.i(TAG, "run: "+Thread.currentThread().getName());
+
+
     }
 
 }
