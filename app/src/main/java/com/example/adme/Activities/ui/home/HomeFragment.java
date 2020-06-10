@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     private SearchView serviceSearchView;
 
     FirebaseFirestore db;
+    private User mCurrentUser;
 
 
     public static HomeFragment newInstance() {
