@@ -40,4 +40,6 @@
     <color name="android_default_layout_color">#FAFAFA</color>
 
     <color name="client_primary">#FA6D01</color>
+
+    <color name="rating_bar_golden">#FFCC00</color>
 </resources>

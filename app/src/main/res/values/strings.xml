@@ -74,4 +74,7 @@
         <item>Electrical Job</item>
         <item>Telephone Line Repairing</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="top_rated_service_provider_s_in_your_area">Top Rated Service provider\'s in your area</string>
 </resources>
