@@ -14,8 +14,7 @@ import com.example.adme.R;
 public class Contacts extends AppCompatActivity {
 
 
-    ConstraintLayout addContactLayout,backBtn;
-    CardView addContactBtn;
+    ConstraintLayout backBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,15 +22,6 @@ public class Contacts extends AppCompatActivity {
         setContentView(R.layout.activity_contacts);
 
         backBtn = findViewById(R.id.backBtn);
-        addContactBtn = findViewById(R.id.addContactBtn);
-        addContactLayout = findViewById(R.id.addContactLayout);
-
-        addContactBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
 

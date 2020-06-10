@@ -31,7 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Objects;
 
 
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity implements FirebaseUtilClass.CreateUserCommunicator {
 
     private static final String TAG = "RegistrationActivity";
     private Button reg_join_btn,goto_login_btn;
@@ -44,6 +44,8 @@ public class RegistrationActivity extends AppCompatActivity {
     //create database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userRef = db.collection("Adme_User");
+
+    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,24 +155,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Log.d(TAG, "createUserWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
 
-                        /** User Information processing will added here**/
-                        String username = "";
-                        String NULL = "";
-                        assert user != null;
-                        if (user.getDisplayName() != null){
-                            username = user.getDisplayName();
-                        }
-                        else{
-                            username = "Adme_User";
-                        }
-
-                        User new_user = new User(username,"client","online",null,null);
-                        new_user.setUserId(user.getUid());
-                        /*** Insert into fireStore database**/
-                        userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
-                            dialog.dismiss();
-                            startLandingActivity(new_user);
-                        });
+                        firebaseUtilClass.createUser(user,RegistrationActivity.this);
 
 
                     } else {
@@ -211,14 +196,20 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
+    private void startAccessLocationActivity(User mCurrentUser) {
+        Intent intent = new Intent(RegistrationActivity.this, AccessLocationActivity.class);
+        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,mCurrentUser);
+        startActivity(intent);
+    }
 
+    @Override
+    public void userAlreadyExists(User user) {
 
+    }
 
-
-
-
-
-
-
-
+    @Override
+    public void onUserCreatedSuccessfully(User user) {
+        dialog.dismiss();
+        startAccessLocationActivity(user);
+    }
 }

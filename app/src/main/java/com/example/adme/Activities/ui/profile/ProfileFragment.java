@@ -18,9 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.LoginActivity;
 import com.example.adme.Activities.MainActivity;
 import com.example.adme.Activities.RegistrationActivity;
+import com.example.adme.Helpers.CookieTechUtilityClass;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
@@ -37,12 +40,20 @@ import java.util.Objects;
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
-    private CardView cardLogout, cardContacts, cardPrivacySettings, cardNotification, cardAccount, cardChangeMode, cardHelp, cardSaveProfile;
+    private CardView cardLogout, cardContacts, cardPrivacySettings, cardNotification, cardAccount, cardChangeMode, cardHelp;
     private GoogleSignInClient mGoogleSignInClient;
+    private ConstraintLayout ratingHolder;
 
     Button editProfileBtn;
     TextView txtProfileName,txtSinceTime;
     EditText editProfileName;
+
+    private User mCurrentUser;
+    private boolean isClient;
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+
 
 
     public static ProfileFragment newInstance() {
@@ -60,26 +71,11 @@ public class ProfileFragment extends Fragment {
         editProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtProfileName.setVisibility(View.GONE);
-                txtSinceTime.setVisibility(View.GONE);
 
-                editProfileName.setVisibility(View.VISIBLE);
-                cardSaveProfile.setVisibility(View.VISIBLE);
             }
         });
 
 
-        cardSaveProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtProfileName.setText(editProfileName.getText().toString());
-                txtProfileName.setVisibility(View.VISIBLE);
-                txtSinceTime.setVisibility(View.VISIBLE);
-
-                editProfileName.setVisibility(View.GONE);
-                cardSaveProfile.setVisibility(View.GONE);
-            }
-        });
 
         cardContacts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,12 +143,34 @@ public class ProfileFragment extends Fragment {
         return  root;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
+        isClient = ((LandingActivity)requireActivity()).isClient();
+        updateUiData();
+    }
+
+    private void updateUiData() {
+        //txtProfileName.setText(mCurrentUser.getUsername());
+        if(mAuth.getCurrentUser() != null){
+            long timeStamp = mAuth.getCurrentUser().getMetadata().getCreationTimestamp();
+            String date = CookieTechUtilityClass.getDate(timeStamp);
+            txtSinceTime.setText("Member since "+ date);
+        }
+
+        if(isClient){
+            ratingHolder.setVisibility(View.GONE);
+        }
+
+
+
+    }
+
     private void initializeFields(View root) {
 
         editProfileBtn = root.findViewById(R.id.editProfileBtn);
-        cardSaveProfile = root.findViewById(R.id.saveProfileNameBtn);
         txtProfileName = root.findViewById(R.id.profileName);
-        editProfileName = root.findViewById(R.id.editProfileName);
         txtSinceTime = root.findViewById(R.id.sinceTime);
 
         cardContacts = root.findViewById(R.id.cardContacts);
@@ -162,6 +180,7 @@ public class ProfileFragment extends Fragment {
         cardChangeMode = root.findViewById(R.id.cardChangeMode);
         cardLogout = root.findViewById(R.id.cardLogout);
         cardHelp = root.findViewById(R.id.cardHelp);
+        ratingHolder = root.findViewById(R.id.profile_rating_holder);
 
         //For Google SignUp
         // Configure sign-in to request the user's ID, email address, and basic

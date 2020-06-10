@@ -323,17 +323,7 @@ public class GoogleMapHelper {
 
     }
 
-    public static void markLocationOnMap(Context context,Location location,GoogleMap mMap){
-        LatLng currentLocation;
-        if(location == null){
-            currentLocation = new LatLng(37.4220,-122.0840);
-        }else{
-            currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
-        }
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(context.getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
-    }
+
 
     public interface OnLocationAddressCallback{
         void locationAddressFetched(Address address);

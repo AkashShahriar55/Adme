@@ -174,12 +174,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     }
 
     private void markUserLocationInMap() {
-        Double lat = Double.valueOf(mCurrentUser.getLatitude());
-        Double lng = Double.valueOf(mCurrentUser.getLongitude());
-        LatLng currentLocation = new LatLng(lat,lng);
+//        Double lat = Double.valueOf(mCurrentUser.getLatitude());
+//        Double lng = Double.valueOf(mCurrentUser.getLongitude());
+        //LatLng currentLocation = new LatLng(lat,lng);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(requireContext().getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+//        mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(requireContext().getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
     }
 
     private void checkPermission() {
@@ -228,11 +228,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
                 setUpMap();
             }else{
                 if(mCurrentUser != null){
-                    if(mCurrentUser.getLatitude() != null && mCurrentUser.getLongitude() != null){
-                        markUserLocationInMap();
-                    }else{
-                        GoogleMapHelper.markCurrentLocation(getContext(),mMap);
-                    }
+//                    if(mCurrentUser.getLatitude() != null && mCurrentUser.getLongitude() != null){
+//                        markUserLocationInMap();
+//                    }else{
+//                        GoogleMapHelper.markCurrentLocation(getContext(),mMap);
+//                    }
                 }
             }
 
@@ -259,11 +259,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
         mMap = googleMap;
         //GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
         if(mCurrentUser != null){
-            if(mCurrentUser.getLatitude() != null && mCurrentUser.getLongitude() != null){
-                markUserLocationInMap();
-            }else{
-                GoogleMapHelper.markCurrentLocation(getContext(),mMap);
-            }
+//            if(mCurrentUser.getLatitude() != null && mCurrentUser.getLongitude() != null){
+//                markUserLocationInMap();
+//            }else{
+//                GoogleMapHelper.markCurrentLocation(getContext(),mMap);
+//            }
         }
 
     }

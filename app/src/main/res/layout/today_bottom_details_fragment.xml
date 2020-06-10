@@ -146,7 +146,7 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
-                                android:id="@+id/textView19"
+                                android:id="@+id/tv_income_today"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="2dp"
@@ -168,18 +168,18 @@
                                 android:textColor="@color/txt_light"
                                 android:textColorHint="#FFFFFF"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/textView19"
-                                app:layout_constraintStart_toStartOf="@+id/textView19"
-                                app:layout_constraintTop_toBottomOf="@+id/textView19" />
+                                app:layout_constraintEnd_toEndOf="@+id/tv_income_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_income_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_income_today" />
 
                             <ImageView
                                 android:id="@+id/imageView14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_dollar_sign"
-                                app:layout_constraintBottom_toTopOf="@+id/textView19"
-                                app:layout_constraintEnd_toStartOf="@+id/textView19"
-                                app:layout_constraintTop_toTopOf="@+id/textView19" />
+                                app:layout_constraintBottom_toTopOf="@+id/tv_income_today"
+                                app:layout_constraintEnd_toStartOf="@+id/tv_income_today"
+                                app:layout_constraintTop_toTopOf="@+id/tv_income_today" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -194,7 +194,7 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
-                                android:id="@+id/textView21"
+                                android:id="@+id/tv_due"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="2dp"
@@ -212,22 +212,22 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Due(-2%)"
+                                android:text="Monthly Due"
                                 android:textColor="@color/txt_light"
                                 android:textColorHint="#FFFFFF"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/textView21"
-                                app:layout_constraintStart_toStartOf="@+id/textView21"
-                                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+                                app:layout_constraintEnd_toEndOf="@+id/tv_due"
+                                app:layout_constraintStart_toStartOf="@+id/tv_due"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_due" />
 
                             <ImageView
                                 android:id="@+id/imageView15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_dollar_sign"
-                                app:layout_constraintBottom_toTopOf="@+id/textView21"
-                                app:layout_constraintEnd_toStartOf="@+id/textView21"
-                                app:layout_constraintTop_toTopOf="@+id/textView21" />
+                                app:layout_constraintBottom_toTopOf="@+id/tv_due"
+                                app:layout_constraintEnd_toStartOf="@+id/tv_due"
+                                app:layout_constraintTop_toTopOf="@+id/tv_due" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -242,7 +242,7 @@
                             app:layout_constraintTop_toTopOf="@+id/guideline24">
 
                             <TextView
-                                android:id="@+id/textView23"
+                                android:id="@+id/tv_appointments_today"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="2dp"
@@ -260,12 +260,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Pressed"
+                                android:text="Appointments"
                                 android:textColor="@color/txt_light"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/textView23"
-                                app:layout_constraintStart_toStartOf="@+id/textView23"
-                                app:layout_constraintTop_toBottomOf="@+id/textView23" />
+                                app:layout_constraintEnd_toEndOf="@+id/tv_appointments_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_appointments_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_appointments_today" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -280,7 +280,7 @@
                             app:layout_constraintTop_toTopOf="@+id/guideline24">
 
                             <TextView
-                                android:id="@+id/textView25"
+                                android:id="@+id/tv_pending_today"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="2dp"
@@ -299,12 +299,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Requested"
+                                android:text="Pending"
                                 android:textColor="@color/txt_light"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/textView25"
-                                app:layout_constraintStart_toStartOf="@+id/textView25"
-                                app:layout_constraintTop_toBottomOf="@+id/textView25" />
+                                app:layout_constraintEnd_toEndOf="@+id/tv_pending_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_pending_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_pending_today" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -319,7 +319,7 @@
                             app:layout_constraintTop_toTopOf="@+id/guideline24">
 
                             <TextView
-                                android:id="@+id/textView27"
+                                android:id="@+id/tv_completed_today"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="2dp"
@@ -340,9 +340,9 @@
                                 android:text="Completed"
                                 android:textColor="@color/txt_light"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/textView27"
-                                app:layout_constraintStart_toStartOf="@+id/textView27"
-                                app:layout_constraintTop_toBottomOf="@+id/textView27" />
+                                app:layout_constraintEnd_toEndOf="@+id/tv_completed_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_completed_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_completed_today" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -382,12 +382,12 @@
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:src="@drawable/ic_dollar_sign"
-                                app:layout_constraintBottom_toBottomOf="@+id/textView"
-                                app:layout_constraintEnd_toStartOf="@+id/textView"
-                                app:layout_constraintTop_toTopOf="@+id/textView" />
+                                app:layout_constraintBottom_toBottomOf="@+id/tv_total_income"
+                                app:layout_constraintEnd_toStartOf="@+id/tv_total_income"
+                                app:layout_constraintTop_toTopOf="@+id/tv_total_income" />
 
                             <TextView
-                                android:id="@+id/textView"
+                                android:id="@+id/tv_total_income"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="441"
@@ -404,12 +404,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="Today Income"
+                                android:text="Total Income"
                                 android:textColor="@color/txt_light"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/textView"
-                                app:layout_constraintStart_toStartOf="@+id/textView"
-                                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                                app:layout_constraintEnd_toEndOf="@+id/tv_total_income"
+                                app:layout_constraintStart_toStartOf="@+id/tv_total_income"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_total_income" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
 

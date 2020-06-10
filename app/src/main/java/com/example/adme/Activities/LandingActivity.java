@@ -43,8 +43,14 @@ public class LandingActivity extends AppCompatActivity {
     private long mBackPressed;
     private NavController navController;
     private String label = null;
-    private boolean isClient = true;
+    private boolean isClient = false;
     private User mCurrentUser;
+
+
+
+    public boolean isClient() {
+        return isClient;
+    }
 
     public User getmCurrentUser() {
         return mCurrentUser;
@@ -77,8 +83,11 @@ public class LandingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-
+    }
 
     @Override
     public void onBackPressed()

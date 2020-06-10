@@ -3,7 +3,6 @@ package com.example.adme.Activities.ui.today;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,22 +21,27 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Helpers.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
+
+import java.util.Map;
+import java.util.Objects;
 
 public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "TodayFragment";
@@ -54,8 +58,6 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private Switch todayStatusSwitch;
     private BottomSheetBehavior bottomSheetBehavior ;
 
-    private Location location;
-
     //create database reference
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static CollectionReference userRef = db.collection("Adme_User");
@@ -63,6 +65,10 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     private static FirebaseUser currentUser =mAuth.getCurrentUser();
 
     private User mCurrentUser ;
+    private Map<String,String> location;
+
+
+    private TextView tv_income_today,tv_due, tv_pending_today, tv_appointments_today,tv_completed_today;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -75,6 +81,33 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        updateUi();
+
+
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    private void initialization(View view) {
+        bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
+
+
+        bottomSheet = view.findViewById(R.id.bottom_details);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        todayCompleted = view.findViewById(R.id.today_completed);
+        todayIncome = view.findViewById(R.id.today_income);
+        todayDue = view.findViewById(R.id.today_due);
+        todayPressed = view.findViewById(R.id.today_pressed);
+        todayRequested = view.findViewById(R.id.today_requested);
+        locationButton = view.findViewById(R.id.today_location_button);
+        notificationButton = view.findViewById(R.id.client_notification_btn);
+        todayStatusSwitch = view.findViewById(R.id.today_status_switch);
+
+        tv_income_today = view.findViewById(R.id.tv_income_today);
+        tv_due =view.findViewById(R.id.tv_due);
+        tv_completed_today = view.findViewById(R.id.tv_completed_today);
+        tv_appointments_today = view.findViewById(R.id.tv_appointments_today);
+        tv_pending_today = view.findViewById(R.id.tv_pending_today);
+
         todayCompleted.setOnClickListener(v -> goToBottomDetails());
         todayIncome.setOnClickListener(v -> goToBottomDetails());
         todayDue.setOnClickListener(v -> goToBottomDetails());
@@ -99,62 +132,41 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
             if(isChecked){
                 buttonView.setText(R.string.online_status);
                 buttonView.setTextColor(getResources().getColor(R.color.color_active));
+                mCurrentUser.setStatus(FirebaseUtilClass.STATUS_ONLINE);
                 isOnline = true;
             }else{
                 buttonView.setText(R.string.offline_status);
                 buttonView.setTextColor(getResources().getColor(R.color.color_not_active));
+                mCurrentUser.setStatus(FirebaseUtilClass.STATUS_OFFLINE);
                 isOnline = false;
             }
         });
-
-        if(requireActivity().getIntent() != null){
-            mCurrentUser = (User) requireActivity().getIntent().getSerializableExtra(FirebaseUtilClass.CURRENT_USER_ID);
-            if(mCurrentUser != null){
-                Toast.makeText(getContext(),mCurrentUser.getUsername(),Toast.LENGTH_LONG).show();
-            }
-        }
-
-        if(location != null){
-            setUpMap();
-        }else{
-            getLocationFromDatabase();
-        }
-
-
-        super.onActivityCreated(savedInstanceState);
     }
 
-    private void getLocationFromDatabase() {
-        userRef.document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                GeoPoint point = documentSnapshot.getGeoPoint(FirebaseUtilClass.LOCATION);
-                if (point != null) {
-                    location = new Location("none");
-                    location.setLatitude(point.getLatitude());
-                    location.setLongitude(point.getLongitude());
-                }
-                setUpMap();
-            }
-        });
+    private void updateUi() {
+        mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
+
+        location = mCurrentUser.getLocation();
+        setUpMap();
+
+        Map<String,String> serviceProviderInfo = mCurrentUser.getService_provider_info();
+        tv_income_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_INCOME_TODAY));
+        tv_completed_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_COMPLETED_TODAY));
+        tv_due.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_DUE));
+        tv_pending_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_PENDING_TODAY));
+        tv_appointments_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_APPOINTMENTS_TODAY));
+
+        if(mCurrentUser.getStatus().equals(FirebaseUtilClass.STATUS_ONLINE)){
+            todayStatusSwitch.setChecked(true);
+        }else if(mCurrentUser.getStatus().equals(FirebaseUtilClass.STATUS_OFFLINE)){
+            todayStatusSwitch.setChecked(false);
+        }
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
-
-
-        bottomSheet = view.findViewById(R.id.bottom_details);
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        todayCompleted = view.findViewById(R.id.today_completed);
-        todayIncome = view.findViewById(R.id.today_income);
-        todayDue = view.findViewById(R.id.today_due);
-        todayPressed = view.findViewById(R.id.today_pressed);
-        todayRequested = view.findViewById(R.id.today_requested);
-        locationButton = view.findViewById(R.id.today_location_button);
-        notificationButton = view.findViewById(R.id.client_notification_btn);
-        todayStatusSwitch = view.findViewById(R.id.today_status_switch);
+        initialization(view);
 
 
     }
@@ -179,7 +191,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void run() {
                 Log.i(TAG, "run: "+Thread.currentThread().getName());
-                Fragment nextFragment = new TodayBottomDetailsFragment(isOnline);
+                Fragment nextFragment = new TodayBottomDetailsFragment(mCurrentUser);
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.replace(R.id.nav_host_fragment, nextFragment);
@@ -264,7 +276,17 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         //GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
-        GoogleMapHelper.markLocationOnMap(requireContext(),location,mMap);
+        if(location.get(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE)!=null &&location.get(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE)!=null){
+            mMap.clear();
+            double latitude = Double.parseDouble(Objects.requireNonNull(mCurrentUser.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE)));
+            double longitude = Double.parseDouble(Objects.requireNonNull(mCurrentUser.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE)));
+            LatLng currentLocation = new LatLng(latitude,longitude);
+            mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(requireContext().getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+        }else{
+            GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+        }
+
     }
 
 
