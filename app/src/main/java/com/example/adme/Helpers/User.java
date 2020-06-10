@@ -1,26 +1,55 @@
 package com.example.adme.Helpers;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Parcelable {
 
     private String username;
     private String mode;
     private String status;
-    private GeoPoint langLat;
+    private String latitude;
+    private String longitude;
     private String userId;
 
     public User() {
     }
 
 
-    public User(String username, GeoPoint langLat, String mode, String status) {
+    public User(String username, String mode, String status, String latitude, String longitude) {
         this.username = username;
-        this.langLat = langLat;
         this.mode = mode;
         this.status = status;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
+
+
+    protected User(Parcel in) {
+        username = in.readString();
+        mode = in.readString();
+        status = in.readString();
+        latitude = in.readString();
+        longitude = in.readString();
+        userId = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     @Exclude
     public String getUserId() {
@@ -39,12 +68,20 @@ public class User {
         this.username = username;
     }
 
-    public GeoPoint getLangLat() {
-        return langLat;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void setLangLat(GeoPoint langLat) {
-        this.langLat = langLat;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public String getMode() {
@@ -61,5 +98,21 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(username);
+        dest.writeString(mode);
+        dest.writeString(status);
+        dest.writeString(latitude);
+        dest.writeString(longitude);
+        dest.writeString(userId);
     }
 }

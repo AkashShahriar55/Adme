@@ -15,6 +15,8 @@ import com.example.adme.Activities.ui.leaderboard.LeaderBoardFragment;
 import com.example.adme.Activities.ui.profile.ProfileFragment;
 import com.example.adme.Activities.ui.today.TodayBottomDetailsFragment;
 import com.example.adme.Activities.ui.today.TodayFragment;
+import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -42,10 +44,17 @@ public class LandingActivity extends AppCompatActivity {
     private NavController navController;
     private String label = null;
     private boolean isClient = true;
+    private User mCurrentUser;
+
+    public User getmCurrentUser() {
+        return mCurrentUser;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mCurrentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
 
         if(isClient){
             setContentView(R.layout.activity_landing_client);

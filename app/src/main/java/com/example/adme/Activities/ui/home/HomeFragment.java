@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.ui.today.AdServiceAdapter;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
 import com.example.adme.Activities.ui.today.TodayBottomDetailsFragment;
@@ -30,15 +31,22 @@ import com.example.adme.Activities.ui.today.TodayFragment;
 import com.example.adme.Activities.ui.today.TodayViewModel;
 import com.example.adme.Activities.ui.today.ViewServiceDetails;
 import com.example.adme.Helpers.GoogleMapHelper;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static androidx.constraintlayout.motion.widget.MotionScene.TAG;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
+
+    private static final String TAG = "HomeFragment";
 
     private HomeViewModel mViewModel;
 
@@ -63,8 +71,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void initializeFields(View root) {
-        checkPermission();
 
+        checkPermission();
         RecyclerView available_service_rv = root.findViewById(R.id.available_service_rv);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         available_service_rv.setLayoutManager(layoutManager);
@@ -93,7 +101,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         bottomDetailsButton.setOnClickListener(v -> goToBottomDetails());
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
 
+    }
+
+    private void markUserLocationInMap() {
+        Double lat = Double.valueOf(mCurrentUser.getLatitude());
+        Double lng = Double.valueOf(mCurrentUser.getLongitude());
+        LatLng currentLocation = new LatLng(lat,lng);
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(requireContext().getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+    }
 
     private void checkPermission() {
         // Here, thisActivity is the current activity
@@ -140,7 +162,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             if(mMap == null){
                 setUpMap();
             }else{
-                GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+                if(mCurrentUser != null){
+                    if(mCurrentUser.getLatitude() != null && mCurrentUser.getLongitude() != null){
+                        markUserLocationInMap();
+                    }else{
+                        GoogleMapHelper.markCurrentLocation(getContext(),mMap);
+                    }
+                }
             }
 
         }
@@ -165,7 +193,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         //GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
-        GoogleMapHelper.markCurrentLocation(getContext(),mMap);
+        if(mCurrentUser != null){
+            if(mCurrentUser.getLatitude() != null && mCurrentUser.getLongitude() != null){
+                markUserLocationInMap();
+            }else{
+                GoogleMapHelper.markCurrentLocation(getContext(),mMap);
+            }
+        }
+
     }
 
 

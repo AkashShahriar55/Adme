@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.adme.Helpers.FirebaseUtilClass;
 import com.example.adme.Helpers.LoadingDialog;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
@@ -32,7 +33,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -63,12 +67,15 @@ public class LoginActivity extends AppCompatActivity {
 
     //create database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference userRef = db.collection("Adme_User");
+    private CollectionReference userRef = db.collection(FirebaseUtilClass.USER_COLLECTION_ID);
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        View contextView = findViewById(R.id.contextView);
 
         initializeFields();
 
@@ -85,10 +92,14 @@ public class LoginActivity extends AppCompatActivity {
         login_facebook_btn.setOnClickListener(v -> signInWithFacebook());
 
         login_btn.setOnClickListener(v -> {
-            String email = Objects.requireNonNull(login_email.getEditText()).getText().toString();
-            String pass = Objects.requireNonNull(login_password.getEditText()).getText().toString();initializeFields();
-            dialog.startLoadingDialog();
-            signInWithEmailAndPassword(email,pass);
+            if(!login_email.getEditText().getText().toString().trim().isEmpty() && !login_email.getEditText().getText().toString().trim().isEmpty()){
+                String email = Objects.requireNonNull(login_email.getEditText()).getText().toString();
+                String pass = Objects.requireNonNull(login_password.getEditText()).getText().toString();initializeFields();
+                signInWithEmailAndPassword(email,pass);
+            }else{
+               Snackbar.make(contextView,"Enter your email and password",Snackbar.LENGTH_SHORT).show();
+            }
+
         });
 
 
@@ -97,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signInAnonymousGuest() {
-        dialog.startLoadingDialog();
+        dialog.show();
         mAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -117,15 +128,40 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            startLandingActivity();
+            dialog.show();
+            fetchUserData(currentUser);
         }
     }
 
-    private void startLandingActivity() {
-        Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
-        startActivity(intent);
-        finish();
+    private void fetchUserData(FirebaseUser currentUser) {
+        userRef.document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                dialog.dismiss();
+                User mCurrentUser = documentSnapshot.toObject(User.class);
+                mCurrentUser.setUserId(currentUser.getUid());
+                if(Objects.requireNonNull(mCurrentUser).getLatitude() == null || mCurrentUser.getLongitude() == null){
+                    startAccessLocationActivity(mCurrentUser);
+                }else{
+                    startLandingActivity(mCurrentUser);
+                }
+            }
+        });
     }
+
+    private void startAccessLocationActivity(User mCurrentUser) {
+        Intent intent = new Intent(LoginActivity.this, AccessLocationActivity.class);
+        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,mCurrentUser);
+        startActivity(intent);
+    }
+
+    private void startLandingActivity(User currentUser) {
+        Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
+        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,currentUser);
+        startActivity(intent);
+    }
+
+
 
     private void initializeFields() {
         ConstraintLayout container = findViewById(R.id.login_container);
@@ -139,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
         login_btn= findViewById(R.id.login_btn);
         login_email = findViewById(R.id.login_email);
         login_password = findViewById(R.id.login_password);
-        dialog = new LoadingDialog(LoginActivity.this);
+        dialog = new LoadingDialog(this,"Logging in");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -177,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                dialog.startLoadingDialog();
+                dialog.show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
 
@@ -208,7 +244,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                dialog.startLoadingDialog();
+                dialog.show();
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -239,7 +275,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else {
 
-                        dialog.dismissDialog();
+                        dialog.show();
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
 
@@ -258,10 +294,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 if (document.exists()) {
+                    User current_user = document.toObject(User.class);
                     // User is already exist in database
                     //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    dialog.dismissDialog();
-                    startLocationActivity();
+                    dialog.show();
+                    startAccessLocationActivity(current_user);
                 } else {
                     // User hasn't created yet
                     // create new user in database
@@ -275,11 +312,12 @@ public class LoginActivity extends AppCompatActivity {
                     else{
                         username = "Adme_User";
                     }
-                    User new_user = new User(username,null,"client","online");
+                    User new_user = new User(username,"client","online",null,null);
+                    new_user.setUserId(user.getUid());
                     /*** Insert into fireStore database**/
                     userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
-                        dialog.dismissDialog();
-                        startLocationActivity();
+                        dialog.show();
+                        startAccessLocationActivity(new_user);
                     });
                 }
             } else {
@@ -304,7 +342,7 @@ public class LoginActivity extends AppCompatActivity {
                         PerformDatabaseOperation(user);
                     } else {
                         // If sign in fails, display a message to the user.
-                        dialog.dismissDialog();
+                        dialog.show();
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
@@ -314,13 +352,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-
-    private  void startLocationActivity(){
-        
-        Intent intent = new Intent(LoginActivity.this, AccessLocationActivity.class);
-        startActivity(intent);
-        finish();
-    }
 
 
     private void signInWithEmailAndPassword(String email, String password) {
@@ -332,12 +363,11 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "signInWithEmail:success");
                          FirebaseUser user = mAuth.getCurrentUser();
                         //updateUI(user);
-                        dialog.dismissDialog();
-                        startLocationActivity();
+                        dialog.show();
+                        fetchUserData(user);
 
                     } else {
                         // If sign in fails, display a message to the user.
-                        dialog.dismissDialog();
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "Authentication failed: " + task.getException(),
                                 Toast.LENGTH_SHORT).show();

@@ -22,8 +22,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.adme.Helpers.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
+import com.example.adme.Helpers.LoadingDialog;
 import com.example.adme.Helpers.PermissionHelper;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -48,6 +51,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.SetOptions;
 
 public class AccessLocationActivity extends AppCompatActivity {
     private static final String TAG = "AccessLocationActivity";
@@ -61,8 +65,11 @@ public class AccessLocationActivity extends AppCompatActivity {
     //create database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userRef = db.collection("Adme_User");
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+
+
+    User mCurrentUser;
+
+    private LoadingDialog dialog;
 
 
 
@@ -74,7 +81,15 @@ public class AccessLocationActivity extends AppCompatActivity {
         Button findALocation = findViewById(R.id.find_a_location_btn);
         TextView skipNowBtn = findViewById(R.id.skip_access_location_button);
 
+        initialization();
 
+        mCurrentUser = (User) getIntent().getParcelableExtra("current_user");
+        if(mCurrentUser != null){
+            Log.d(TAG, "onCreate: current user is not null");
+            if(mCurrentUser.getLongitude() != null && mCurrentUser.getLatitude()!=null){
+                startLandingActivity(mCurrentUser);
+            }
+        }
 
         if(PermissionHelper.requestLocationPermission(this)){
             checkSettings();
@@ -85,6 +100,7 @@ public class AccessLocationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 isUseCurrentLocationButtonClicked = true;
                 if(location_setting_checked){
+
                     startLocationUpdates();
                 }else{
                     if(PermissionHelper.requestLocationPermission(AccessLocationActivity.this)){
@@ -111,26 +127,28 @@ public class AccessLocationActivity extends AppCompatActivity {
         skipNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startLandingActivity();
+                startLandingActivity(mCurrentUser);
             }
         });
 
 
     }
 
-    private void startLandingActivity() {
+    private void initialization() {
+        dialog = new LoadingDialog(this,"Welcome");
+    }
+
+    private void startLandingActivity(User currentUser) {
+        dialog.dismiss();
         Intent intent = new Intent(this, LandingActivity.class);
+        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,currentUser);
         startActivity(intent);
-        finish();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        //firebase
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         locationCallback = new LocationCallback(){
@@ -145,12 +163,11 @@ public class AccessLocationActivity extends AppCompatActivity {
                             fusedLocationProviderClient.removeLocationUpdates(this);
                             if(isUseCurrentLocationButtonClicked){
                                 updateUserLocation(location);
-
-
-
                             }
                             if(isFindALocationButtonClicked){
-                                startLocationUpdates();
+                                mCurrentUser.setLatitude(String.valueOf(location.getLatitude()));
+                                mCurrentUser.setLongitude(String.valueOf(location.getLongitude()));
+                                startFindLocationActivity(mCurrentUser);
                             }
                         }
                     }
@@ -159,15 +176,20 @@ public class AccessLocationActivity extends AppCompatActivity {
         };
     }
 
+    private void startFindLocationActivity(User mCurrentUser) {
+        Intent intent = new Intent(AccessLocationActivity.this,FindLocationActivity.class);
+        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,mCurrentUser);
+        startActivity(intent);
+    }
+
     private void updateUserLocation(Location location) {
-        String uid = currentUser.getUid();
-        userRef.document(uid).update("langLat",new GeoPoint(location.getLatitude(),location.getLongitude())).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mCurrentUser.setLatitude(String.valueOf(location.getLatitude()));
+        mCurrentUser.setLongitude(String.valueOf(location.getLongitude()));
+        userRef.document(mCurrentUser.getUserId()).set(mCurrentUser, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.i(TAG, "onSuccess:  ");
-                Intent intent = new Intent(AccessLocationActivity.this,LandingActivity.class);
-                intent.putExtra("Location",location);
-                startActivity(intent);
+
+                startLandingActivity(mCurrentUser);
             }
         });
     }
@@ -243,6 +265,10 @@ public class AccessLocationActivity extends AppCompatActivity {
 
 
     private void startLocationUpdates() {
+        if(isUseCurrentLocationButtonClicked){
+            dialog.show();
+        }
+
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(5000);
