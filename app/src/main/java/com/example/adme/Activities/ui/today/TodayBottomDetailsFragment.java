@@ -17,17 +17,34 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Helpers.Service;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class TodayBottomDetailsFragment extends Fragment {
 
     private TodayBottomDetailsViewModel mViewModel;
     private boolean isOnline;
     private View view;
+    private User mCurrentUser;
 
-    public TodayBottomDetailsFragment(boolean isOnline) {
-        this.isOnline = isOnline;
+    private TextView tv_income_today,tv_due, tv_pending_today, tv_appointments_today,tv_completed_today,tv_income_total;
+    RecyclerView appointmentRecyclerView,serviceRecyclerView;
+    Switch todayStatusSwitch;
+    Button todayAddService;
+    ImageView bottomDetailsButton,notificationButton;
+
+    List<Service> services = new ArrayList<>();
+
+    public TodayBottomDetailsFragment(User user) {
+        this.mCurrentUser = user;
     }
 
     @Override
@@ -38,11 +55,26 @@ public class TodayBottomDetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        
+        initialization(view);
 
-        Button todayAddService = view.findViewById(R.id.today_add_service);
-        this.view = view;
+    }
 
-        ImageView notificationButton = view.findViewById(R.id.client_notification_btn);
+    private void initialization(View view) {
+
+        tv_income_today = view.findViewById(R.id.tv_income_today);
+        tv_due =view.findViewById(R.id.tv_due);
+        tv_completed_today = view.findViewById(R.id.tv_completed_today);
+        tv_appointments_today = view.findViewById(R.id.tv_appointments_today);
+        tv_pending_today = view.findViewById(R.id.tv_pending_today);
+        tv_income_total = view.findViewById(R.id.tv_total_income);
+
+        appointmentRecyclerView = view.findViewById(R.id.appointment_container);
+        serviceRecyclerView = view.findViewById(R.id.service_container);
+
+        todayAddService = view.findViewById(R.id.today_add_service);
+
+        notificationButton = view.findViewById(R.id.client_notification_btn);
         notificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +82,7 @@ public class TodayBottomDetailsFragment extends Fragment {
             }
         });
 
-        Switch todayStatusSwitch = view.findViewById(R.id.today_status_switch);
+        todayStatusSwitch = view.findViewById(R.id.today_status_switch);
         todayStatusSwitch.setChecked(isOnline);
         if(isOnline){
             todayStatusSwitch.setText(R.string.online_status);
@@ -71,7 +103,7 @@ public class TodayBottomDetailsFragment extends Fragment {
             }
         });
 
-        ImageView bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
+        bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
         bottomDetailsButton.setOnClickListener(v -> {
             requireActivity().onBackPressed();
 
@@ -84,6 +116,7 @@ public class TodayBottomDetailsFragment extends Fragment {
                 requireContext().startActivity(addServiceActivityIntent);
             }
         });
+
     }
 
     private void goToNotificationFragment() {
@@ -100,10 +133,31 @@ public class TodayBottomDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
-        RecyclerView appointmentRecyclerView = view.findViewById(R.id.appointment_container);
-        RecyclerView serviceRecyclerView = view.findViewById(R.id.service_container);
+
 
         super.onActivityCreated(savedInstanceState);
+
+        updateUi();
+
+
+
+    }
+
+    private void updateUi() {
+
+        Map<String,String> serviceProviderInfo = mCurrentUser.getService_provider_info();
+        tv_income_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_INCOME_TODAY));
+        tv_completed_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_COMPLETED_TODAY));
+        tv_due.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_DUE));
+        tv_pending_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_PENDING_TODAY));
+        tv_appointments_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_APPOINTMENTS_TODAY));
+        tv_income_total.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_INCOME_TOTAL));
+
+        if(mCurrentUser.getStatus().equals(FirebaseUtilClass.STATUS_ONLINE)){
+            todayStatusSwitch.setChecked(true);
+        }else if(mCurrentUser.getStatus().equals(FirebaseUtilClass.STATUS_OFFLINE)){
+            todayStatusSwitch.setChecked(false);
+        }
 
         new Thread(() -> {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -118,12 +172,9 @@ public class TodayBottomDetailsFragment extends Fragment {
             serviceRecyclerView.setHasFixedSize(true);
             serviceRecyclerView.setLayoutManager(serviceLayoutManager);
 
-            RecyclerView.Adapter serviceAdapter = new ServiceAdapter(getContext());
+            RecyclerView.Adapter serviceAdapter = new ServiceAdapter(getContext(),services);
             serviceRecyclerView.setAdapter(serviceAdapter);
         }).start();
-
-
-
     }
 
 }

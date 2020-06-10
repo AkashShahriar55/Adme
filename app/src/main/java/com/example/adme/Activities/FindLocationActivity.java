@@ -46,6 +46,9 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userRef = db.collection("Adme_User");
 
+    //firebase helper
+    FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+
     private LoadingDialog dialog;
 
     @Override
@@ -55,6 +58,7 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
 
         mapHelper = new GoogleMapHelper(this,this);
         mCurrentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
+        currentPlace = getIntent().getParcelableExtra("current_place");
 
         initialization();
 
@@ -67,7 +71,7 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
                 if(!placeSearchEditText.getText().toString().trim().isEmpty()){
                     placeSearchProgressBar.setVisibility(View.VISIBLE);
                     String query = placeSearchEditText.getText().toString().trim();
-                    mapHelper.searchPlaces(query, mCurrentUser.getLatitude(), mCurrentUser.getLongitude());
+                    mapHelper.searchPlaces(query, currentPlace.getLatitude(), currentPlace.getLongitude());
                     // Check if no view has focus:
                     hideKeyboard();
                 }
@@ -100,7 +104,10 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
             }
         });
 
-        mapHelper.getCurrentLocationAddress(mCurrentUser.getLatitude(),mCurrentUser.getLongitude());
+        TextView currentLocationName = findViewById(R.id.place_name);
+        TextView currentLocationDetails = findViewById(R.id.place_details);
+        currentLocationName.setText(currentPlace.getName());
+        currentLocationDetails.setText(currentPlace.getFormattedAddress());
 
         placeSearchProgressBar = findViewById(R.id.place_search_progressbar);
 
@@ -110,8 +117,12 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
             public void onClick(View v) {
                 dialog.show();
 
-
-                updateUserLocation(currentPlace);
+                firebaseUtilClass.updateUserLocation(mCurrentUser, currentPlace, new FirebaseUtilClass.UpdateLocationInfoCommunicator() {
+                    @Override
+                    public void onLocationInfoUpdated(User user) {
+                        startLandingActivity(user);
+                    }
+                });
             }
         });
 
@@ -138,12 +149,9 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
 
     @Override
     public void onCurrentLocationAddressFetched(MyPlaces place) {
-        TextView currentLocationName = findViewById(R.id.place_name);
-        TextView currentLocationDetails = findViewById(R.id.place_details);
-        currentPlace = place;
-        currentLocationName.setText(place.getName());
-        currentLocationDetails.setText(place.getFormattedAddress());
+        // not used
     }
+
 
     @Override
     public void onBackPressed() {
@@ -153,18 +161,12 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
     @Override
     public void onPlaceSelected(MyPlaces place) {
         dialog.show();
-        updateUserLocation(place);
-
-    }
-
-    private void updateUserLocation(MyPlaces place) {
-        mCurrentUser.setLatitude(String.valueOf(place.getLatitude()));
-        mCurrentUser.setLongitude(String.valueOf(place.getLongitude()));
-        userRef.document(mCurrentUser.getUserId()).set(mCurrentUser, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        firebaseUtilClass.updateUserLocation(mCurrentUser, place, new FirebaseUtilClass.UpdateLocationInfoCommunicator() {
             @Override
-            public void onSuccess(Void aVoid) {
-                startLandingActivity(mCurrentUser);
+            public void onLocationInfoUpdated(User user) {
+                startLandingActivity(user);
             }
         });
+
     }
 }

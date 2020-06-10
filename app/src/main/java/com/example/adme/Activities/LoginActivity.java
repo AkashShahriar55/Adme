@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.adme.Helpers.FirebaseUtilClass;
 import com.example.adme.Helpers.LoadingDialog;
+import com.example.adme.Helpers.ServiceProviderData;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.facebook.AccessToken;
@@ -51,7 +52,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements FirebaseUtilClass.CreateUserCommunicator {
 
     private TextView txt_create_account;
     private Button login_skip_btn,login_google_btn,login_facebook_btn,login_btn;
@@ -68,6 +69,10 @@ public class LoginActivity extends AppCompatActivity {
     //create database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userRef = db.collection(FirebaseUtilClass.USER_COLLECTION_ID);
+
+    private User mCurrentUser ;
+
+    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
 
 
 
@@ -117,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "signInAnonymously:success");
                     FirebaseUser user = mAuth.getCurrentUser();
                     assert user != null;
-                    PerformDatabaseOperation(user);
+                    firebaseUtilClass.createUser(user,LoginActivity.this);
                 }
             }
         });
@@ -139,12 +144,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 dialog.dismiss();
                 User mCurrentUser = documentSnapshot.toObject(User.class);
-                mCurrentUser.setUserId(currentUser.getUid());
-                if(Objects.requireNonNull(mCurrentUser).getLatitude() == null || mCurrentUser.getLongitude() == null){
+
+                if(mCurrentUser.getLocation().size() == 0){
+                    Log.d(TAG, "onSuccess: size is zero");
                     startAccessLocationActivity(mCurrentUser);
                 }else{
                     startLandingActivity(mCurrentUser);
                 }
+
             }
         });
     }
@@ -269,7 +276,7 @@ public class LoginActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
 
                         assert user != null;
-                        PerformDatabaseOperation(user);
+                        firebaseUtilClass.createUser(user,this);
 
 
 
@@ -286,46 +293,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void PerformDatabaseOperation(FirebaseUser user) {
 
-        userRef.document(user.getUid()).get().addOnCompleteListener(task1 -> {
-            if (task1.isSuccessful()) {
-                DocumentSnapshot document = task1.getResult();
-
-
-                if (document.exists()) {
-                    User current_user = document.toObject(User.class);
-                    // User is already exist in database
-                    //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    dialog.show();
-                    startAccessLocationActivity(current_user);
-                } else {
-                    // User hasn't created yet
-                    // create new user in database
-                    Log.d(TAG, "No such document");
-                    String username = "";
-                    String NULL = "";
-                    assert user != null;
-                    if (user.getDisplayName() != null){
-                        username = user.getDisplayName();
-                    }
-                    else{
-                        username = "Adme_User";
-                    }
-                    User new_user = new User(username,"client","online",null,null);
-                    new_user.setUserId(user.getUid());
-                    /*** Insert into fireStore database**/
-                    userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
-                        dialog.show();
-                        startAccessLocationActivity(new_user);
-                    });
-                }
-            } else {
-                Log.d(TAG, "get failed with ", task1.getException());
-            }
-
-        });
-    }
 
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -339,7 +307,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         assert user != null;
-                        PerformDatabaseOperation(user);
+                        firebaseUtilClass.createUser(user,this);
                     } else {
                         // If sign in fails, display a message to the user.
                         dialog.show();
@@ -386,5 +354,16 @@ public class LoginActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
+    }
+
+    @Override
+    public void userAlreadyExists(User user) {
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onUserCreatedSuccessfully(User user) {
+        dialog.dismiss();
+        startAccessLocationActivity(user);
     }
 }

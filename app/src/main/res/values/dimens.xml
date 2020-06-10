@@ -8,7 +8,7 @@
     <dimen name="profile_height">250dp</dimen>
     <dimen name="profile_card_height">64dp</dimen>
     <dimen name="in_card_image_size">40dp</dimen>
-    <dimen name="inner_image_size">16dp</dimen>
+    <dimen name="inner_image_size">24dp</dimen>
     <dimen name="right_arrow_size">16dp</dimen>
     <dimen name="card_title_text_size">15sp</dimen>
     <dimen name="back_button_size">25dp</dimen>

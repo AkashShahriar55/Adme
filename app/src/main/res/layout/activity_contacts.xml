@@ -33,9 +33,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/backBtn"
-            android:layout_width="@dimen/back_button_size"
-            android:layout_height="@dimen/back_button_size"
-            android:layout_marginStart="24dp"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
             android:clickable="true"
             android:foreground="?selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -82,245 +81,76 @@
             android:layout_height="match_parent">
 
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="@dimen/inner_image_size"
-                android:layout_height="@dimen/inner_image_size"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/ic_phone"
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Add phone no:"
+                android:textColor="@color/white"
+                android:textSize="@dimen/semi_titte_size"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="370dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Contact Numbers:"
-                android:textColor="@color/blue"
-                android:textSize="@dimen/semi_titte_size"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/imageView" />
-
-            <TextView
-                android:id="@+id/textView56"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="1.  +8801784783001"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-            <Button
-                android:id="@+id/firstContactEdit"
-                android:layout_width="@dimen/inner_image_size"
-                android:layout_height="@dimen/inner_image_size"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/ic_contact_edit"
-                android:foreground="?selectableItemBackground"
-                app:layout_constraintBottom_toBottomOf="@+id/textView56"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-
-            <TextView
-                android:id="@+id/firstContactMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/green"
-                android:switchPadding="10dp"
-                android:text="@string/contactModePrivate"
-                android:textColor="@color/color_not_active"
-                android:textStyle="normal"
-                android:transitionName="todayStatusSwitch"
-                app:layout_constraintStart_toStartOf="@+id/textView56"
-                app:layout_constraintTop_toBottomOf="@+id/textView56" />
-
-
-
-            <Switch
-                android:id="@+id/firstContactModeSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/green"
-                android:switchPadding="10dp"
-                android:text="@string/contactModePrivate"
-                android:textColor="@color/color_not_active"
-                android:textStyle="normal"
-                android:visibility="invisible"
-                android:transitionName="todayStatusSwitch"
-                app:layout_constraintStart_toStartOf="@+id/textView56"
-                app:layout_constraintTop_toBottomOf="@+id/textView56" />
-
-
-            <TextView
-                android:id="@+id/secondContact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="2.  +8801784783001"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/textView56"
-                app:layout_constraintTop_toBottomOf="@+id/firstContactModeSwitch" />
-
-
-            <Button
-                android:id="@+id/secondContactEdit"
-                android:layout_width="@dimen/inner_image_size"
-                android:layout_height="@dimen/inner_image_size"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/ic_contact_edit"
-                android:foreground="?selectableItemBackground"
-                app:layout_constraintBottom_toBottomOf="@+id/secondContact"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/secondContact" />
-
-
-            <TextView
-                android:id="@+id/secondContactMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/green"
-                android:switchPadding="10dp"
-                android:text="@string/contactModePrivate"
-                android:textColor="@color/color_not_active"
-                android:textStyle="normal"
-                android:transitionName="todayStatusSwitch"
-                app:layout_constraintStart_toStartOf="@+id/secondContact"
-                app:layout_constraintTop_toBottomOf="@+id/secondContact" />
-
-
-
-            <Switch
-                android:id="@+id/secondContactModeSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/green"
-                android:switchPadding="10dp"
-                android:text="@string/contactModePrivate"
-                android:textColor="@color/color_not_active"
-                android:textStyle="normal"
-                android:visibility="invisible"
-                android:transitionName="todayStatusSwitch"
-                app:layout_constraintStart_toStartOf="@+id/textView56"
-                app:layout_constraintTop_toBottomOf="@+id/secondContact" />
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/saveChangesBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="gone"
-                app:cardCornerRadius="5dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addContactLayout">
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_backgound">
+                <include layout="@layout/layout_profile_contact_item" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                <include layout="@layout/layout_profile_contact_item" />
+            </LinearLayout>
 
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="Save Changes"
-                        android:textSize="@dimen/card_title_text_size"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/addContactBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:foreground="?selectableItemBackground"
-                android:visibility="visible"
-                app:cardCornerRadius="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addContactLayout">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_backgound">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="Add Contact"
-                        android:textSize="@dimen/card_title_text_size"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/addContactLayout"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/addContactBtn"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toStartOf="@+id/button6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter phone no." />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button6"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/light_blue"
+                android:text="@string/add"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+
+            <TextView
+                android:id="@+id/textView94"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="You can add up to 3 phone numbers"
+                android:textColor="@color/light_blue"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/secondContactModeSwitch">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
-                <com.hbb20.CountryCodePicker
-                    android:id="@+id/ccp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    app:ccp_defaultNameCode="BD"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/phoneText"
-                    android:layout_width="170dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:hint="Phone Number"
-                    android:inputType="phone"
-                    android:singleLine="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ccp"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

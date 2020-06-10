@@ -87,14 +87,14 @@
                     android:foregroundGravity="center"
                     android:rating="4.0"
                     app:layout_constraintBottom_toTopOf="@+id/barrier3"
-                    app:layout_constraintEnd_toStartOf="@+id/textView75"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_empty_recycleview_button"
                     app:layout_constraintStart_toEndOf="@+id/textView74"
                     app:layout_constraintTop_toTopOf="parent">
 
                 </androidx.appcompat.widget.AppCompatRatingBar>
 
                 <TextView
-                    android:id="@+id/textView75"
+                    android:id="@+id/tv_empty_recycleview_button"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -170,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="textView74,textView75,appCompatRatingBar"
+                    app:constraint_referenced_ids="textView74,tv_empty_recycleview_button,appCompatRatingBar"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="165dp" />
 
@@ -179,7 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="circleImageView,textView74,textView75,appCompatRatingBar,textView76,textView79"
+                    app:constraint_referenced_ids="circleImageView,textView74,tv_empty_recycleview_button,appCompatRatingBar,textView76,textView79"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="165dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>

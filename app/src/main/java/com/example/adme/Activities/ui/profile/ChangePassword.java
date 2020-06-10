@@ -12,7 +12,7 @@ import com.example.adme.R;
 
 public class ChangePassword extends AppCompatActivity {
 
-    TextView continueBtn, savePassBtn;
+    TextView continueBtn;
     ConstraintLayout backBtn,currentPassLay,changePassLay;
 
     @Override
@@ -22,7 +22,6 @@ public class ChangePassword extends AppCompatActivity {
 
         continueBtn = findViewById(R.id.continueBtn);
         backBtn = findViewById(R.id.backBtn);
-        savePassBtn = findViewById(R.id.saveChangesBtn);
         currentPassLay = findViewById(R.id.currentPasswordLayout);
         changePassLay = findViewById(R.id.changePassLayout);
 

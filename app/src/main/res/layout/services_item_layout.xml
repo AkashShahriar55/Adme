@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/ic_paint" />
 
     <TextView
-        android:id="@+id/textView39"
+        android:id="@+id/tv_empty_recycleview_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -49,9 +49,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:rating="4.5"
-        app:layout_constraintBottom_toBottomOf="@+id/textView39"
-        app:layout_constraintStart_toEndOf="@+id/textView39"
-        app:layout_constraintTop_toTopOf="@+id/textView39" />
+        app:layout_constraintBottom_toBottomOf="@+id/tv_empty_recycleview_title"
+        app:layout_constraintStart_toEndOf="@+id/tv_empty_recycleview_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_empty_recycleview_title" />
 
     <TextView
         android:id="@+id/textView74"
@@ -75,7 +75,7 @@
         app:srcCompat="@drawable/ic_people" />
 
     <TextView
-        android:id="@+id/textView75"
+        android:id="@+id/tv_empty_recycleview_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -85,6 +85,6 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView74"
-        app:layout_constraintStart_toStartOf="@+id/textView39"
-        app:layout_constraintTop_toBottomOf="@+id/textView39" />
+        app:layout_constraintStart_toStartOf="@+id/tv_empty_recycleview_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_empty_recycleview_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>
