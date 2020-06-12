@@ -13,6 +13,9 @@ import com.example.adme.Activities.ui.home.HomeFragment;
 import com.example.adme.Activities.ui.income.IncomeFragment;
 import com.example.adme.Activities.ui.leaderboard.LeaderBoardFragment;
 import com.example.adme.Activities.ui.profile.ProfileFragment;
+import com.example.adme.Activities.ui.servicehistory.ServiceHistoryFragment;
+import com.example.adme.Activities.ui.today.Notification_Fragment;
+import com.example.adme.Activities.ui.today.QuotationDetails;
 import com.example.adme.Activities.ui.today.TodayBottomDetailsFragment;
 import com.example.adme.Activities.ui.today.TodayFragment;
 import com.example.adme.Helpers.FirebaseUtilClass;
@@ -25,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -35,7 +39,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import java.util.List;
 
-public class LandingActivity extends AppCompatActivity {
+public class LandingActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "LandingActivity";
 
@@ -46,6 +50,14 @@ public class LandingActivity extends AppCompatActivity {
     private boolean isClient = false;
     private User mCurrentUser;
 
+    final Fragment fragment1 = new TodayFragment();
+    final Fragment fragment2 = new LeaderBoardFragment();
+    final Fragment fragment3 = new IncomeFragment();
+    final Fragment fragment4 = new ProfileFragment();
+    final Fragment fragment5 = new HomeFragment();
+    final Fragment fragment6 = new ServiceHistoryFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment active = fragment1;
 
 
     public boolean isClient() {
@@ -65,53 +77,150 @@ public class LandingActivity extends AppCompatActivity {
         if(isClient){
             setContentView(R.layout.activity_landing_client);
             BottomNavigationView navView = findViewById(R.id.nav_view);
-            // Passing each menu ID as a set of Ids because each
-            // menu should be considered as top level destinations.
+            navView.setOnNavigationItemSelectedListener(LandingActivity.this);
 
-            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-            NavigationUI.setupWithNavController(navView, navController);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment5, "5").commit();
+                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment6, "6").hide(fragment6).commit();
+                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment3, "3").hide(fragment3).commit();
+                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment4, "4").hide(fragment4).commit();
+                    active = fragment5;
+                }
+            });
+
         }else{
             setContentView(R.layout.activity_landing);
             BottomNavigationView navView = findViewById(R.id.nav_view);
-            // Passing each menu ID as a set of Ids because each
-            // menu should be considered as top level destinations.
+            navView.setOnNavigationItemSelectedListener(LandingActivity.this);
 
-            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-            NavigationUI.setupWithNavController(navView, navController);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment1, "1").commit();
+                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment2, "2").hide(fragment2).commit();
+                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment3, "3").hide(fragment3).commit();
+                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment4, "4").hide(fragment4).commit();
+                    active = fragment1;
+                }
+            });
+
         }
-
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+    }
 
+    public boolean isTodayVisible() {
+        return active == fragment1;
     }
 
     @Override
-    public void onBackPressed()
-    {
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        Fragment currentFragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+    public void onBackPressed() {
+        Fragment currentFragment = fm.findFragmentById(R.id.nav_host_fragment);
 
-        if((currentFragment instanceof TodayFragment) || (currentFragment instanceof HomeFragment) ){
-            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis())
-            {
+        if(currentFragment instanceof QuotationDetails || currentFragment instanceof Notification_Fragment){
+            fm.beginTransaction().remove(currentFragment).commit();
+            Log.d(TAG, "onBackPressed: appointmentFragment");
+        } else if (currentFragment instanceof TodayFragment ||
+                currentFragment instanceof LeaderBoardFragment ||
+                currentFragment instanceof IncomeFragment ||
+                currentFragment instanceof ProfileFragment ||
+                currentFragment instanceof HomeFragment ||
+                currentFragment instanceof ServiceHistoryFragment) {
+            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
                 if(Build.VERSION.SDK_INT>=16){
                     finishAffinity();
-                } else{
+                } else {
                     finish();
                     System.exit(0);
                 }
                 return;
+            } else {
+                Toast.makeText(getBaseContext(), "Tap back again to exit", Toast.LENGTH_SHORT).show();
             }
-            else { Toast.makeText(getBaseContext(), "Tap back again to exit", Toast.LENGTH_SHORT).show(); }
-
             mBackPressed = System.currentTimeMillis();
-        }else{
+        }  else {
             super.onBackPressed();
         }
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.d(TAG, "onNavigationItemSelected: "+item.getTitle());
+        switch (item.getItemId()) {
+            case R.id.navigation_today: {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fm.beginTransaction().hide(active).show(fragment1).commit();
+                        active = fragment1;
+                        TodayFragment fragment = (TodayFragment)fm.findFragmentByTag("1");
+                        fragment.updateView();
+                    }
+                });
+                return true;
+            }
+            case R.id.navigation_leaderboard: {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fm.beginTransaction().hide(active).show(fragment2).commit();
+                        active = fragment2;
+                        LeaderBoardFragment fragment = (LeaderBoardFragment)fm.findFragmentByTag("2");
+                        fragment.updateView();
+                    }
+                });
+                return true;
+            }
+            case R.id.navigation_income: {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fm.beginTransaction().hide(active).show(fragment3).commit();
+                        active = fragment3;
+                        IncomeFragment fragment = (IncomeFragment)fm.findFragmentByTag("3");
+                        fragment.updateView();
+                    }
+                });
+                return true;
+            }
+            case R.id.navigation_profile: {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fm.beginTransaction().hide(active).show(fragment4).commit();
+                        active = fragment4;
+                    }
+                });
+                return true;
+            }
+            case R.id.navigation_home: {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fm.beginTransaction().hide(active).show(fragment5).commit();
+                        active = fragment5;
+                    }
+                });
+                return true;
+            }
+            case R.id.navigation_service_history: {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fm.beginTransaction().hide(active).show(fragment6).commit();
+                        active = fragment6;
+                    }
+                });
+                return true;
+            }
+        }
+        return false;
     }
 }

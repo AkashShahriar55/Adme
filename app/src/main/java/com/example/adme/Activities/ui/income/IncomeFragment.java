@@ -3,6 +3,9 @@ package com.example.adme.Activities.ui.income;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,7 +152,23 @@ public class IncomeFragment extends Fragment {
 
         mChart = (ChartProgressBar) root.findViewById(R.id.ChartProgressBar);
         mChart.setDataList(dataList);
-        mChart.build();
+//        mChart.build();
 //        Toast.makeText(getApplicationContext(), "date : "+sdf.format(myCalendar.getTime()), Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean isViewLoaded=false;
+    public void updateView() {
+        if (!isViewLoaded) {
+            MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
+                @Override
+                public boolean queueIdle() {
+                    mChart.build();
+                    isViewLoaded=true;
+                    Log.d("LeaderBoardFragment", "queueIdle: updateView");
+                    return false;
+                }
+            };
+            Looper.myQueue().addIdleHandler(handler);
+        }
     }
 }

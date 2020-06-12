@@ -51,7 +51,7 @@ public class Notification_Fragment extends Fragment {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requireActivity().onBackPressed();
+                getActivity().onBackPressed();
             }
         });
 

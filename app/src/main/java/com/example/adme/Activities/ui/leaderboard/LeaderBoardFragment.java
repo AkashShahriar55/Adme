@@ -1,6 +1,9 @@
 package com.example.adme.Activities.ui.leaderboard;
 
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.adme.Activities.ui.today.TodayFragment;
 import com.example.adme.R;
 
 public class LeaderBoardFragment extends Fragment {
@@ -42,8 +46,23 @@ public class LeaderBoardFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         adapter = new LeaderBoardAdapter();
-        recyclerView.setAdapter(adapter);
-
 
     }
+
+    private boolean isViewLoaded=false;
+    public void updateView() {
+        if (!isViewLoaded) {
+            MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
+                @Override
+                public boolean queueIdle() {
+                    recyclerView.setAdapter(adapter);
+                    isViewLoaded=true;
+                    Log.d("LeaderBoardFragment", "queueIdle: updateView");
+                    return false;
+                }
+            };
+            Looper.myQueue().addIdleHandler(handler);
+        }
+    }
+
 }

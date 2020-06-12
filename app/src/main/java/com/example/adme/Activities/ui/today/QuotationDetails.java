@@ -48,8 +48,7 @@ public class QuotationDetails extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.quotation_details_fragment, container, false);
     }
 
@@ -150,13 +149,11 @@ public class QuotationDetails extends Fragment implements OnMapReadyCallback {
                                 //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin,17));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 10));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBound, 100));
-                                GoogleMapHelper helper = new GoogleMapHelper(mMap);
 
                                 // Getting URL to the Google Directions API
+                                GoogleMapHelper helper = new GoogleMapHelper(mMap);
                                 String url = helper.getDirectionsUrl(origin, dest);
-
                                 Log.i(TAG, "run: " + url);
-
                                 helper.downloadJson(url);
 
                             }

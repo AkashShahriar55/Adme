@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,330 +32,58 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.05" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/today_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_location"
+            app:backgroundTint="@color/white"
+            app:fabCustomSize="50dp"
+            android:layout_marginBottom="82dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <FrameLayout
             android:id="@+id/map"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_optimizationLevel="standard"
-            app:layout_constraintBottom_toTopOf="@+id/guideline18"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_optimizationLevel="standard">
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/today_location_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="70dp"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/ic_location"
-        app:backgroundTint="@color/white"
-        app:layout_anchor="@id/bottom_details"
-        app:layout_anchorGravity="end|top"
-        app:fabCustomSize="50dp"
-        android:focusable="true" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bottom_details"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/layout_coordinator"
         android:layout_width="match_parent"
-        android:layout_height="295dp"
-        android:paddingTop="45dp"
-        android:transitionName="bottom_details"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="95dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline18">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottom_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bottom_details_background"
-            tools:layout_editor_absoluteY="45dp">
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline22"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.05" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline23"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.95" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout14"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideline23"
-                app:layout_constraintStart_toStartOf="@+id/guideline22"
-                app:layout_constraintTop_toBottomOf="@+id/bottom_details_toolbar">
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline27"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.66" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline20"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.33" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.5" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline24"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.55" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/today_income"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/border_ash_today"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline24"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline13"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tv_income_today"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:text="1000"
-                        android:textColor="@color/color_active"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/textView20"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                    <TextView
-                        android:id="@+id/textView20"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/title_income"
-                        android:textColor="@color/txt_light"
-                        android:textColorHint="#FFFFFF"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_income_today"
-                        app:layout_constraintStart_toStartOf="@+id/tv_income_today"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_income_today" />
-
-                    <ImageView
-                        android:id="@+id/imageView14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="TODO"
-                        android:src="@drawable/ic_dollar_sign"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_income_today"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_income_today"
-                        app:layout_constraintTop_toTopOf="@+id/tv_income_today" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/today_due"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/border_ash_today"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline24"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline13"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tv_due"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:text="500"
-                        android:textColor="@color/color_negative"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/textView22"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                    <TextView
-                        android:id="@+id/textView22"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Monthly Due"
-                        android:textColor="@color/txt_light"
-                        android:textColorHint="#FFFFFF"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_due"
-                        app:layout_constraintStart_toStartOf="@+id/tv_due"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_due" />
-
-                    <ImageView
-                        android:id="@+id/imageView15"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_dollar_sign"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_due"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_due"
-                        app:layout_constraintTop_toTopOf="@+id/tv_due" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/today_pressed"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/border_ash_today"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline20"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/guideline24">
-
-                    <TextView
-                        android:id="@+id/tv_appointments_today"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:text="14"
-                        android:textColor="@color/txt_Dark"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/textView24"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                    <TextView
-                        android:id="@+id/textView24"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Appointments"
-                        android:textColor="@color/txt_light"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_appointments_today"
-                        app:layout_constraintStart_toStartOf="@+id/tv_appointments_today"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_appointments_today" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/today_requested"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/border_ash_today"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline27"
-                    app:layout_constraintStart_toStartOf="@+id/guideline20"
-                    app:layout_constraintTop_toTopOf="@+id/guideline24">
-
-                    <TextView
-                        android:id="@+id/tv_pending_today"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:text="5"
-                        android:textColor="@color/txt_Dark"
-                        android:textColorLink="#FFFFFF"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/textView26"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                    <TextView
-                        android:id="@+id/textView26"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Pending"
-                        android:textColor="@color/txt_light"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_pending_today"
-                        app:layout_constraintStart_toStartOf="@+id/tv_pending_today"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_pending_today" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/today_completed"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/border_ash_today"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline27"
-                    app:layout_constraintTop_toTopOf="@+id/guideline24">
-
-                    <TextView
-                        android:id="@+id/tv_completed_today"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:text="2"
-                        android:textColor="@color/txt_Dark"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/textView28"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                    <TextView
-                        android:id="@+id/textView28"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Completed"
-                        android:textColor="@color/txt_light"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_completed_today"
-                        app:layout_constraintStart_toStartOf="@+id/tv_completed_today"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_completed_today" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="156dp"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            android:background="@drawable/login_background"
+            android:transitionName="bottom_details">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/bottom_details_toolbar"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/toolbar_height"
-                android:transitionName="bootm_details_toolbar"
+                android:transitionName="bootm_details"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -368,9 +97,7 @@
                         android:id="@+id/bottom_details_button"
                         android:layout_width="60dp"
                         android:layout_height="0dp"
-                        android:clickable="true"
-                        android:contentDescription="TODO"
-                        android:foreground="?attr/selectableItemBackground"
+                        android:rotation="-90"
                         android:scaleType="center"
                         android:src="@drawable/ic_up_icon"
                         android:transitionName="bottom_details_back"
@@ -383,9 +110,6 @@
                         android:layout_width="60dp"
                         android:layout_height="0dp"
                         android:scaleType="center"
-                        android:clickable="true"
-                        android:contentDescription="TODO"
-                        android:foreground="?attr/selectableItemBackground"
                         android:src="@drawable/ic_notification_bell"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -417,11 +141,402 @@
                         app:layout_constraintBottom_toBottomOf="@+id/client_notification_btn"
                         app:layout_constraintEnd_toEndOf="@+id/client_notification_btn"
                         app:layout_constraintStart_toStartOf="@+id/client_notification_btn"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@+id/client_notification_btn" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bottom_details_toolbar">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout14"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/white"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                        app:layout_constraintStart_toStartOf="@+id/guideline11"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView2">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline27"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.66" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline20"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.33" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.5" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline24"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.55" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/today_income"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/border_ash_today"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline24"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline13"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/tv_income_today"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:text="1000"
+                                android:textColor="@color/color_active"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toTopOf="@+id/textView20"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_chainStyle="packed" />
+
+                            <TextView
+                                android:id="@+id/textView20"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/title_income"
+                                android:textColor="@color/txt_light"
+                                android:textColorHint="#FFFFFF"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/tv_income_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_income_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_income_today" />
+
+                            <ImageView
+                                android:id="@+id/imageView14"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_dollar_sign"
+                                app:layout_constraintBottom_toTopOf="@+id/tv_income_today"
+                                app:layout_constraintEnd_toStartOf="@+id/tv_income_today"
+                                app:layout_constraintTop_toTopOf="@+id/tv_income_today" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/border_ash_today"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline24"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/guideline13"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/tv_due"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:text="500"
+                                android:textColor="@color/color_negative"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toTopOf="@+id/textView22"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_chainStyle="packed" />
+
+                            <TextView
+                                android:id="@+id/textView22"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Monthly Due"
+                                android:textColor="@color/txt_light"
+                                android:textColorHint="#FFFFFF"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/tv_due"
+                                app:layout_constraintStart_toStartOf="@+id/tv_due"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_due" />
+
+                            <ImageView
+                                android:id="@+id/imageView15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_dollar_sign"
+                                app:layout_constraintBottom_toTopOf="@+id/tv_due"
+                                app:layout_constraintEnd_toStartOf="@+id/tv_due"
+                                app:layout_constraintTop_toTopOf="@+id/tv_due" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/border_ash_today"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline20"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline24">
+
+                            <TextView
+                                android:id="@+id/tv_appointments_today"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:text="14"
+                                android:textColor="@color/txt_Dark"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toTopOf="@+id/textView24"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_chainStyle="packed" />
+
+                            <TextView
+                                android:id="@+id/textView24"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Appointments"
+                                android:textColor="@color/txt_light"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/tv_appointments_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_appointments_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_appointments_today" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/border_ash_today"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline27"
+                            app:layout_constraintStart_toStartOf="@+id/guideline20"
+                            app:layout_constraintTop_toTopOf="@+id/guideline24">
+
+                            <TextView
+                                android:id="@+id/tv_pending_today"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:text="5"
+                                android:textColor="@color/txt_Dark"
+                                android:textColorLink="#FFFFFF"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toTopOf="@+id/textView26"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_chainStyle="packed" />
+
+                            <TextView
+                                android:id="@+id/textView26"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Pending"
+                                android:textColor="@color/txt_light"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/tv_pending_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_pending_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_pending_today" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/border_ash_today"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/guideline27"
+                            app:layout_constraintTop_toTopOf="@+id/guideline24">
+
+                            <TextView
+                                android:id="@+id/tv_completed_today"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:text="2"
+                                android:textColor="@color/txt_Dark"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toTopOf="@+id/textView28"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_chainStyle="packed" />
+
+                            <TextView
+                                android:id="@+id/textView28"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Completed"
+                                android:textColor="@color/txt_light"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/tv_completed_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_completed_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_completed_today" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.05" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.95" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView2"
+                        android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="40dp"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                        app:layout_constraintStart_toStartOf="@+id/guideline11"
+                        app:layout_constraintTop_toTopOf="parent" >
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:background="@drawable/border_ash_today">
+
+                            <ImageView
+                                android:id="@+id/imageView9"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_dollar_sign"
+                                app:layout_constraintBottom_toBottomOf="@+id/tv_total_income"
+                                app:layout_constraintEnd_toStartOf="@+id/tv_total_income"
+                                app:layout_constraintTop_toTopOf="@+id/tv_total_income" />
+
+                            <TextView
+                                android:id="@+id/tv_total_income"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="441"
+                                android:textColor="@color/txt_Dark"
+                                android:textSize="20sp"
+                                app:layout_constraintBottom_toTopOf="@+id/textView9"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_chainStyle="packed" />
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="Total Income"
+                                android:textColor="@color/txt_light"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/tv_total_income"
+                                app:layout_constraintStart_toStartOf="@+id/tv_total_income"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_total_income" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/service_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/guideline11"
+                        app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+                    <TextView
+                        android:id="@+id/textView37"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Your services "
+                        android:textColor="@color/txt_highlight"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="@+id/guideline11"
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout14" />
+
+                    <Button
+                        android:id="@+id/today_add_service"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/view_details_btn"
+                        android:text="Add"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView37"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                        app:layout_constraintTop_toTopOf="@+id/textView37" />
+
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="Active Appointments"
+                        android:textColor="@color/txt_highlight"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="@+id/guideline11"
+                        app:layout_constraintTop_toBottomOf="@+id/service_container" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/appointment_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                        app:layout_constraintStart_toStartOf="@+id/guideline11"
+                        app:layout_constraintTop_toBottomOf="@+id/textView38" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.core.widget.NestedScrollView>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
