@@ -17,11 +17,11 @@ public class Appointment {
     private String service_provider_time;
     private String state;
     private Map<String,String> services;
-    private Place clint_location;
+    private MyPlaces clint_location;
 
     public Appointment(){}
 
-    public Appointment(String clint_name, String clint_phone, String clint_ref, String clint_text, String clint_time, String distance, String price_needed, String price_requested, String service_provider_name, String service_provider_ref, String service_provider_text, String service_provider_time, String state, Map<String, String> services, Place clint_location) {
+    public Appointment(String clint_name, String clint_phone, String clint_ref, String clint_text, String clint_time, String distance, String price_needed, String price_requested, String service_provider_name, String service_provider_ref, String service_provider_text, String service_provider_time, String state, Map<String, String> services, MyPlaces clint_location) {
         this.clint_name = clint_name;
         this.clint_phone = clint_phone;
         this.clint_ref = clint_ref;
@@ -151,11 +151,11 @@ public class Appointment {
         this.services = services;
     }
 
-    public Place getClint_location() {
+    public MyPlaces getClint_location() {
         return clint_location;
     }
 
-    public void setClint_location(Place clint_location) {
+    public void setClint_location(MyPlaces clint_location) {
         this.clint_location = clint_location;
     }
 }
