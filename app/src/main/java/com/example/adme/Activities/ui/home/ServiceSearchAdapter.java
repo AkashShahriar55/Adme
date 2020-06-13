@@ -11,13 +11,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Helpers.Service;
 import com.example.adme.R;
 import java.util.List;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ServiceSearchAdapter extends RecyclerView.Adapter<ServiceSearchAdapter.MyViewHolder> {
     private Context context;
-    private List<ServiceProvider> serviceProviderList;
+    private List<Service> serviceProviderList;
     private ServiceSearchAdapterListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -50,7 +54,7 @@ public class ServiceSearchAdapter extends RecyclerView.Adapter<ServiceSearchAdap
     }
 
 
-    public ServiceSearchAdapter(Context context, List<ServiceProvider> serviceProviderList, ServiceSearchAdapterListener listener) {
+    public ServiceSearchAdapter(Context context, List<Service> serviceProviderList, ServiceSearchAdapterListener listener) {
         this.context = context;
         this.listener = listener;
         this.serviceProviderList = serviceProviderList;
@@ -64,15 +68,27 @@ public class ServiceSearchAdapter extends RecyclerView.Adapter<ServiceSearchAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final ServiceProvider serviceProvider = serviceProviderList.get(position);
+        final Service serviceProvider = serviceProviderList.get(position);
 
         holder.tv_username.setText(serviceProvider.getUser_name());
         holder.ratingBar.setRating(Float.parseFloat(serviceProvider.getRating()));
-        holder.tv_work_done.setText(serviceProvider.getWork_done());
+        holder.tv_work_done.setText(serviceProvider.getReviews());
         holder.tv_distance.setText("1.2 miles away");
         holder.tv_details.setText(serviceProvider.getShort_dis());
-        holder.tv_min_fee.setText(serviceProvider.getMin_fee());
-        holder.tv_max_fee.setText(serviceProvider.getMax_fee());
+
+        int smallest = 1000;
+        int largest = 0;
+        for(Map<String,String> service : serviceProvider.getServices()){
+            int num = Integer.parseInt(service.get(FirebaseUtilClass.ENTRY_SERVICE_PRICE));
+            if (num > largest) {
+                largest = num;
+            }
+            if (num < smallest) {
+                smallest = num;
+            }
+        }
+        holder.tv_min_fee.setText(smallest+"");
+        holder.tv_max_fee.setText(largest+"");
 
         Glide.with(context)
                 .load(serviceProvider.getPic_url())
@@ -88,6 +104,6 @@ public class ServiceSearchAdapter extends RecyclerView.Adapter<ServiceSearchAdap
     }
 
     public interface ServiceSearchAdapterListener {
-        void onServiceProviderSelected(ServiceProvider serviceProvider);
+        void onServiceProviderSelected(Service serviceProvider);
     }
 }

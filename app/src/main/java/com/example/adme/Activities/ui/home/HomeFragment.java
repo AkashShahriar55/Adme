@@ -28,20 +28,13 @@ import android.widget.Toast;
 import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
 
-import com.example.adme.Activities.ui.today.TodayBottomDetailsFragment;
-import com.example.adme.Activities.ui.today.TodayFragment;
-
 import com.example.adme.Activities.ui.today.TodayViewModel;
-import com.example.adme.Helpers.GoogleMapHelper;
+import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -73,7 +66,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     private ImageView client_notification_btn, bottomDetailsButton;
 
     private RecyclerView search_service_rv;
-    private List<ServiceProvider> serviceProvidersList;
+    private List<Service> serviceProvidersList;
     private ServiceSearchAdapter serviceSearchAdapter;
     private SearchView serviceSearchView;
 
@@ -170,7 +163,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     public void onStart() {
         super.onStart();
         mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
-
     }
 
     private void markUserLocationInMap() {
@@ -279,7 +271,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     }
 
     @Override
-    public void onServiceProviderSelected(ServiceProvider serviceProvider) {
+    public void onServiceProviderSelected(Service serviceProvider) {
         Toast.makeText(getContext(), "Selected: " + serviceProvider.getUser_name() , Toast.LENGTH_LONG).show();
     }
 
@@ -287,7 +279,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
         db = FirebaseFirestore.getInstance();
         ///Adme_Service_list/service1
 //        final DocumentReference docRef = db.collection("Adme_Service_list").document("service1");
-        final DocumentReference docRef = db.document("Adme_Service_list/service1");
+        final DocumentReference docRef = db.document("Adme_Service_list/service90");
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
@@ -296,11 +288,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
                     return;
                 }
                 if (snapshot != null && snapshot.exists()) {
-                    ServiceProvider sv= snapshot.toObject(ServiceProvider.class);
+                    Service sv = snapshot.toObject(Service.class);
                     serviceProvidersList.add(sv);
                     serviceSearchAdapter.notifyDataSetChanged();
                     Log.d(TAG, "Current data: " + snapshot.getData());
                     Log.d(TAG, "Current2 data: " + sv.getUser_name());
+
+//                    setFirebaseData(sv,"service1");
+
+//                    Place place = new Place("54 Teligati Road, Daulotpur", "23.46","45.33");
+//                    sv.setService_provider_location(place);
+//                    Service service= new Service();
+//                    db.collection("Adme_Service_list").document("service90").set(sv);
+
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
@@ -308,7 +308,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
         });
     }
 
-    private void setFirebaseData(ServiceProvider sv, String doc){
+    private void setFirebaseData(Service sv, String doc){
         db.collection("Adme_Service_list").document(doc)
                 .set(sv)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -326,32 +326,66 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     }
 
     private void getFirebaseDataList() {
-        db = FirebaseFirestore.getInstance();
-        db.collection("Adme_Service_list")
-                .whereArrayContainsAny("tag", Arrays.asList("artist", "paint"))
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-                        serviceProvidersList.clear();
-                        for (QueryDocumentSnapshot doc : value) {
-                            ServiceProvider sv= doc.toObject(ServiceProvider.class);
-                            serviceProvidersList.add(sv);
-                            serviceSearchAdapter.notifyDataSetChanged();
-
-//                            for(int i=0; i<sv.getTag().size(); i++){
-//                                sv.getTag().set(i , sv.getTag().get(i).toLowerCase());
-//                                Log.d(TAG, doc.getId()+" Current3 data: " + sv.getTag().get(i));
+//        db = FirebaseFirestore.getInstance();
+////        db.collection("Adme_Service_list")
+////                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+////                    @Override
+////                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+////                        if (e != null) {
+////                            Log.w(TAG, "Listen failed.", e);
+////                            return;
+////                        }
+////                        serviceProvidersList.clear();
+////                        for (QueryDocumentSnapshot doc : value) {
+////                            ServiceProvider sv= doc.toObject(ServiceProvider.class);
+////                            serviceProvidersList.add(sv);
+////                            serviceSearchAdapter.notifyDataSetChanged();
+////
+//////                            for(int i=0; i<sv.getTag().size(); i++){
+//////                                sv.getTag().set(i , sv.getTag().get(i).toLowerCase());
+//////                                Log.d(TAG, doc.getId()+" Current3 data: " + sv.getTag().get(i));
+//////                            }
+//////                            setFirebaseData(sv, doc.getId());
+////                        }
+//////                        Log.d(TAG, "Current2 data: " + serviceProvidersList.get(3).getUser_name());
+////                    }
+////                });
+//
+//        db.collection("Adme_Service_list")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
 //                            }
-//                            setFirebaseData(sv, doc.getId());
-                        }
-//                        Log.d(TAG, "Current2 data: " + serviceProvidersList.get(3).getUser_name());
-                    }
-                });
-
+//                            serviceProvidersList.clear();
+//                            for (QueryDocumentSnapshot doc : task.getResult()) {
+//                                ServiceProvider sv= doc.toObject(ServiceProvider.class);
+//                                serviceProvidersList.add(sv);
+//                                serviceSearchAdapter.notifyDataSetChanged();
+//
+////                            for(int i=0; i<sv.getTag().size(); i++){
+////                                sv.getTag().set(i , sv.getTag().get(i).toLowerCase());
+////                                Log.d(TAG, doc.getId()+" Current3 data: " + sv.getTag().get(i));
+////                            }
+////                            setFirebaseData(sv, doc.getId());
+//                            }
+////                            Place place=new Place("Bashbari", "23.46","45.33");
+////                            ServiceProvider sv =new ServiceProvider(serviceProvidersList.get(5))
+////                            serviceProvidersList.get(5).setService_provider_location(place);
+////                            db.collection("Adme_Service_list").document("service90").set(serviceProvidersList.get(5));
+////                            Map<String, Object> data = new HashMap<>();
+////                            data.put("place", place);
+////                            db.collection("Adme_Service_list").document("service9").set(data);
+//
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+//
     }
 
     private void getFirebaseQueryList(List<String> queryArray) {
@@ -360,7 +394,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
         db.collection("Adme_Service_list")
 //                .startAt(queryArray.get(0))
 //                .endAt(queryArray.get(0)+"\uf8ff")
-                .whereArrayContainsAny("tag", queryArray)
+                .whereArrayContainsAny("tags", queryArray)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
@@ -369,7 +403,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
                             Log.w(TAG, "Listen failed.", e);
                         } else {
                             for (QueryDocumentSnapshot doc : value) {
-                                ServiceProvider sv = doc.toObject(ServiceProvider.class);
+                                Service sv = doc.toObject(Service.class);
                                 serviceProvidersList.add(sv);
 
 //                            for(int i=0; i<sv.getTag().size(); i++){

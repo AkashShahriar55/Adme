@@ -17,83 +17,58 @@ public class Service implements Parcelable {
     private String rating;
     private String reviews;
     private String working_hour;
+    private String user_name;
+    private String short_dis;
+    private String pic_url;
+    private String user_ref;
     private Map<String,String> location = new HashMap<>();
     private List<String> feature_images = new ArrayList<>();
     private List<Map<String,String>> services = new ArrayList<>();
     private List<String> tags;
-    private Map<String,String> user_info = new HashMap<>();
+    private String status;
     private String mServiceId;
+
 
     public Service() {
     }
 
-    public Service(String category, String working_hour, Map<String, String> location, List<String> feature_images, List<Map<String, String>> services, Map<String, String> user_info,String mServiceId) {
+//    public Service(String category, String working_hour, Map<String, String> location, List<String> feature_images, List<Map<String, String>> services, Map<String, String> user_info,String mServiceId) {
+//        this.category = category;
+//        this.working_hour = working_hour;
+//        this.location = location;
+//        this.feature_images = feature_images;
+//        this.services = services;
+//
+//        String[] tokens = category.split("\\s+");
+//        this.tags.addAll(Arrays.asList(tokens));
+//        tokens = location.get(FirebaseUtilClass.ENTRY_LOCATION_ADDRESS).split("\\s+");
+//        this.tags.addAll(Arrays.asList(tokens));
+//        for(Map<String,String> service:services){
+//            tokens = service.get(FirebaseUtilClass.ENTRY_SERVICE_TITLE).split("\\s+");
+//            tags.addAll(Arrays.asList(tokens));
+//        }
+//
+//        this.rating = "0";
+//        this.reviews = "0";
+//        this.mServiceId = mServiceId;
+//    }
+
+
+    public Service(String category, String rating, String reviews, String working_hour, String user_name, String short_dis, String pic_url, String user_ref, Map<String, String> location, List<String> feature_images, List<Map<String, String>> services, List<String> tags, String status) {
         this.category = category;
+        this.rating = rating;
+        this.reviews = reviews;
         this.working_hour = working_hour;
+        this.user_name = user_name;
+        this.short_dis = short_dis;
+        this.pic_url = pic_url;
+        this.user_ref = user_ref;
         this.location = location;
         this.feature_images = feature_images;
         this.services = services;
-        this.user_info = user_info;
-
-        String[] tokens = category.split("\\s+");
-        this.tags.addAll(Arrays.asList(tokens));
-        tokens = location.get(FirebaseUtilClass.ENTRY_LOCATION_ADDRESS).split("\\s+");
-        this.tags.addAll(Arrays.asList(tokens));
-        for(Map<String,String> service:services){
-            tokens = service.get(FirebaseUtilClass.ENTRY_SERVICE_TITLE).split("\\s+");
-            tags.addAll(Arrays.asList(tokens));
-        }
-
-
-        this.rating = "0";
-        this.reviews = "0";
-        this.mServiceId = mServiceId;
+        this.tags = tags;
+        this.status = status;
     }
-
-    protected Service(Parcel in) {
-        category = in.readString();
-        rating = in.readString();
-        reviews = in.readString();
-        working_hour = in.readString();
-        feature_images = in.createStringArrayList();
-        tags = in.createStringArrayList();
-        mServiceId = in.readString();
-
-        int location_size = in.readInt();
-        for (int i = 0; i < location_size; i++) {
-            String key = in.readString();
-            String value = in.readString();
-            location.put(key,value);
-        }
-
-        int user_info_size = in.readInt();
-        for (int i = 0; i < user_info_size; i++) {
-            String key = in.readString();
-            String value = in.readString();
-            user_info.put(key,value);
-        }
-
-        int services_size = in.readInt();
-        for (int i = 0; i < services_size; i++) {
-            Map<String,String> service = new HashMap<>();
-            service.put(FirebaseUtilClass.ENTRY_SERVICE_TITLE,in.readString());
-            service.put(FirebaseUtilClass.ENTRY_SERVICE_DESCRIPTION,in.readString());
-            service.put(FirebaseUtilClass.ENTRY_SERVICE_PRICE,in.readString());
-            services.add(service);
-        }
-    }
-
-    public static final Creator<Service> CREATOR = new Creator<Service>() {
-        @Override
-        public Service createFromParcel(Parcel in) {
-            return new Service(in);
-        }
-
-        @Override
-        public Service[] newArray(int size) {
-            return new Service[size];
-        }
-    };
 
     public String getCategory() {
         return category;
@@ -159,12 +134,44 @@ public class Service implements Parcelable {
         this.tags = tags;
     }
 
-    public Map<String, String> getUser_info() {
-        return user_info;
+    public String getUser_name() {
+        return user_name;
     }
 
-    public void setUser_info(Map<String, String> user_info) {
-        this.user_info = user_info;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getShort_dis() {
+        return short_dis;
+    }
+
+    public void setShort_dis(String short_dis) {
+        this.short_dis = short_dis;
+    }
+
+    public String getPic_url() {
+        return pic_url;
+    }
+
+    public void setPic_url(String pic_url) {
+        this.pic_url = pic_url;
+    }
+
+    public String getUser_ref() {
+        return user_ref;
+    }
+
+    public void setUser_ref(String user_ref) {
+        this.user_ref = user_ref;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Exclude
@@ -175,6 +182,51 @@ public class Service implements Parcelable {
     public void setmServiceId(String mServiceId) {
         this.mServiceId = mServiceId;
     }
+
+
+
+    protected Service(Parcel in) {
+        category = in.readString();
+        rating = in.readString();
+        reviews = in.readString();
+        working_hour = in.readString();
+        feature_images = in.createStringArrayList();
+        tags = in.createStringArrayList();
+        user_name = in.readString();
+        short_dis = in.readString();
+        pic_url = in.readString();
+        user_ref = in.readString();
+        status = in.readString();
+        mServiceId = in.readString();
+
+        int location_size = in.readInt();
+        for (int i = 0; i < location_size; i++) {
+            String key = in.readString();
+            String value = in.readString();
+            location.put(key,value);
+        }
+
+        int services_size = in.readInt();
+        for (int i = 0; i < services_size; i++) {
+            Map<String,String> service = new HashMap<>();
+            service.put(FirebaseUtilClass.ENTRY_SERVICE_TITLE,in.readString());
+            service.put(FirebaseUtilClass.ENTRY_SERVICE_DESCRIPTION,in.readString());
+            service.put(FirebaseUtilClass.ENTRY_SERVICE_PRICE,in.readString());
+            services.add(service);
+        }
+    }
+
+    public static final Creator<Service> CREATOR = new Creator<Service>() {
+        @Override
+        public Service createFromParcel(Parcel in) {
+            return new Service(in);
+        }
+
+        @Override
+        public Service[] newArray(int size) {
+            return new Service[size];
+        }
+    };
 
     @Override
     public int describeContents() {
@@ -189,18 +241,16 @@ public class Service implements Parcelable {
         dest.writeString(working_hour);
         dest.writeStringList(feature_images);
         dest.writeStringList(tags);
+        dest.writeString(user_name);
+        dest.writeString(short_dis);
+        dest.writeString(pic_url);
+        dest.writeString(user_ref);
+        dest.writeString(status);
         dest.writeString(mServiceId);
 
         int location_size = location.size();
         dest.writeInt(location_size);
         for(Map.Entry<String,String> map: location.entrySet() ){
-            dest.writeString( map.getKey());
-            dest.writeString(map.getValue());
-        }
-
-        int user_info_size = user_info.size();
-        dest.writeInt(user_info_size);
-        for(Map.Entry<String,String> map: user_info.entrySet() ){
             dest.writeString( map.getKey());
             dest.writeString(map.getValue());
         }
