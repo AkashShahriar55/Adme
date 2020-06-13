@@ -47,7 +47,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
     private long mBackPressed;
     private NavController navController;
     private String label = null;
-    private boolean isClient = false;
+    private boolean isClient = true;
     private User mCurrentUser;
 
     final Fragment fragment1 = new TodayFragment();
