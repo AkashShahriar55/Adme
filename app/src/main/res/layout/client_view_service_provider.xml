@@ -44,14 +44,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/android_default_layout_color"
-                android:padding="8dp"
+                android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageSlider">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/circleImageView"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="0dp"
                     android:src="@drawable/ic_avatar"
                     app:layout_constraintBottom_toTopOf="@+id/barrier4"
@@ -62,14 +62,14 @@
                 </de.hdodenhof.circleimageview.CircleImageView>
 
                 <TextView
-                    android:id="@+id/textView74"
+                    android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="Akash Shahriar"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@+id/appCompatRatingBar"
+                    app:layout_constraintEnd_toStartOf="@+id/ratingBar"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toEndOf="@+id/circleImageView"
@@ -77,9 +77,10 @@
 
                 </TextView>
 
-                <androidx.appcompat.widget.AppCompatRatingBar
-                    android:id="@+id/appCompatRatingBar"
+                <RatingBar
+                    android:id="@+id/ratingBar"
                     style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:theme="@style/RatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -87,12 +88,34 @@
                     android:rating="4.0"
                     app:layout_constraintBottom_toTopOf="@+id/barrier3"
                     app:layout_constraintEnd_toStartOf="@+id/tv_empty_recycleview_button"
-                    app:layout_constraintStart_toEndOf="@+id/textView74"
+                    app:layout_constraintStart_toEndOf="@+id/tv_username"
                     app:layout_constraintTop_toTopOf="parent">
+                </RatingBar>
 
-                </androidx.appcompat.widget.AppCompatRatingBar>
 
                 <TextView
+                    android:id="@+id/tv_work_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="15"
+                    android:textSize="11sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView19"
+                    app:layout_constraintStart_toEndOf="@+id/imageView19"
+                    app:layout_constraintTop_toTopOf="@+id/imageView19" />
+
+                <ImageView
+                    android:id="@+id/imageView19"
+                    android:layout_width="9dp"
+                    android:layout_height="9dp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/barrier3"
+                    app:layout_constraintStart_toStartOf="@+id/tv_empty_recycleview_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_people" />
+
+                <TextView
+                    android:visibility="gone"
                     android:id="@+id/tv_empty_recycleview_button"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -103,32 +126,34 @@
                     app:layout_constraintBottom_toTopOf="@+id/barrier3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/appCompatRatingBar"
+                    app:layout_constraintStart_toEndOf="@+id/ratingBar"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView76"
+                    android:id="@+id/tv_catagory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="Painter"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/circleImageView"
-                    app:layout_constraintTop_toBottomOf="@+id/textView74" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_username" />
 
                 <TextView
-                    android:id="@+id/textView79"
+                    android:id="@+id/tv_short_discription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:lineSpacingExtra="3dp"
                     android:maxLength="100"
                     android:text="I will provide with home paint, Wall painting, Plastic painting, Artistic paints, Pattern paintings"
                     android:textColor="@color/black"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/circleImageView"
-                    app:layout_constraintTop_toBottomOf="@+id/textView76">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_catagory">
 
                 </TextView>
 
@@ -142,13 +167,13 @@
                     android:padding="8dp"
                     android:text="@string/working_hour"
                     android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@+id/textView77"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_working_hour"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/barrier4" />
 
                 <TextView
-                    android:id="@+id/textView77"
+                    android:id="@+id/tv_working_hour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_corner"
@@ -169,7 +194,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="textView74,tv_empty_recycleview_button,appCompatRatingBar"
+                    app:constraint_referenced_ids="tv_username,tv_empty_recycleview_button,ratingBar"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="165dp" />
 
@@ -178,7 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="circleImageView,textView74,tv_empty_recycleview_button,appCompatRatingBar,textView76,textView79"
+                    app:constraint_referenced_ids="circleImageView,tv_username,tv_empty_recycleview_button,ratingBar,tv_catagory,tv_short_discription"
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="165dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -187,125 +212,124 @@
                 android:id="@+id/constraint_layout17"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@color/android_default_layout_color"
-                android:paddingStart="8dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/white"
                 android:paddingBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/constraintLayout16"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout16">
 
-                <TextView
-                    android:id="@+id/textView80"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout20"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/location"
-                    android:textColor="@color/sv_primary"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@id/barrier6"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/default_background"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_location_short"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_location"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/location"
+                        android:textColor="@color/sv_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.533" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <ImageView
                     android:id="@+id/imageView6"
                     android:layout_width="30dp"
                     android:layout_height="0dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toTopOf="@+id/barrier9"
+                    android:layout_marginStart="14dp"
+                    app:layout_constraintBottom_toTopOf="@+id/map"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/barrier6"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout20"
                     app:srcCompat="@drawable/ic_icon_metro_location_black" />
 
                 <TextView
-                    android:id="@+id/textView81"
+                    android:id="@+id/tv_location_short"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
                     android:text="Rohanpur,Rajshahi"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/textView82"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_location_details"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
-                    app:layout_constraintTop_toBottomOf="@id/barrier6"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
-                    android:id="@+id/textView82"
+                    android:id="@+id/tv_location_details"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="8dp"
                     android:text="Rohonpur,Gomostapur,Chapainawabganj,Rajshahi"
-                    android:textColor="@color/black"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/barrier9"
                     app:layout_constraintEnd_toStartOf="@+id/barrier10"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
-                    app:layout_constraintTop_toBottomOf="@+id/textView81" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location_short" />
 
                 <TextView
-                    android:id="@+id/textView83"
+                    android:id="@+id/tv_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:text="1.1"
                     android:textColor="@color/sv_primary"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/textView84"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/barrier10"
-                    app:layout_constraintTop_toBottomOf="@id/barrier6"
+                    app:layout_constraintEnd_toEndOf="@+id/textView84"
+                    app:layout_constraintStart_toStartOf="@+id/textView84"
+                    app:layout_constraintTop_toTopOf="@+id/tv_location_short"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
                     android:id="@+id/textView84"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:text="@string/miles"
                     android:textColor="@color/sv_primary"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/barrier9"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_location_details"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/barrier10"
-                    app:layout_constraintTop_toBottomOf="@+id/textView83" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_distance" />
 
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/barrier6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="textView80"
+                    app:constraint_referenced_ids="tv_location"
                     tools:layout_editor_absoluteX="8dp"
-                    tools:layout_editor_absoluteY="292dp" />
-
-                <androidx.constraintlayout.widget.Barrier
-                    android:id="@+id/barrier9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="textView83,textView84,imageView6,textView82,textView81"
-                    tools:layout_editor_absoluteX="8dp"
-                    tools:layout_editor_absoluteY="292dp" />
+                    tools:layout_editor_absoluteY="292dp"
+                    tools:ignore="NotSibling" />
 
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/barrier10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="end"
-                    app:constraint_referenced_ids="textView82,textView81"
+                    app:constraint_referenced_ids="tv_location_details,tv_location_short"
                     tools:layout_editor_absoluteX="403dp"
                     tools:layout_editor_absoluteY="8dp" />
 
@@ -313,11 +337,13 @@
                     android:id="@+id/map"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@drawable/rounded_corner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/barrier9" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location_details" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -326,26 +352,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@color/android_default_layout_color"
-                android:paddingTop="16dp"
+                android:background="@color/default_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraint_layout17">
 
                 <TextView
-                    android:id="@+id/textView61"
+                    android:id="@+id/tv_services"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/services"
                     android:textColor="@color/sv_primary"
                     android:textSize="20sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/ad_service_btn"
-                    app:layout_constraintEnd_toStartOf="@+id/ad_service_btn"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/ad_service_recyclerView"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/ad_service_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -360,14 +388,17 @@
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/barrier"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView61"
+                    app:layout_constraintStart_toEndOf="@+id/tv_services"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ad_service_recyclerView"
+                    android:background="@color/default_background"
+                    android:clipToPadding="false"
+                    android:paddingBottom="6dp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="0dp"
                     android:nestedScrollingEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -381,7 +412,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="textView61,ad_service_btn"
+                    app:constraint_referenced_ids="tv_services,ad_service_btn"
                     tools:layout_editor_absoluteY="658dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -390,21 +421,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@color/android_default_layout_color"
-                android:paddingTop="16dp"
+                android:background="@color/default_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraint_layout_18">
 
                 <TextView
-                    android:id="@+id/textView85"
+                    android:id="@+id/tv_reviews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginBottom="16dp"
                     android:text="@string/reviews"
                     android:textColor="@color/sv_primary"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/barrier5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -416,12 +446,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="textView85"
+                    app:constraint_referenced_ids="tv_reviews"
                     tools:layout_editor_absoluteY="500dp" />
 
-
                 <androidx.recyclerview.widget.RecyclerView
+                    android:background="@color/default_background"
                     android:id="@+id/review_recyclerView"
+                    android:clipToPadding="false"
+                    android:paddingBottom="67dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
@@ -438,22 +470,23 @@
 
     </ScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_scroll_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@android:color/transparent"
-        android:elevation="2dp"
-        android:src="@drawable/ic_arrow_up"
-        app:borderWidth="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:pressedTranslationZ="12dp"
-        android:layout_gravity="bottom|end"
-        android:visibility="gone">
+    <include layout="@layout/client_appointment_bottom_sheet" />
 
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab_scroll_up"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="32dp"-->
+<!--        android:layout_marginBottom="32dp"-->
+<!--        android:backgroundTint="@android:color/transparent"-->
+<!--        android:elevation="2dp"-->
+<!--        android:src="@drawable/ic_arrow_up"-->
+<!--        app:borderWidth="2dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:pressedTranslationZ="12dp"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:visibility="gone">-->
+<!--    </com.google.android.material.floatingactionbutton.FloatingActionButton>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,7 +6,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -19,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -29,6 +33,7 @@ import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
 
 import com.example.adme.Activities.ui.today.TodayViewModel;
+import com.example.adme.Activities.ui.today.ViewServiceDetails;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
@@ -72,6 +77,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 
     FirebaseFirestore db;
     private User mCurrentUser;
+    boolean isKeyboardHide=true;
+    boolean isSearchResultVisible=false;
 
 
     public static HomeFragment newInstance() {
@@ -81,6 +88,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root= inflater.inflate(R.layout.home_fragment, container, false);
+        root.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                hideSoftKeyboard(getActivity());
+                return true;
+            }
+        });
         initializeFields(root);
         return root;
     }
@@ -110,16 +123,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     // searchView expanded
-                    serviceProvidersList.clear();
+//                    serviceProvidersList.clear();
                     serviceSearchAdapter.notifyDataSetChanged();
                     search_service_rv.setVisibility(View.VISIBLE);
                     locationButton.setVisibility(View.GONE);
+                    isKeyboardHide=false;
+                    isSearchResultVisible=true;
                 } else {
                     // searchView not expanded
                     serviceSearchView.setIconified(true);
                     serviceSearchView.clearFocus();
                     search_service_rv.setVisibility(View.GONE);
                     locationButton.setVisibility(View.VISIBLE);
+                    isKeyboardHide=true;
+                    isSearchResultVisible=false;
                 }
             }
         });
@@ -138,7 +155,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
             }
         });
     }
-
+    public static void hideSoftKeyboard(Activity activity) {
+        final InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager.isActive()) {
+            if (activity.getCurrentFocus() != null) {
+                inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -272,7 +296,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 
     @Override
     public void onServiceProviderSelected(Service serviceProvider) {
-        Toast.makeText(getContext(), "Selected: " + serviceProvider.getUser_name() , Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getContext(), ServiceProviderDetailsActivity.class);
+        intent.putExtra("serviceProviderObject", serviceProvider);
+        getContext().startActivity(intent);
+//        Toast.makeText(getContext(), "Selected: " + serviceProvider.getUser_name() , Toast.LENGTH_LONG).show();
     }
 
     private void getFirebaseData() {
@@ -383,6 +410,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 //                        } else {
 //                            Log.d(TAG, "Error getting documents: ", task.getException());
 //                        }
+
+//                            for(int i=0; i<sv.getTag().size(); i++){
+//                                sv.getTag().set(i , sv.getTag().get(i).toLowerCase());
+//                                Log.d(TAG, doc.getId()+" Current3 data: " + sv.getTag().get(i));
+//                            }
+//                            setFirebaseData(sv, doc.getId());
 //                    }
 //                });
 //
@@ -405,13 +438,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
                             for (QueryDocumentSnapshot doc : value) {
                                 Service sv = doc.toObject(Service.class);
                                 serviceProvidersList.add(sv);
-
-//                            for(int i=0; i<sv.getTag().size(); i++){
-//                                sv.getTag().set(i , sv.getTag().get(i).toLowerCase());
-//                                Log.d(TAG, doc.getId()+" Current3 data: " + sv.getTag().get(i));
-//                            }
-//                            setFirebaseData(sv, doc.getId());
-
                             }
                         }
                         serviceSearchAdapter.notifyDataSetChanged();

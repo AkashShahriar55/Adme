@@ -3,6 +3,7 @@ package com.example.adme.Activities.ui.income;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,13 +31,14 @@ public class RatingHistoryAdapter extends RecyclerView.Adapter<RatingHistoryAdap
 
     @Override
     public int getItemCount() {
-        return 10;
+        return 5;
     }
 
 
     static class RatingHistoryViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_name,tv_time,tv_star,tv_detail,tv_money,tv_invoice;
+        RatingBar ratingBar;
 
         RatingHistoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -46,6 +48,7 @@ public class RatingHistoryAdapter extends RecyclerView.Adapter<RatingHistoryAdap
             tv_detail = itemView.findViewById(R.id.tv_detail);
             tv_money = itemView.findViewById(R.id.tv_money);
             tv_invoice = itemView.findViewById(R.id.tv_invoice);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
         }
     }
 

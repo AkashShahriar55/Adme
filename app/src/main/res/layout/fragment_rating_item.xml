@@ -55,6 +55,7 @@
             app:srcCompat="@drawable/ic_clock" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/img2"
             android:layout_width="17dp"
             android:layout_height="17dp"
@@ -65,6 +66,7 @@
             app:srcCompat="@drawable/ic_star_black_24dp" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_star"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,6 +75,17 @@
             android:textColor="@color/txt_highlight"
             android:textSize="14sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline30" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:theme="@style/RatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:rating="4.5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline30" />
 
@@ -91,6 +104,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:paddingBottom="8dp"
+            android:lineSpacingExtra="4dp"
             android:text="My Television is now running. Your service is very good. The exerience that i had was incredible."
             android:textColor="@color/txt_Dark"
             android:textSize="15sp"
