@@ -78,6 +78,14 @@
         </activity> <!-- for income -->
         <activity android:name=".Activities.ui.income.RatingAndHistoryActicity" />
         <activity android:name=".Activities.ui.income.MoneyHistoryActicity" />
+        <activity android:name=".Activities.ui.home.ServiceProviderDetailsActivity"
+            android:theme="@style/AppTheme2">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
     </application>
 
 </manifest>

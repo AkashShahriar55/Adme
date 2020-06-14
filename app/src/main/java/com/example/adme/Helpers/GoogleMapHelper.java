@@ -441,4 +441,46 @@ public class GoogleMapHelper {
         void onCurrentLocationAddressFetched(MyPlaces place);
     }
 
+
+    public static void markLocation(Context context, GoogleMap mMap, LatLng location){
+        mMap.addMarker(new MarkerOptions().position(location).draggable(true).title(context.getString(R.string.current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,DEFAULT_ZOOM));
+    }
+
+    public static double getDistanceInMiles(double lat1, double lng1, double lat2, double lng2){
+        Location loc1 = new Location("");
+        loc1.setLatitude(lat1);
+        loc1.setLongitude(lng1);
+        Location loc2 = new Location("");
+        loc2.setLatitude(lat2);
+        loc2.setLongitude(lng2);
+        float distanceInMeters = loc1.distanceTo(loc2);
+        return distanceInMeters/1609.34;
+    }
+
+    public static float getCurrentLocationDistance(Context context, GoogleMap mMap, LatLng otherlocation){
+        float[] results = new float[1];
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+//                locationProviderClient.getLastLocation().addOnSuccessListener((Activity) context, location -> {
+//                    if(location != null){
+//                        LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+//                        Location.distanceBetween(currentLocation.latitude, currentLocation.longitude, otherlocation.latitude, otherlocation.longitude, results);
+//                        float distance = results[0];
+//                        Log.i(TAG, "distance: "+distance);
+//                    }
+//
+//                }).addOnFailureListener((Activity) context, new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//
+//                    }
+//                });
+//            }
+//        }).start();
+        return results[0];
+    }
+
 }
