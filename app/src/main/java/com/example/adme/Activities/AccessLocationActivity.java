@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.LoadingDialog;
 import com.example.adme.Helpers.MyPlaces;

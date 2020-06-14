@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,9 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.LoadingDialog;
-import com.example.adme.Helpers.ServiceProviderData;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.facebook.AccessToken;
@@ -34,7 +34,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -74,14 +73,21 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
     private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
 
+    private View contextView;
+
+    private SharedPreferences firstUsePreferences;
+    private boolean isLocationSettingShowed = false;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        View contextView = findViewById(R.id.contextView);
+        contextView = findViewById(R.id.contextView);
 
+        firstUsePreferences = getSharedPreferences(String.valueOf(R.string.SHARED_PREFERENCE_FIRST_USE),MODE_PRIVATE);
+        isLocationSettingShowed = firstUsePreferences.getBoolean(String.valueOf(R.string.SP_IS_LOCATION_SETTING_SHOWED),false);
         initializeFields();
 
 
@@ -89,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
         txt_create_account.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegistrationActivity.class)));
 
         login_skip_btn.setOnClickListener(v ->{
-            signInAnonymousGuest();
+
         });
 
         login_google_btn.setOnClickListener(v -> signInWithGoogle());
@@ -99,10 +105,10 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
         login_btn.setOnClickListener(v -> {
             if(!login_email.getEditText().getText().toString().trim().isEmpty() && !login_email.getEditText().getText().toString().trim().isEmpty()){
                 String email = Objects.requireNonNull(login_email.getEditText()).getText().toString();
-                String pass = Objects.requireNonNull(login_password.getEditText()).getText().toString();initializeFields();
+                String pass = Objects.requireNonNull(login_password.getEditText()).getText().toString();
                 signInWithEmailAndPassword(email,pass);
             }else{
-               Snackbar.make(contextView,"Enter your email and password",Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(contextView,"Enter your email and password",Snackbar.LENGTH_SHORT).show();
             }
 
         });
@@ -110,61 +116,20 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
 
 
-    }
-
-    private void signInAnonymousGuest() {
-        dialog.show();
-        mAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInAnonymously:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    assert user != null;
-                    firebaseUtilClass.createUser(user,LoginActivity.this);
-                }
-            }
-        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null){
-            dialog.show();
-            fetchUserData(currentUser);
-        }
     }
 
-    private void fetchUserData(FirebaseUser currentUser) {
-        userRef.document(currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                dialog.dismiss();
-                User mCurrentUser = documentSnapshot.toObject(User.class);
-
-                if(mCurrentUser.getLocation().size() == 0){
-                    Log.d(TAG, "onSuccess: size is zero");
-                    startAccessLocationActivity(mCurrentUser);
-                }else{
-                    startLandingActivity(mCurrentUser);
-                }
-
-            }
-        });
-    }
-
-    private void startAccessLocationActivity(User mCurrentUser) {
+    private void startAccessLocationActivity() {
         Intent intent = new Intent(LoginActivity.this, AccessLocationActivity.class);
-        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,mCurrentUser);
         startActivity(intent);
     }
 
-    private void startLandingActivity(User currentUser) {
+    private void startLandingActivity() {
         Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
-        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,currentUser);
         startActivity(intent);
     }
 
@@ -329,18 +294,16 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
-                         FirebaseUser user = mAuth.getCurrentUser();
+                         FirebaseUser user = Objects.requireNonNull(task.getResult()).getUser();
                         //updateUI(user);
                         dialog.show();
-                        fetchUserData(user);
+                        firebaseUtilClass.createUser(user,LoginActivity.this);
 
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed: " + task.getException(),
-                                Toast.LENGTH_SHORT).show();
 
+                    }else{
+                        Snackbar.make(contextView,task.getException().getMessage(),Snackbar.LENGTH_SHORT).show();
                     }
+
 
                     // ...
                 });
@@ -359,11 +322,20 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
     @Override
     public void userAlreadyExists(User user) {
         dialog.dismiss();
+        if(isLocationSettingShowed){
+            startLandingActivity();
+        }else{
+            startAccessLocationActivity();
+        }
     }
 
     @Override
     public void onUserCreatedSuccessfully(User user) {
         dialog.dismiss();
-        startAccessLocationActivity(user);
+        if(isLocationSettingShowed){
+            startLandingActivity();
+        }else{
+            startAccessLocationActivity();
+        }
     }
 }

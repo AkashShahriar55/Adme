@@ -8,9 +8,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +22,11 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Helpers.Constants;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
+import com.example.adme.Architecture.UserDataModel;
 import com.example.adme.R;
 
 import java.util.ArrayList;
@@ -30,10 +35,14 @@ import java.util.Map;
 
 public class TodayBottomDetailsFragment extends Fragment {
 
+    private static final String TAG = "TodayBottomDetailsFragm";
+
     private TodayBottomDetailsViewModel mViewModel;
     private boolean isOnline;
     private View view;
     private User mCurrentUser;
+
+    private UserDataModel userDataModel;
 
     private TextView tv_income_today,tv_due, tv_pending_today, tv_appointments_today,tv_completed_today,tv_income_total;
     RecyclerView appointmentRecyclerView,serviceRecyclerView;
@@ -60,13 +69,31 @@ public class TodayBottomDetailsFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userDataModel = new ViewModelProvider(requireActivity()).get(UserDataModel.class);
+
+        final Observer<User> userDataObserver = new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+
+                mCurrentUser = user;
+                Log.d("view-model", "onChanged:  bottom details" + user.getStatus());
+                updateUi();
+            }
+        };
+
+        userDataModel.getCurrentUser().observe(this,userDataObserver);
+    }
+
     private void initialization(View view) {
 
         tv_income_today = view.findViewById(R.id.tv_income_today);
         tv_due =view.findViewById(R.id.tv_due);
         tv_completed_today = view.findViewById(R.id.tv_completed_today);
-        tv_appointments_today = view.findViewById(R.id.tv_appointments_today);
-        tv_pending_today = view.findViewById(R.id.tv_pending_today);
+        tv_appointments_today = view.findViewById(R.id.tv_pressed_today);
+        tv_pending_today = view.findViewById(R.id.tv_requested_today);
         tv_income_total = view.findViewById(R.id.tv_total_income);
 
         appointmentRecyclerView = view.findViewById(R.id.appointment_container);
@@ -95,11 +122,13 @@ public class TodayBottomDetailsFragment extends Fragment {
             if(isChecked){
                 buttonView.setText(R.string.online_status);
                 buttonView.setTextColor(getResources().getColor(R.color.color_active));
-                isOnline = true;
+                mCurrentUser.setStatus(FirebaseUtilClass.STATUS_ONLINE);
+                userDataModel.getCurrentUser().setValue(mCurrentUser);
             }else{
                 buttonView.setText(R.string.offline_status);
                 buttonView.setTextColor(getResources().getColor(R.color.color_not_active));
-                isOnline = false;
+                mCurrentUser.setStatus(FirebaseUtilClass.STATUS_OFFLINE);
+                userDataModel.getCurrentUser().setValue(mCurrentUser);
             }
         });
 
@@ -113,7 +142,7 @@ public class TodayBottomDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent addServiceActivityIntent = new Intent(requireContext(),AddServicesActivity.class);
-                requireContext().startActivity(addServiceActivityIntent);
+                requireActivity().startActivityForResult(addServiceActivityIntent, Constants.REQUEST_CODE_ADD_SERVICE_ACTIVITY);
             }
         });
 
@@ -149,8 +178,8 @@ public class TodayBottomDetailsFragment extends Fragment {
         tv_income_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_INCOME_TODAY));
         tv_completed_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_COMPLETED_TODAY));
         tv_due.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_DUE));
-        tv_pending_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_PENDING_TODAY));
-        tv_appointments_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_APPOINTMENTS_TODAY));
+        tv_pending_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_REQUESTED_TODAY));
+        tv_appointments_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_PRESSED_TODAY));
         tv_income_total.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_INCOME_TOTAL));
 
         if(mCurrentUser.getStatus().equals(FirebaseUtilClass.STATUS_ONLINE)){

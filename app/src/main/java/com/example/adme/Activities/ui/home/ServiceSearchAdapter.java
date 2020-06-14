@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.Service;
 import com.example.adme.R;
 import java.util.List;

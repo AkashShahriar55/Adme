@@ -3,6 +3,7 @@ package com.example.adme.Helpers;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;

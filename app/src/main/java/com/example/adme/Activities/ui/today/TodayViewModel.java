@@ -4,16 +4,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.adme.Architecture.DataRepository;
+import com.example.adme.Helpers.User;
+
 public class TodayViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
-
+    private MutableLiveData<User> userData;
+    private DataRepository repository;
     public TodayViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        repository = new DataRepository();
+        userData = repository.getUserData();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public MutableLiveData<User> getUserData() {
+        return userData;
     }
 }

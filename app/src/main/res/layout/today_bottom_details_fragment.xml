@@ -242,7 +242,7 @@
                             app:layout_constraintTop_toTopOf="@+id/guideline24">
 
                             <TextView
-                                android:id="@+id/tv_appointments_today"
+                                android:id="@+id/tv_pressed_today"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="2dp"
@@ -263,9 +263,9 @@
                                 android:text="Appointments"
                                 android:textColor="@color/txt_light"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/tv_appointments_today"
-                                app:layout_constraintStart_toStartOf="@+id/tv_appointments_today"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_appointments_today" />
+                                app:layout_constraintEnd_toEndOf="@+id/tv_pressed_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_pressed_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_pressed_today" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -280,7 +280,7 @@
                             app:layout_constraintTop_toTopOf="@+id/guideline24">
 
                             <TextView
-                                android:id="@+id/tv_pending_today"
+                                android:id="@+id/tv_requested_today"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="2dp"
@@ -302,9 +302,9 @@
                                 android:text="Pending"
                                 android:textColor="@color/txt_light"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/tv_pending_today"
-                                app:layout_constraintStart_toStartOf="@+id/tv_pending_today"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_pending_today" />
+                                app:layout_constraintEnd_toEndOf="@+id/tv_requested_today"
+                                app:layout_constraintStart_toStartOf="@+id/tv_requested_today"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_requested_today" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout

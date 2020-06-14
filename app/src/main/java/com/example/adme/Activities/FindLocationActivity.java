@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.LoadingDialog;
 import com.example.adme.Helpers.MyPlaces;

@@ -26,13 +26,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adme.Activities.LandingActivity;
-import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.Service;
+import com.example.adme.Helpers.UiHelper;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -92,6 +95,9 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
     List<Service> services = new ArrayList<>();
 
 
+    TodayViewModel todayViewModel;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_today, container, false);
 
@@ -100,8 +106,24 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        updateUi();
+        //updateUi();
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        todayViewModel = new ViewModelProvider(requireActivity()).get(TodayViewModel.class);
+        final Observer<User> userDataObserver = new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                mCurrentUser = user;
+                Log.d("view-model", "onChanged:  bottom details" + user.getStatus());
+                updateUi();
+            }
+        };
+        todayViewModel.getUserData().observe(requireActivity(),userDataObserver);
     }
 
     private void initialization(View view) {
@@ -110,24 +132,12 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         layout_coordinator = view.findViewById(R.id.layout_coordinator);
         bottom_details_toolbar = view.findViewById(R.id.bottom_details_toolbar);
 
-//        todayCompleted = view.findViewById(R.id.today_completed);
-//        todayIncome = view.findViewById(R.id.today_income);
-//        todayDue = view.findViewById(R.id.today_due);
-//        todayPressed = view.findViewById(R.id.today_pressed);
-//        todayRequested = view.findViewById(R.id.today_requested);
-
-//        todayCompleted.setOnClickListener(v -> goToBottomDetails());
-//        todayIncome.setOnClickListener(v -> goToBottomDetails());
-//        todayDue.setOnClickListener(v -> goToBottomDetails());
-//        todayPressed.setOnClickListener(v -> goToBottomDetails());
-//        todayRequested.setOnClickListener(v -> goToBottomDetails());
-//        bottomDetailsButton.setOnClickListener(v -> goToBottomDetails());
 
         tv_income_today = view.findViewById(R.id.tv_income_today);
         tv_due =view.findViewById(R.id.tv_due);
         tv_completed_today = view.findViewById(R.id.tv_completed_today);
-        tv_appointments_today = view.findViewById(R.id.tv_appointments_today);
-        tv_pending_today = view.findViewById(R.id.tv_pending_today);
+        tv_appointments_today = view.findViewById(R.id.tv_pressed_today);
+        tv_pending_today = view.findViewById(R.id.tv_requested_today);
         tv_income_total = view.findViewById(R.id.tv_total_income);
 
         appointmentRecyclerView = view.findViewById(R.id.appointment_container);
@@ -181,10 +191,32 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         locationButton = view.findViewById(R.id.today_location_button);
         locationButton.setOnClickListener(v -> checkPermission());
 
+        oldPeekHeight = bottomSheetBehavior.getPeekHeight();
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottomSheetBehavior.addBottomSheetCallback (new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN: {
+                        Log.d(TAG, "onStateChanged: STATE_HIDDEN");
+                        if(isbottomSheetVisible) {
+                            new UiHelper(requireContext()).setMargins(locationButton,0,0,0,70);
+                            locationButton.requestLayout();
+                            bottomSheetBehavior.setPeekHeight(bottom_details_toolbar.getHeight()+5, true);
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                        }
+                    }
+                    break;
+                }
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
+        });
+
     }
 
     private void updateUi() {
-        mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
+        //mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
 
         location = mCurrentUser.getLocation();
         setUpMap();
@@ -193,8 +225,8 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         tv_income_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_INCOME_TODAY));
         tv_completed_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_COMPLETED_TODAY));
         tv_due.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_DUE));
-        tv_pending_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_PENDING_TODAY));
-        tv_appointments_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_APPOINTMENTS_TODAY));
+        tv_pending_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_REQUESTED_TODAY));
+        tv_appointments_today.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_PRESSED_TODAY));
         tv_income_total.setText(serviceProviderInfo.get(FirebaseUtilClass.ENTRY_INCOME_TOTAL));
 
         if(mCurrentUser.getStatus().equals(FirebaseUtilClass.STATUS_ONLINE)){
@@ -213,25 +245,6 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         serviceRecyclerView.setLayoutManager(serviceLayoutManager);
         serviceAdapter = new ServiceAdapter(getContext(),services);
 
-        oldPeekHeight = bottomSheetBehavior.getPeekHeight();
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        bottomSheetBehavior.addBottomSheetCallback (new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN: {
-                        Log.d(TAG, "onStateChanged: STATE_HIDDEN");
-                        if(isbottomSheetVisible) {
-                            bottomSheetBehavior.setPeekHeight(bottom_details_toolbar.getHeight()+5, true);
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                        }
-                    }
-                    break;
-                }
-            }
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
-        });
     }
 
     @Override
@@ -247,24 +260,6 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         fragmentTransaction.commit();
     }
 
-    private void goToBottomDetails() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "run: "+Thread.currentThread().getName());
-                Fragment nextFragment = new TodayBottomDetailsFragment(mCurrentUser);
-                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.replace(R.id.nav_host_fragment, nextFragment);
-                fragmentTransaction.commit();
-
-            }
-        }).start();
-
-        Log.i(TAG, "run: "+Thread.currentThread().getName());
-
-
-    }
 
     private void checkPermission() {
         // Here, thisActivity is the current activity
@@ -386,6 +381,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
                 @Override
                 public boolean queueIdle() {
+                    new UiHelper(requireContext()).setMargins(locationButton,0,0,0,170);
                     appointmentRecyclerView.setAdapter(appointmentAdapter);
                     serviceRecyclerView.setAdapter(serviceAdapter);
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);

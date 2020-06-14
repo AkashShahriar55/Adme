@@ -1,17 +1,27 @@
-package com.example.adme.Helpers;
+package com.example.adme.Architecture;
 
-import android.location.Location;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.adme.Helpers.MyPlaces;
+import com.example.adme.Helpers.ServiceProviderData;
+import com.example.adme.Helpers.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class FirebaseUtilClass {
@@ -31,8 +41,8 @@ public class FirebaseUtilClass {
     public static final String  STATUS_OFFLINE = "Offline";
     public static final String ENTRY_MONTHLY_SUBSCRIPTION_PAID = "Paid";
 
-    public static final String ENTRY_APPOINTMENTS_TODAY = "appointments_today";
-    public static final String ENTRY_PENDING_TODAY = "pending today";
+    public static final String ENTRY_PRESSED_TODAY = "pressed_today";
+    public static final String ENTRY_REQUESTED_TODAY = "requested_today";
     public static final String ENTRY_COMPLETED_TODAY = "completed_today";
     public static final String ENTRY_INCOME_TODAY = "income_today";
     public static final String ENTRY_INCOME_TOTAL = "income_total";
@@ -57,16 +67,53 @@ public class FirebaseUtilClass {
     public static final String ENTRY_SERVICE_DESCRIPTION = "service_description";
     public static final String ENTRY_SERVICE_PRICE = "service_price";
 
+    public static final String ENTRY_CLIENT_APPOINTMENTS = "client_appointments";
+
 
     //create database reference
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference userRef = db.collection(USER_COLLECTION_ID);
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private User expectedUser;
+    private FirebaseFirestore db;
+    private CollectionReference userRef;
+    private FirebaseAuth mAuth;
+    private MutableLiveData<User> userData;
+    private String user_id;
+
+    public FirebaseUtilClass() {
+        userData = new MutableLiveData<>();
+        db = FirebaseFirestore.getInstance();
+        userRef = db.collection(USER_COLLECTION_ID);
+        mAuth = FirebaseAuth.getInstance();
+
+    }
+
+    public MutableLiveData<User> getUserData() {
+        if(mAuth.getCurrentUser() != null){
+            user_id = mAuth.getCurrentUser().getUid();
+            fetchUserData();
+        }
+        return userData;
+    }
 
 
+    private void fetchUserData() {
+        userRef.document(user_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                userData.setValue(documentSnapshot.toObject(User.class));
+            }
+        });
 
-    public void createUser(FirebaseUser user,CreateUserCommunicator communicator){
+        userRef.document(user_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+
+                    userData.setValue(documentSnapshot.toObject(User.class));
+                }
+            }
+        });
+    }
+
+    public void createUser(FirebaseUser user, CreateUserCommunicator communicator){
         userRef.document(user.getUid()).get().addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()) {
                 DocumentSnapshot document = task1.getResult();
@@ -100,14 +147,8 @@ public class FirebaseUtilClass {
                     User new_user = new User(username,email,joined,user_id);
                     /*** Insert into fireStore database**/
                     userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
-                        userRef.document(user.getUid()).collection(FirebaseUtilClass.USER_MAIN_DATA_COLLECTION_NAME).document(FirebaseUtilClass.SERVICE_PROVIDER_DOCUMENT_NAME).set(new ServiceProviderData()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "onSuccess: successfully created user");
-                                communicator.onUserCreatedSuccessfully(new_user);
-                            }
-                        });
-
+                        Log.d(TAG, "onSuccess: successfully created user");
+                        communicator.onUserCreatedSuccessfully(new_user);
                     });
                 }
             } else {
@@ -117,7 +158,7 @@ public class FirebaseUtilClass {
         });
     }
 
-    public void updateUserLocation(User user,MyPlaces place,UpdateLocationInfoCommunicator communicator) {
+    public void updateUserLocation(User user, MyPlaces place, UpdateLocationInfoCommunicator communicator) {
         Map<String,String> location = user.getLocation();
         location.put(ENTRY_LOCATION_LATITUDE,place.getLatitude());
         location.put(ENTRY_LOCATION_LONGITUDE,place.getLongitude());
@@ -134,10 +175,30 @@ public class FirebaseUtilClass {
         });
     }
 
+    public void signInWithEmailAndPassword(String email, String password, DatabaseOperationListener listener) {
+
+
+        mAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                listener.onSuccess(authResult);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onFailure(e);
+            }
+        });
+    }
+
     public interface UpdateLocationInfoCommunicator{
         void onLocationInfoUpdated(User user);
     }
 
+    public interface DatabaseOperationListener{
+        void onSuccess(Object object);
+        void onFailure(Exception e);
+    }
 
 
     public interface CreateUserCommunicator{

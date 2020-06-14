@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.text.Editable;
@@ -15,7 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.LoadingDialog;
 import com.example.adme.Helpers.User;
 import com.example.adme.Helpers.Validation;
@@ -47,10 +48,16 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
 
     private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
 
+    private SharedPreferences firstUsePreferences;
+    private boolean isLocationSettingShowed = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        firstUsePreferences = getSharedPreferences(String.valueOf(R.string.SHARED_PREFERENCE_FIRST_USE),MODE_PRIVATE);
+        isLocationSettingShowed = firstUsePreferences.getBoolean(String.valueOf(R.string.SP_IS_LOCATION_SETTING_SHOWED),false);
 
         initializeFields();
 
@@ -140,11 +147,6 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null){
-            startActivity(new Intent(RegistrationActivity.this,LandingActivity.class));
-            finish();
-        }
     }
 
     private void signUpWithEmailAndPass(String email_address, String password) {
@@ -170,9 +172,8 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
                     // ...
                 });
     }
-    private void startLandingActivity(User currentUser) {
+    private void startLandingActivity() {
         Intent intent = new Intent(RegistrationActivity.this, LandingActivity.class);
-        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,currentUser);
         startActivity(intent);
     }
 
@@ -196,20 +197,28 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
         }
     }
 
-    private void startAccessLocationActivity(User mCurrentUser) {
+    private void startAccessLocationActivity() {
         Intent intent = new Intent(RegistrationActivity.this, AccessLocationActivity.class);
-        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,mCurrentUser);
         startActivity(intent);
     }
 
     @Override
     public void userAlreadyExists(User user) {
-
+        if(isLocationSettingShowed){
+            startLandingActivity();
+        }else{
+            startAccessLocationActivity();
+        }
     }
 
     @Override
     public void onUserCreatedSuccessfully(User user) {
         dialog.dismiss();
-        startAccessLocationActivity(user);
+
+        if(isLocationSettingShowed){
+            startLandingActivity();
+        }else{
+            startAccessLocationActivity();
+        }
     }
 }

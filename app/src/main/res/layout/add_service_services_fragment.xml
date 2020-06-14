@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.050075874" />
+        app:layout_constraintGuide_percent="0.02" />
 
     <TextView
         android:id="@+id/textView61"
@@ -22,7 +22,7 @@
         android:layout_marginBottom="16dp"
         android:text="@string/services"
         android:textColor="@color/sv_primary"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/barrier"
         app:layout_constraintEnd_toStartOf="@+id/ad_service_btn"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -41,7 +41,7 @@
         android:paddingEnd="24dp"
         android:text="@string/add"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView61"

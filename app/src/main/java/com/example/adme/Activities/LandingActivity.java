@@ -1,12 +1,10 @@
 package com.example.adme.Activities;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.adme.Activities.ui.home.HomeFragment;
@@ -16,28 +14,21 @@ import com.example.adme.Activities.ui.profile.ProfileFragment;
 import com.example.adme.Activities.ui.servicehistory.ServiceHistoryFragment;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
 import com.example.adme.Activities.ui.today.QuotationDetails;
-import com.example.adme.Activities.ui.today.TodayBottomDetailsFragment;
 import com.example.adme.Activities.ui.today.TodayFragment;
-import com.example.adme.Helpers.FirebaseUtilClass;
+import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Helpers.Constants;
 import com.example.adme.Helpers.User;
+import com.example.adme.Architecture.UserDataModel;
 import com.example.adme.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import java.util.List;
 
 public class LandingActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -47,7 +38,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
     private long mBackPressed;
     private NavController navController;
     private String label = null;
-    private boolean isClient = true;
+    private boolean isClient = false;
     private User mCurrentUser;
 
     final Fragment fragment1 = new TodayFragment();
@@ -58,6 +49,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
     final Fragment fragment6 = new ServiceHistoryFragment();
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active = fragment1;
+
 
 
     public boolean isClient() {
@@ -108,6 +100,19 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
 
         }
 
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+            case Constants.REQUEST_CODE_ADD_SERVICE_ACTIVITY:
+
+                break;
+        }
     }
 
     @Override
@@ -147,6 +152,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
         }  else {
             super.onBackPressed();
         }
+
 
     }
 

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.adme.Helpers.Service;
 import com.example.adme.R;
 
 public class AddServicesActivity extends AppCompatActivity {
@@ -41,6 +42,8 @@ public class AddServicesActivity extends AppCompatActivity {
     TextView addServiceOverview,addServiceServices,addServiceGallery,addServiceLocation,addServiceCancelButton;
     Fragment fragmentOverview,fragmentServices,fragmentGallery,fragmentLocation;
     SaveFragmentListener saveFragmentListener;
+
+    Service newService = new Service();
 
 
     @Override

@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adme.Helpers.FirebaseUtilClass;
 import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;

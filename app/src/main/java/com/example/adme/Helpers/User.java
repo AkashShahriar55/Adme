@@ -3,11 +3,11 @@ package com.example.adme.Helpers;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class User implements Parcelable {
@@ -39,8 +39,8 @@ public class User implements Parcelable {
 
         service_provider_info.put(FirebaseUtilClass.ENTRY_INCOME_TODAY,"0");
         service_provider_info.put(FirebaseUtilClass.ENTRY_DUE,"0");
-        service_provider_info.put(FirebaseUtilClass.ENTRY_APPOINTMENTS_TODAY,"0");
-        service_provider_info.put(FirebaseUtilClass.ENTRY_PENDING_TODAY,"0");
+        service_provider_info.put(FirebaseUtilClass.ENTRY_PRESSED_TODAY,"0");
+        service_provider_info.put(FirebaseUtilClass.ENTRY_REQUESTED_TODAY,"0");
         service_provider_info.put(FirebaseUtilClass.ENTRY_COMPLETED_TODAY,"0");
         service_provider_info.put(FirebaseUtilClass.ENTRY_INCOME_TOTAL,"0");
         service_provider_info.put(FirebaseUtilClass.ENTRY_MONTHLY_SUBSCRIPTION,FirebaseUtilClass.ENTRY_MONTHLY_SUBSCRIPTION_PAID);
@@ -50,7 +50,6 @@ public class User implements Parcelable {
         contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_ONE_PRIVACY,FirebaseUtilClass.ENTRY_PHONE_NO_PRIVACY_PUBLIC);
         contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_TWO,null);
         contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_TWO_PRIVACY,FirebaseUtilClass.ENTRY_PHONE_NO_PRIVACY_PUBLIC);
-
 
 
     }
