@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,18 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.MyReader;
+import com.example.adme.Helpers.Service;
 import com.example.adme.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -35,10 +46,17 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
     private AddServiceGalleryViewModel mViewModel;
     private boolean isValidationChecked= false;
     private boolean isDataSaved = false;
-    private Uri imageUris[] = new Uri[3];
+    private Uri imageUris[];
 
     private ImageView service_image_1,service_image_2,service_image_3;
     private int code;
+
+
+
+    public AddServiceGallery(Uri imageUris[] ) {
+        this.imageUris = imageUris;
+
+    }
 
 
     @Override
@@ -76,6 +94,8 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
 
 
         });
+
+
 
     }
 
@@ -254,4 +274,6 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
             isDataSaved = true;
         }
     }
+
+
 }

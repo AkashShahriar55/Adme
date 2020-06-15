@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ui.today.AddServiceLocation">
 
-    <CheckBox
-        android:id="@+id/location_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Location"
-        app:layout_constraintEnd_toStartOf="@+id/guideline43"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
-
     <TextView
         android:id="@+id/textView55"
         android:layout_width="wrap_content"
@@ -85,7 +76,7 @@
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_fetch_your_location"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginTop="10dp"

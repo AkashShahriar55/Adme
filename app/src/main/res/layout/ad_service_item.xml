@@ -1,70 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/ad_service_item_constraint_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ad_service_item_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
     android:background="@drawable/bottom_border_grey"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp">
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <TextView
-        android:id="@+id/textView67"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_service_title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Plastic Paint"
-        app:layout_constraintBottom_toTopOf="@+id/textView68"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_service_description"
+        app:layout_constraintEnd_toEndOf="@+id/tv_service_description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:textSize="16sp"
-        android:textColor="@color/black"/>
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/textView68"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_service_description"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
         android:text="Plastic painting on the wall"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_service_price"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView67" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_service_title" />
 
     <TextView
-        android:id="@+id/textView69"
+        android:id="@+id/tv_service_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="20dp"
         android:text="$99"
+        android:textColor="@color/sv_primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textView70"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toEndOf="@+id/textView68"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/sv_primary"/>
+        app:layout_constraintEnd_toStartOf="@+id/btn_service_delete"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView70"
+        android:id="@+id/btn_service_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="15dp"
         android:text="Remove"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView69"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView69"
-        android:textColor="@color/color_negative"/>
+        android:textColor="@color/color_negative"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_service_price"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="end"
-        app:constraint_referenced_ids="textView67,textView68"
+        app:constraint_referenced_ids="tv_service_title,tv_service_description"
         tools:layout_editor_absoluteX="411dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

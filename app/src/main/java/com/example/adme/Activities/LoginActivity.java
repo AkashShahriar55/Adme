@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
         login_btn= findViewById(R.id.login_btn);
         login_email = findViewById(R.id.login_email);
         login_password = findViewById(R.id.login_password);
-        dialog = new LoadingDialog(this,"Logging in");
+        dialog = new LoadingDialog(this,"Logging in",null);
 
         mAuth = FirebaseAuth.getInstance();
 

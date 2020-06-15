@@ -7,10 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.adme.Helpers.MyPlaces;
+import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.ServiceProviderData;
 import com.example.adme.Helpers.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FirebaseUtilClass {
@@ -57,7 +62,7 @@ public class FirebaseUtilClass {
     public static final String ENTRY_PHONE_NO_PRIVACY_PUBLIC = "Public";
     public static final String ENTRY_PHONE_NO_PRIVACY_PRIVATE = "Private";
 
-
+    public static final String ENTRY_LOCATION = "location";
     public static final String ENTRY_LOCATION_DISPLAY_NAME = "display_name";
     public static final String ENTRY_LOCATION_ADDRESS = "address";
     public static final String ENTRY_LOCATION_LATITUDE = "latitude";
@@ -67,7 +72,10 @@ public class FirebaseUtilClass {
     public static final String ENTRY_SERVICE_DESCRIPTION = "service_description";
     public static final String ENTRY_SERVICE_PRICE = "service_price";
 
+
     public static final String ENTRY_CLIENT_APPOINTMENTS = "client_appointments";
+
+    public static final String STORAGE_FOLDER_SERVICE_PORTFOLIO = "service_portfolio";
 
 
     //create database reference
@@ -75,6 +83,7 @@ public class FirebaseUtilClass {
     private CollectionReference userRef;
     private FirebaseAuth mAuth;
     private MutableLiveData<User> userData;
+    private MutableLiveData<List<Service>> services;
     private String user_id;
 
     public FirebaseUtilClass() {
@@ -82,7 +91,6 @@ public class FirebaseUtilClass {
         db = FirebaseFirestore.getInstance();
         userRef = db.collection(USER_COLLECTION_ID);
         mAuth = FirebaseAuth.getInstance();
-
     }
 
     public MutableLiveData<User> getUserData() {
@@ -158,21 +166,40 @@ public class FirebaseUtilClass {
         });
     }
 
-    public void updateUserLocation(User user, MyPlaces place, UpdateLocationInfoCommunicator communicator) {
-        Map<String,String> location = user.getLocation();
+    public void updateUserLocation(FirebaseUser user, MyPlaces place, UpdateLocationInfoCommunicator communicator) {
+        Map<String,String> location = new HashMap<>();
         location.put(ENTRY_LOCATION_LATITUDE,place.getLatitude());
         location.put(ENTRY_LOCATION_LONGITUDE,place.getLongitude());
         location.put(ENTRY_LOCATION_DISPLAY_NAME,place.getName());
         location.put(ENTRY_LOCATION_ADDRESS,place.getFormattedAddress());
-        user.setLocation(location);
 
-        userRef.document(user.getmUserId()).set(user, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        Log.d("akash-debug", "updateUserLocation: "+user.getUid());
+
+        userRef.document(user.getUid()).update(ENTRY_LOCATION, location).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: location info updated");
-                communicator.onLocationInfoUpdated(user);
+                Log.d("akash-debug", "onSuccess: location info updated");
+                communicator.onLocationInfoUpdated();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("akash-debug", "onFailure: "+ e);
             }
         });
+    }
+
+
+    public FirebaseUser getCurrentUser(){
+        FirebaseUser mCurrentUser = mAuth.getCurrentUser();
+        if(mCurrentUser!=null){
+            return mCurrentUser;
+        }
+
+        return null;
+    }
+
+    public void fetchUserServices(){
     }
 
     public void signInWithEmailAndPassword(String email, String password, DatabaseOperationListener listener) {
@@ -191,8 +218,17 @@ public class FirebaseUtilClass {
         });
     }
 
+
+    public boolean checkIfAlreadyLoggedIn(){
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser!=null){
+            return true;
+        }
+        return false;
+    }
+
     public interface UpdateLocationInfoCommunicator{
-        void onLocationInfoUpdated(User user);
+        void onLocationInfoUpdated();
     }
 
     public interface DatabaseOperationListener{

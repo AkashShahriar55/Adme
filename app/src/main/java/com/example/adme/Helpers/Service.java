@@ -19,9 +19,9 @@ public class Service implements Parcelable {
     private String reviews;
     private String working_hour;
     private String user_name;
-    private String short_dis;
     private String pic_url;
     private String user_ref;
+    private String description;
     private Map<String,String> location = new HashMap<>();
     private List<String> feature_images = new ArrayList<>();
     private List<Map<String,String>> services = new ArrayList<>();
@@ -33,35 +33,14 @@ public class Service implements Parcelable {
     public Service() {
     }
 
-//    public Service(String category, String working_hour, Map<String, String> location, List<String> feature_images, List<Map<String, String>> services, Map<String, String> user_info,String mServiceId) {
-//        this.category = category;
-//        this.working_hour = working_hour;
-//        this.location = location;
-//        this.feature_images = feature_images;
-//        this.services = services;
-//
-//        String[] tokens = category.split("\\s+");
-//        this.tags.addAll(Arrays.asList(tokens));
-//        tokens = location.get(FirebaseUtilClass.ENTRY_LOCATION_ADDRESS).split("\\s+");
-//        this.tags.addAll(Arrays.asList(tokens));
-//        for(Map<String,String> service:services){
-//            tokens = service.get(FirebaseUtilClass.ENTRY_SERVICE_TITLE).split("\\s+");
-//            tags.addAll(Arrays.asList(tokens));
-//        }
-//
-//        this.rating = "0";
-//        this.reviews = "0";
-//        this.mServiceId = mServiceId;
-//    }
 
-
-    public Service(String category, String rating, String reviews, String working_hour, String user_name, String short_dis, String pic_url, String user_ref, Map<String, String> location, List<String> feature_images, List<Map<String, String>> services, List<String> tags, String status) {
+    public Service(String category,String description, String working_hour, String user_name, String pic_url, String user_ref, Map<String, String> location, List<String> feature_images, List<Map<String, String>> services, List<String> tags, String status) {
         this.category = category;
-        this.rating = rating;
-        this.reviews = reviews;
+        this.description = description;
+        this.rating = "0";
+        this.reviews = "0";
         this.working_hour = working_hour;
         this.user_name = user_name;
-        this.short_dis = short_dis;
         this.pic_url = pic_url;
         this.user_ref = user_ref;
         this.location = location;
@@ -77,6 +56,14 @@ public class Service implements Parcelable {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getRating() {
@@ -143,13 +130,6 @@ public class Service implements Parcelable {
         this.user_name = user_name;
     }
 
-    public String getShort_dis() {
-        return short_dis;
-    }
-
-    public void setShort_dis(String short_dis) {
-        this.short_dis = short_dis;
-    }
 
     public String getPic_url() {
         return pic_url;
@@ -188,13 +168,13 @@ public class Service implements Parcelable {
 
     protected Service(Parcel in) {
         category = in.readString();
+        description = in.readString();
         rating = in.readString();
         reviews = in.readString();
         working_hour = in.readString();
         feature_images = in.createStringArrayList();
         tags = in.createStringArrayList();
         user_name = in.readString();
-        short_dis = in.readString();
         pic_url = in.readString();
         user_ref = in.readString();
         status = in.readString();
@@ -237,13 +217,13 @@ public class Service implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(category);
+        dest.writeString(description);
         dest.writeString(rating);
         dest.writeString(reviews);
         dest.writeString(working_hour);
         dest.writeStringList(feature_images);
         dest.writeStringList(tags);
         dest.writeString(user_name);
-        dest.writeString(short_dis);
         dest.writeString(pic_url);
         dest.writeString(user_ref);
         dest.writeString(status);

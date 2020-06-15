@@ -20,11 +20,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
+import com.example.adme.Helpers.Service;
 import com.example.adme.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -38,10 +41,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-public class AddServiceLocation extends Fragment implements AddServicesActivity.SaveFragmentListener, OnMapReadyCallback, GoogleMapHelper.OnLocationAddressCallback {
+public class AddServiceLocation extends Fragment implements AddServicesActivity.SaveFragmentListener, OnMapReadyCallback {
 
     private static final String TAG = "AddServiceLocation";
 
@@ -53,10 +58,19 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
     private GoogleMap mMap;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 15;
+    private Button btn_fetch_your_location;
 
-    public static AddServiceLocation newInstance() {
-        return new AddServiceLocation();
+    private Service newService;
+
+    private String latitude;
+    private String longitude;
+    private String display_name;
+    private String full_address;
+
+    public AddServiceLocation(Service newService) {
+        this.newService = newService;
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -67,18 +81,28 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        testCheckbox = view.findViewById(R.id.location_checkbox);
+        btn_fetch_your_location = view.findViewById(R.id.btn_fetch_your_location);
         addressTextView = view.findViewById(R.id.add_service_location_address);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        testCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btn_fetch_your_location.setEnabled(false);
+        btn_fetch_your_location.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isValidationChecked = isChecked;
-
+            public void onClick(View v) {
+                GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+                GoogleMapHelper.getCurrentLocationAddress(requireContext(), new GoogleMapHelper.OnLocationAddressCallback() {
+                    @Override
+                    public void locationAddressFetched(Address address) {
+                        isValidationChecked = true;
+                        addressTextView.setText(address.getAddressLine(0));
+                        latitude = String.valueOf(address.getLatitude());
+                        longitude = String.valueOf(address.getLongitude());
+                        full_address = address.getAddressLine(0);
+                    }
+                });
             }
         });
 
@@ -93,6 +117,11 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
     @Override
     public void saveData() {
         if(isValidationChecked){
+            Map<String,String > location = new HashMap<>();
+            location.put(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE,latitude);
+            location.put(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE,longitude);
+            location.put(FirebaseUtilClass.ENTRY_LOCATION_ADDRESS,full_address);
+            newService.setLocation(location);
             isDataSaved = true;
         }
     }
@@ -100,8 +129,18 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        btn_fetch_your_location.setEnabled(true);
         GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
-        GoogleMapHelper.getCurrentLocationAddress(requireContext(),this);
+        GoogleMapHelper.getCurrentLocationAddress(requireContext(), new GoogleMapHelper.OnLocationAddressCallback() {
+            @Override
+            public void locationAddressFetched(Address address) {
+                isValidationChecked = true;
+                addressTextView.setText(address.getAddressLine(0));
+                latitude = String.valueOf(address.getLatitude());
+                longitude = String.valueOf(address.getLongitude());
+                full_address = address.getAddressLine(0);
+            }
+        });
     }
 
     private void checkPermission() {
@@ -164,10 +203,5 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
             }
         }).start();
 
-    }
-
-    @Override
-    public void locationAddressFetched(Address address) {
-        addressTextView.setText(address.getAddressLine(0));
     }
 }

@@ -17,10 +17,13 @@ import org.w3c.dom.Text;
 
 public class LoadingDialog extends Dialog {
     private String title;
+    private String progress;
+    TextView titleTV,progressTV;
 
-    public LoadingDialog(@NonNull Context context,String title) {
+    public LoadingDialog(@NonNull Context context,String title,String progress) {
         super(context);
         this.title = title;
+        this.progress = progress;
     }
 
     @Override
@@ -28,9 +31,21 @@ public class LoadingDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_progress_dialog);
         setCancelable(false);
-        TextView titleTV = findViewById(R.id.custom_dialog_title);
+         titleTV = findViewById(R.id.custom_dialog_title);
         titleTV.setText(title);
+        progressTV = findViewById(R.id.tv_progress);
+        progressTV.setText(progress);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    public void updateProgress(String progress){
+        progressTV.setText(progress);
     }
 
 

@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.adme.Helpers.Service;
 import com.example.adme.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.collection.LLRBNode;
@@ -42,16 +43,19 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
     private TextInputLayout edt_service_description;
     private Calendar startTime;
     private Calendar endTime;
+    private String startTimeStr = "10:00 AM";
+    private String endTimeStr = "4:00 PM";
     private TextView timeErrorTextView;
     private String descriptionText = "";
     private int previousSpinnerPosition = 0;
 
+    private Service newService;
 
-
-
-    public static AddServiceOverview newInstance() {
-        return new AddServiceOverview();
+    public AddServiceOverview(Service newService) {
+        this.newService = newService;
     }
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -177,8 +181,8 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
 
                     checkTimeValidation();
 
-                    String s = new DecimalFormat("00").format(hourOfDay) + ":" + new DecimalFormat("00").format(minute) + " " + AM_PM;
-                    start_time_btn.setText(s);
+                    startTimeStr = new DecimalFormat("00").format(hourOfDay) + ":" + new DecimalFormat("00").format(minute) + " " + AM_PM;
+                    start_time_btn.setText(startTimeStr);
                     isDataSaved = false;
                     Log.i(TAG, "onTimeSet: "+isDataSaved);
 
@@ -215,8 +219,8 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
                         hourOfDay = hourOfDay % 12;
                     }
                     checkTimeValidation();
-                    String s = new DecimalFormat("00").format(hourOfDay) + ":" + new DecimalFormat("00").format(minute) + " " + AM_PM;
-                    end_time_btn.setText(s);
+                    endTimeStr = new DecimalFormat("00").format(hourOfDay) + ":" + new DecimalFormat("00").format(minute) + " " + AM_PM;
+                    end_time_btn.setText(endTimeStr);
                     isDataSaved = false;
                     Log.i(TAG, "onTimeSet: "+isDataSaved);
 
@@ -260,7 +264,9 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
     @Override
     public void saveData() {
 
-
+        newService.setCategory((String) service_category_spinner.getSelectedItem());
+        newService.setDescription(descriptionText);
+        newService.setWorking_hour(startTimeStr + " to "+endTimeStr);
         if(isValidationChecked){
             isDataSaved = true;
         }

@@ -120,9 +120,13 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             public void onChanged(User user) {
                 mCurrentUser = user;
                 Log.d("view-model", "onChanged:  bottom details" + user.getStatus());
+                if(user.getService_reference().length <= 0){
+
+                }
                 updateUi();
             }
         };
+
         todayViewModel.getUserData().observe(requireActivity(),userDataObserver);
     }
 
@@ -184,6 +188,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 Intent addServiceActivityIntent = new Intent(requireContext(),AddServicesActivity.class);
+                addServiceActivityIntent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,mCurrentUser);
                 requireContext().startActivity(addServiceActivityIntent);
             }
         });

@@ -12,22 +12,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.AdServiceDialog;
+import com.example.adme.Helpers.Service;
 import com.example.adme.R;
 
-public class AddServiceServices extends Fragment implements AddServicesActivity.SaveFragmentListener, AdServiceDialog.AdServiceDialogListener {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class AddServiceServices extends Fragment implements AddServicesActivity.SaveFragmentListener, AdServiceDialog.AdServiceDialogListener, AdServiceAdapter.AddServiceAdapterListener {
 
     private AddServiceServicesViewModel mViewModel;
-    private boolean isValidationChecked= false;
+    private boolean isValidationChecked= true;
     private boolean isDataSaved = false;
     private TextView ad_service_btn;
     private final String calledFrom = "fragment";
+    private AdServiceAdapter adServiceAdapter;
+    LinearLayout empty_recyclerview_layout;
+    RecyclerView ad_service_recyclerView;
 
-    public static AddServiceServices newInstance() {
-        return new AddServiceServices();
+    private Service newService;
+
+    private List<Map<String,String>> services = new ArrayList<>();
+
+    public AddServiceServices(Service newService) {
+        this.newService = newService;
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -38,14 +54,21 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
     }
 
     private void initializeFields(View root) {
-
-        RecyclerView ad_service_recyclerView = root.findViewById(R.id.ad_service_recyclerView);
+        empty_recyclerview_layout = root.findViewById(R.id.empty_recyclerview_layout);
+        ad_service_recyclerView = root.findViewById(R.id.ad_service_recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         ad_service_recyclerView.setLayoutManager(layoutManager);
         ad_service_recyclerView.setHasFixedSize(true);
-        AdServiceAdapter adapter = new AdServiceAdapter();
-        ad_service_recyclerView.setAdapter(adapter);
+        adServiceAdapter = new AdServiceAdapter(requireContext(),services,this);
+        ad_service_recyclerView.setAdapter(adServiceAdapter);
         ad_service_btn = root.findViewById(R.id.ad_service_btn);
+
+        if(services.size()<=0){
+            ad_service_recyclerView.setVisibility(View.GONE);
+            empty_recyclerview_layout.setVisibility(View.VISIBLE);
+        }
+
+
 
         ad_service_btn.setOnClickListener(v -> {
             openDialogFromFragment();
@@ -80,16 +103,40 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
     @Override
     public void saveData() {
         if(isValidationChecked){
+            newService.setServices(services);
             isDataSaved = true;
         }
     }
 
     @Override
     public void dialogText(String service_name, String service_description, String service_charge) {
+        isDataSaved = false;
+        if (services.size() <= 0){
+            ad_service_recyclerView.setVisibility(View.VISIBLE);
+            empty_recyclerview_layout.setVisibility(View.GONE);
+        }
+        Map<String,String> service = new HashMap<>();
+        service.put(FirebaseUtilClass.ENTRY_SERVICE_TITLE,service_name);
+        service.put(FirebaseUtilClass.ENTRY_SERVICE_DESCRIPTION,service_description);
+        service.put(FirebaseUtilClass.ENTRY_SERVICE_PRICE,service_charge);
+        services.add(service);
+        adServiceAdapter.setServiceList(services);
+
 
         Log.i("service_name",service_name);
         Log.i("service_description",service_description);
         Log.i("service_charge",service_charge);
 
+    }
+
+    @Override
+    public void deleteService(int position) {
+        isDataSaved = false;
+        services.remove(position);
+        adServiceAdapter.setServiceList(services);
+        if (services.size() <= 0){
+            ad_service_recyclerView.setVisibility(View.GONE);
+            empty_recyclerview_layout.setVisibility(View.VISIBLE);
+        }
     }
 }
