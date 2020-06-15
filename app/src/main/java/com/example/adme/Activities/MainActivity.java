@@ -9,11 +9,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    SharedPreferences mPreferences;
+    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    private SharedPreferences firstUsePreferences;
+    private boolean isLocationSettingShowed = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ImageView bannerLogo = findViewById(R.id.banner_logo);
 
-        mPreferences = getSharedPreferences(String.valueOf(R.string.SHARED_PREFERENCE_FIRST_USE),MODE_PRIVATE);
+        firstUsePreferences = getSharedPreferences(String.valueOf(R.string.SHARED_PREFERENCE_FIRST_USE),MODE_PRIVATE);
+        isLocationSettingShowed = firstUsePreferences.getBoolean(String.valueOf(R.string.SP_IS_LOCATION_SETTING_SHOWED),false);
 
 
         new Thread(new Runnable() {
@@ -32,10 +37,19 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,bannerLogo,"banner_logo");
-                            Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
-                            loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(loginActivity,activityOptionsCompat.toBundle());
+                            if(firebaseUtilClass.checkIfAlreadyLoggedIn()){
+                                if(isLocationSettingShowed){
+                                    startLandingActivity();
+                                }else{
+                                    startAccessLocationActivity();
+                                }
+                            }else{
+                                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,bannerLogo,"banner_logo");
+                                Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
+                                loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(loginActivity,activityOptionsCompat.toBundle());
+                            }
+
                         }
                     });
 
@@ -46,5 +60,15 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
 
+    }
+
+    private void startAccessLocationActivity() {
+        Intent intent = new Intent(MainActivity.this, AccessLocationActivity.class);
+        startActivity(intent);
+    }
+
+    private void startLandingActivity() {
+        Intent intent = new Intent(MainActivity.this, LandingActivity.class);
+        startActivity(intent);
     }
 }

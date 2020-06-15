@@ -185,7 +185,7 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
         reg_password = findViewById(R.id.reg_password);
         password_validation_text = findViewById(R.id.password_validation_text);
         mAuth = FirebaseAuth.getInstance();
-        dialog = new LoadingDialog(this,"Logging in");
+        dialog = new LoadingDialog(this,"Logging in",null);
         goto_login_btn = findViewById(R.id.goto_login_btn);
 
         /** To hide the keyboard after clicking a  button**/

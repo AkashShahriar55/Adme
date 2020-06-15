@@ -90,7 +90,7 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
     }
 
     private void initialization() {
-        dialog = new LoadingDialog(this,"Welcome");
+        dialog = new LoadingDialog(this,"Welcome",null);
         RecyclerView recyclerView = findViewById(R.id.places_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -117,10 +117,10 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
             public void onClick(View v) {
                 dialog.show();
 
-                firebaseUtilClass.updateUserLocation(mCurrentUser, currentPlace, new FirebaseUtilClass.UpdateLocationInfoCommunicator() {
+                firebaseUtilClass.updateUserLocation(firebaseUtilClass.getCurrentUser(), currentPlace, new FirebaseUtilClass.UpdateLocationInfoCommunicator() {
                     @Override
-                    public void onLocationInfoUpdated(User user) {
-                        startLandingActivity(user);
+                    public void onLocationInfoUpdated() {
+                        startLandingActivity();
                     }
                 });
             }
@@ -129,10 +129,9 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
 
     }
 
-    private void startLandingActivity(User currentUser) {
+    private void startLandingActivity() {
         dialog.dismiss();
         Intent intent = new Intent(FindLocationActivity.this, LandingActivity.class);
-        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,currentUser);
         startActivity(intent);
     }
 
@@ -161,10 +160,10 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
     @Override
     public void onPlaceSelected(MyPlaces place) {
         dialog.show();
-        firebaseUtilClass.updateUserLocation(mCurrentUser, place, new FirebaseUtilClass.UpdateLocationInfoCommunicator() {
+        firebaseUtilClass.updateUserLocation(firebaseUtilClass.getCurrentUser(), place, new FirebaseUtilClass.UpdateLocationInfoCommunicator() {
             @Override
-            public void onLocationInfoUpdated(User user) {
-                startLandingActivity(user);
+            public void onLocationInfoUpdated() {
+                startLandingActivity();
             }
         });
 

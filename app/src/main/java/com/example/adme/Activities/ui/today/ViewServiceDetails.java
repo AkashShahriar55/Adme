@@ -11,10 +11,8 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
@@ -31,12 +29,18 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class ViewServiceDetails extends AppCompatActivity implements OnMapReadyCallback,AdServiceDialog.AdServiceDialogListener {
     private static final String TAG = "ViewServiceDetails";
     private TextView ad_service_btn;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private GoogleMap mMap;
     private final String calledFrom = "activity";
+
+    private List<Map<String,String>> services = new ArrayList<>();
 
 
     @Override
@@ -66,7 +70,12 @@ public class ViewServiceDetails extends AppCompatActivity implements OnMapReadyC
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ViewServiceDetails.this);
         ad_service_recyclerView.setLayoutManager(layoutManager);
         ad_service_recyclerView.setHasFixedSize(true);
-        AdServiceAdapter service_adapter = new AdServiceAdapter();
+        AdServiceAdapter service_adapter = new AdServiceAdapter(this, services, new AdServiceAdapter.AddServiceAdapterListener() {
+            @Override
+            public void deleteService(int position) {
+
+            }
+        });
         ad_service_recyclerView.setAdapter(service_adapter);
 
         //open Ad service Dialog

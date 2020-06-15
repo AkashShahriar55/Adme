@@ -74,7 +74,7 @@ public class ServiceSearchAdapter extends RecyclerView.Adapter<ServiceSearchAdap
         holder.ratingBar.setRating(Float.parseFloat(serviceProvider.getRating()));
         holder.tv_work_done.setText(serviceProvider.getReviews());
         holder.tv_distance.setText("1.2 miles away");
-        holder.tv_details.setText(serviceProvider.getShort_dis());
+        holder.tv_details.setText(serviceProvider.getDescription());
 
         int smallest = 1000;
         int largest = 0;

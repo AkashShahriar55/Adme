@@ -105,4 +105,6 @@ dependencies {
 
     //for loading animation
     implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
 }

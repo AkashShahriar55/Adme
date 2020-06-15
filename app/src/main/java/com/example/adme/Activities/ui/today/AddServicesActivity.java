@@ -1,5 +1,6 @@
 package com.example.adme.Activities.ui.today;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,8 +17,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Helpers.LoadingDialog;
 import com.example.adme.Helpers.Service;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class AddServicesActivity extends AppCompatActivity {
 
@@ -43,13 +63,22 @@ public class AddServicesActivity extends AppCompatActivity {
     Fragment fragmentOverview,fragmentServices,fragmentGallery,fragmentLocation;
     SaveFragmentListener saveFragmentListener;
 
-    Service newService = new Service();
+    User currentUser;
 
+    Service newService = new Service();
+    Uri imageUris[] = new Uri[3];
+
+    FirebaseStorage storage = FirebaseStorage.getInstance("gs://adme-bf48a.appspot.com");
+    StorageReference service_portfolio_ref = storage.getReference().child(FirebaseUtilClass.STORAGE_FOLDER_SERVICE_PORTFOLIO);
+    UploadTask uploadTask ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_services);
+
+        currentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
+
 
         addServiceOne = findViewById(R.id.add_service_1_image);
         addServiceTwo = findViewById(R.id.add_service_2_image);
@@ -72,10 +101,10 @@ public class AddServicesActivity extends AppCompatActivity {
         });
 
 
-        fragmentOverview = new AddServiceOverview();
-        fragmentServices = new AddServiceServices();
-        fragmentGallery = new AddServiceGallery();
-        fragmentLocation = new AddServiceLocation();
+        fragmentOverview = new AddServiceOverview(newService);
+        fragmentServices = new AddServiceServices(newService);
+        fragmentGallery = new AddServiceGallery(imageUris);
+        fragmentLocation = new AddServiceLocation(newService);
         fragmentManager = getSupportFragmentManager();
 
         showFragment(fragmentOverview,OVERVIEW,STATE_OVERVIEW);
@@ -125,6 +154,7 @@ public class AddServicesActivity extends AppCompatActivity {
 
     public void saveButtonClicked(View view){
         saveFragmentListener.saveData();
+        Log.d(TAG, "saveButtonClicked: "+newService.getCategory()+" "+newService.getDescription()+" "+newService.getWorking_hour());
         boolean isSaved = saveFragmentListener.isDataSaved();
         if(isSaved)
             switch (state){
@@ -173,8 +203,27 @@ public class AddServicesActivity extends AppCompatActivity {
             Toast.makeText(this,"Complete and save Location",Toast.LENGTH_SHORT).show();
             showFragment(fragmentLocation,LOCATION,STATE_LOCATION);
         }else{
-            finish();
+
+            finishAddingNewService();
+
         }
+    }
+
+    private void finishAddingNewService() {
+        newService.setUser_name(currentUser.getUser_name());
+        newService.setUser_ref(currentUser.getmUserId());
+        newService.setStatus(currentUser.getStatus());
+        List<String> tags = new ArrayList<>();
+        String tokens[] = newService.getCategory().split("\\s+");
+        tags.addAll(Arrays.asList(tokens));
+        for(Map<String,String> service: newService.getServices()){
+            tokens = service.get(FirebaseUtilClass.ENTRY_SERVICE_TITLE).split("\\s+");
+            tags.addAll(Arrays.asList(tokens));
+        }
+
+        newService.setTags(tags);
+        newService.setStatus(currentUser.getStatus());
+        uploadImageToServer();
     }
 
     @Override
@@ -249,5 +298,68 @@ public class AddServicesActivity extends AppCompatActivity {
                 addServiceSaveButton.setText("Save and Finish");
                 break;
         }
+    }
+
+    private void uploadImageToServer() {
+        List<String> uris = new ArrayList<>();
+        LoadingDialog dialog = new LoadingDialog(this,"Uploading images","uploading: 0 mb");
+        dialog.show();
+        for(Uri uri:imageUris){
+            if(uri != null){
+                StorageReference image = service_portfolio_ref.child(uri.getLastPathSegment());
+                uploadTask = image.putFile(uri);
+                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+
+                        // Continue with the task to get the download URL
+                        return image.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            uris.add(downloadUri.getPath());
+                            Log.d("akash_debug", "onComplete: "+downloadUri);
+                        } else {
+                            // Handle failures
+                            // ...
+                        }
+                    }
+                });
+
+            }
+
+        }
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                taskSnapshot.getUploadSessionUri();
+                Log.d("akash_debug", "onSuccess: "+taskSnapshot.getUploadSessionUri());
+                dialog.dismiss();
+                uploadToDatabase();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                //long percent = (taskSnapshot.getBytesTransferred()/ finalTotal_size) * 100;
+                String mb = String.format("%.2f",taskSnapshot.getBytesTransferred()/125000.0);
+                dialog.updateProgress("Uploading: "+mb+" mb");
+            }
+        });
+
+    }
+
+    private void uploadToDatabase() {
+
     }
 }

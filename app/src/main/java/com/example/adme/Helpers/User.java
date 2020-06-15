@@ -107,6 +107,14 @@ public class User implements Parcelable {
         }
     };
 
+    public String[] getService_reference() {
+        return service_reference;
+    }
+
+    public void setService_reference(String[] service_reference) {
+        this.service_reference = service_reference;
+    }
+
     public String getJoined() {
         return joined;
     }

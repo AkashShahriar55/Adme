@@ -94,8 +94,6 @@ public class AccessLocationActivity extends AppCompatActivity implements GoogleM
 
         initialization();
 
-        mCurrentUser = (User) getIntent().getParcelableExtra("current_user");
-
         if(PermissionHelper.requestLocationPermission(this)){
             checkSettings();
         }
@@ -132,7 +130,7 @@ public class AccessLocationActivity extends AppCompatActivity implements GoogleM
         skipNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startLandingActivity(mCurrentUser);
+                startLandingActivity();
             }
         });
 
@@ -140,13 +138,12 @@ public class AccessLocationActivity extends AppCompatActivity implements GoogleM
     }
 
     private void initialization() {
-        dialog = new LoadingDialog(this,"Welcome");
+        dialog = new LoadingDialog(this,"Welcome",null);
     }
 
-    private void startLandingActivity(User currentUser) {
+    private void startLandingActivity() {
         dialog.dismiss();
         Intent intent = new Intent(this, LandingActivity.class);
-        intent.putExtra(FirebaseUtilClass.CURRENT_USER_ID,currentUser);
         startActivity(intent);
     }
 
@@ -275,8 +272,10 @@ public class AccessLocationActivity extends AppCompatActivity implements GoogleM
 
     @Override
     public void onCurrentLocationAddressFetched(MyPlaces place) {
+        Log.d("akash-debug", "onCurrentLocationAddressFetched: ");
         if(isUseCurrentLocationButtonClicked){
-            firebaseUtilClass.updateUserLocation(mCurrentUser, place, user -> startLandingActivity(user));
+            Log.d("akash-debug", "onCurrentLocationAddressFetched: ");
+            firebaseUtilClass.updateUserLocation(firebaseUtilClass.getCurrentUser(), place, () -> startLandingActivity());
         }else if(isFindALocationButtonClicked){
             startFindLocationActivity(mCurrentUser,place);
         }

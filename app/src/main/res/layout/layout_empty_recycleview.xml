@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:layout_marginBottom="20dp"
     android:background="@drawable/border_ash_today"
     tools:layout_editor_absoluteY="25dp">
@@ -12,13 +12,15 @@
         android:id="@+id/tv_empty_recycleview_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="You haven't added any service yet"
         android:textColor="@color/txt_highlight"
         android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_empty_recycleview_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tv_empty_recycleview_button"
@@ -31,6 +33,7 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_empty_recycleview_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>
