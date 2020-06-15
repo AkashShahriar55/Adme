@@ -57,13 +57,13 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.example.adme.Helpers.FirebaseUtilClass.ENTRY_LOCATION_ADDRESS;
-import static com.example.adme.Helpers.FirebaseUtilClass.ENTRY_LOCATION_DISPLAY_NAME;
-import static com.example.adme.Helpers.FirebaseUtilClass.ENTRY_LOCATION_LATITUDE;
-import static com.example.adme.Helpers.FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE;
-import static com.example.adme.Helpers.FirebaseUtilClass.ENTRY_SERVICE_DESCRIPTION;
-import static com.example.adme.Helpers.FirebaseUtilClass.ENTRY_SERVICE_PRICE;
-import static com.example.adme.Helpers.FirebaseUtilClass.ENTRY_SERVICE_TITLE;
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_LOCATION_ADDRESS;
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_LOCATION_DISPLAY_NAME;
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_LOCATION_LATITUDE;
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE;
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_SERVICE_DESCRIPTION;
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_SERVICE_PRICE;
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_SERVICE_TITLE;
 
 public class ServiceProviderDetailsActivity  extends AppCompatActivity implements OnMapReadyCallback, SelectServiceAdapter.SelectServiceAdapterListener {
     private static final String TAG = "ServiceProviderDetails";
@@ -82,7 +82,6 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     RatingBar ratingBar;
     List<String> selectServices = new ArrayList<>();
     List<String> selectServicesPrice = new ArrayList<>();
-    List<String> feature_image_url_list = new ArrayList<>();
     SliderView sliderView;
     ViewServiceImageSliderAdapter feature_image_adapter;
     LatLng serviceProviderLocation;
@@ -350,7 +349,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         tv_username.setText(service.getUser_name());
         tv_work_done.setText(service.getReviews());
         tv_catagory.setText(service.getCategory());
-        tv_short_discription.setText(service.getShort_dis());
+        tv_short_discription.setText(service.getDescription());
         tv_working_hour.setText(service.getWorking_hour());
         tv_location_short.setText(service.getLocation().get(ENTRY_LOCATION_DISPLAY_NAME));
         tv_location_details.setText(service.getLocation().get(ENTRY_LOCATION_ADDRESS));

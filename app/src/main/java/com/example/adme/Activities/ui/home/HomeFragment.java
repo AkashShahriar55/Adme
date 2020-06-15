@@ -1,6 +1,7 @@
 package com.example.adme.Activities.ui.home;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -31,15 +32,17 @@ import android.widget.Toast;
 
 import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
-
 import com.example.adme.Activities.ui.today.TodayViewModel;
-import com.example.adme.Activities.ui.today.ViewServiceDetails;
+import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,17 +53,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, ServiceSearchAdapter.ServiceSearchAdapterListener {
-
-
     private static final String TAG = "HomeFragment";
-
     private HomeViewModel mViewModel;
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -73,12 +71,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     private RecyclerView search_service_rv;
     private List<Service> serviceProvidersList;
     private ServiceSearchAdapter serviceSearchAdapter;
-    private SearchView serviceSearchView;
+    private CardView cv_search;
 
     FirebaseFirestore db;
     private User mCurrentUser;
-    boolean isKeyboardHide=true;
-    boolean isSearchResultVisible=false;
 
 
     public static HomeFragment newInstance() {
@@ -88,12 +84,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root= inflater.inflate(R.layout.home_fragment, container, false);
-        root.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                hideSoftKeyboard(getActivity());
-                return true;
-            }
-        });
         initializeFields(root);
         return root;
     }
@@ -107,54 +97,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
         AvailableServiceAdapter available_service_adapter = new AvailableServiceAdapter("home");
         available_service_rv.setAdapter(available_service_adapter);
 
-        search_service_rv = root.findViewById(R.id.rv_service_result);
-        serviceProvidersList = new ArrayList<>();
-        serviceSearchAdapter = new ServiceSearchAdapter(getContext(), serviceProvidersList, this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        search_service_rv.setLayoutManager(mLayoutManager);
-        search_service_rv.setItemAnimator(new DefaultItemAnimator());
-        search_service_rv.setAdapter(serviceSearchAdapter);
-//        getFirebaseData();
-//        getFirebaseDataList();
+        cv_search = root.findViewById(R.id.cv_search);
+        cv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToSearchFragment();
+            }
+        });
 
-        serviceSearchView = root.findViewById(R.id.searchView);
-        serviceSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // searchView expanded
-//                    serviceProvidersList.clear();
-                    serviceSearchAdapter.notifyDataSetChanged();
-                    search_service_rv.setVisibility(View.VISIBLE);
-                    locationButton.setVisibility(View.GONE);
-                    isKeyboardHide=false;
-                    isSearchResultVisible=true;
-                } else {
-                    // searchView not expanded
-                    serviceSearchView.setIconified(true);
-                    serviceSearchView.clearFocus();
-                    search_service_rv.setVisibility(View.GONE);
-                    locationButton.setVisibility(View.VISIBLE);
-                    isKeyboardHide=true;
-                    isSearchResultVisible=false;
-                }
-            }
-        });
-        serviceSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                List<String> queryList = new ArrayList<String>(Arrays.asList(query.split(" ")));
-                getFirebaseQueryList(queryList);
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                List<String> queryList = new ArrayList<String>(Arrays.asList(newText.split(" ")));
-                getFirebaseQueryList(queryList);
-                return false;
-            }
-        });
     }
+
     public static void hideSoftKeyboard(Activity activity) {
         final InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager.isActive()) {
@@ -163,6 +115,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
             }
         }
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -193,7 +146,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 //        Double lat = Double.valueOf(mCurrentUser.getLatitude());
 //        Double lng = Double.valueOf(mCurrentUser.getLongitude());
         //LatLng currentLocation = new LatLng(lat,lng);
-        mMap.clear();
+//        mMap.clear();
 //        mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(requireContext().getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
     }
@@ -243,13 +196,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
             if(mMap == null){
                 setUpMap();
             }else{
-                if(mCurrentUser != null){
-//                    if(mCurrentUser.getLatitude() != null && mCurrentUser.getLongitude() != null){
+                GoogleMapHelper.markCurrentLocation(getContext(),mMap);
+//                if(mCurrentUser != null){
+//                    if(mCurrentUser.getLatLng() != null){
 //                        markUserLocationInMap();
 //                    }else{
 //                        GoogleMapHelper.markCurrentLocation(getContext(),mMap);
 //                    }
-                }
+//                }
             }
 
         }
@@ -273,25 +227,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
-        if(mCurrentUser != null){
-//            if(mCurrentUser.getLatitude() != null && mCurrentUser.getLongitude() != null){
-//                markUserLocationInMap();
-//            }else{
-//                GoogleMapHelper.markCurrentLocation(getContext(),mMap);
+        GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
+//        if(mCurrentUser != null){
+//            if(mCurrentUser != null){
+//                if(mCurrentUser.getLatLng() != null){
+////                    markUserLocationInMap();
+//                    GoogleMapHelper.markLocation(getContext(),mMap,mCurrentUser.getLatLng());
+//                }else{
+//                    GoogleMapHelper.markCurrentLocation(getContext(),mMap);
+//                }
 //            }
-        }
+//        }
 
-    }
-
-    private void goToNotificationFragment() {
-
-        Fragment notificationFragment = new Notification_Fragment();
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
-
-        fragmentTransaction.replace(R.id.nav_host_fragment, notificationFragment);
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -300,149 +247,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
         intent.putExtra("serviceProviderObject", serviceProvider);
         getContext().startActivity(intent);
 //        Toast.makeText(getContext(), "Selected: " + serviceProvider.getUser_name() , Toast.LENGTH_LONG).show();
-    }
-
-    private void getFirebaseData() {
-        db = FirebaseFirestore.getInstance();
-        ///Adme_Service_list/service1
-//        final DocumentReference docRef = db.collection("Adme_Service_list").document("service1");
-        final DocumentReference docRef = db.document("Adme_Service_list/service90");
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-                if (snapshot != null && snapshot.exists()) {
-                    Service sv = snapshot.toObject(Service.class);
-                    serviceProvidersList.add(sv);
-                    serviceSearchAdapter.notifyDataSetChanged();
-                    Log.d(TAG, "Current data: " + snapshot.getData());
-                    Log.d(TAG, "Current2 data: " + sv.getUser_name());
-
-//                    setFirebaseData(sv,"service1");
-
-//                    Place place = new Place("54 Teligati Road, Daulotpur", "23.46","45.33");
-//                    sv.setService_provider_location(place);
-//                    Service service= new Service();
-//                    db.collection("Adme_Service_list").document("service90").set(sv);
-
-                } else {
-                    Log.d(TAG, "Current data: null");
-                }
-            }
-        });
-    }
-
-    private void setFirebaseData(Service sv, String doc){
-        db.collection("Adme_Service_list").document(doc)
-                .set(sv)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
-    }
-
-    private void getFirebaseDataList() {
-//        db = FirebaseFirestore.getInstance();
-////        db.collection("Adme_Service_list")
-////                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-////                    @Override
-////                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-////                        if (e != null) {
-////                            Log.w(TAG, "Listen failed.", e);
-////                            return;
-////                        }
-////                        serviceProvidersList.clear();
-////                        for (QueryDocumentSnapshot doc : value) {
-////                            ServiceProvider sv= doc.toObject(ServiceProvider.class);
-////                            serviceProvidersList.add(sv);
-////                            serviceSearchAdapter.notifyDataSetChanged();
-////
-//////                            for(int i=0; i<sv.getTag().size(); i++){
-//////                                sv.getTag().set(i , sv.getTag().get(i).toLowerCase());
-//////                                Log.d(TAG, doc.getId()+" Current3 data: " + sv.getTag().get(i));
-//////                            }
-//////                            setFirebaseData(sv, doc.getId());
-////                        }
-//////                        Log.d(TAG, "Current2 data: " + serviceProvidersList.get(3).getUser_name());
-////                    }
-////                });
-//
-//        db.collection("Adme_Service_list")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                            }
-//                            serviceProvidersList.clear();
-//                            for (QueryDocumentSnapshot doc : task.getResult()) {
-//                                ServiceProvider sv= doc.toObject(ServiceProvider.class);
-//                                serviceProvidersList.add(sv);
-//                                serviceSearchAdapter.notifyDataSetChanged();
-//
-////                            for(int i=0; i<sv.getTag().size(); i++){
-////                                sv.getTag().set(i , sv.getTag().get(i).toLowerCase());
-////                                Log.d(TAG, doc.getId()+" Current3 data: " + sv.getTag().get(i));
-////                            }
-////                            setFirebaseData(sv, doc.getId());
-//                            }
-////                            Place place=new Place("Bashbari", "23.46","45.33");
-////                            ServiceProvider sv =new ServiceProvider(serviceProvidersList.get(5))
-////                            serviceProvidersList.get(5).setService_provider_location(place);
-////                            db.collection("Adme_Service_list").document("service90").set(serviceProvidersList.get(5));
-////                            Map<String, Object> data = new HashMap<>();
-////                            data.put("place", place);
-////                            db.collection("Adme_Service_list").document("service9").set(data);
-//
-//                        } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-//                        }
-
-//                            for(int i=0; i<sv.getTag().size(); i++){
-//                                sv.getTag().set(i , sv.getTag().get(i).toLowerCase());
-//                                Log.d(TAG, doc.getId()+" Current3 data: " + sv.getTag().get(i));
-//                            }
-//                            setFirebaseData(sv, doc.getId());
-//                    }
-//                });
-//
-    }
-
-    private void getFirebaseQueryList(List<String> queryArray) {
-        Log.d(TAG, " Current4 data: " + queryArray);
-        db = FirebaseFirestore.getInstance();
-        db.collection("Adme_Service_list")
-//                .startAt(queryArray.get(0))
-//                .endAt(queryArray.get(0)+"\uf8ff")
-                .whereArrayContainsAny("tags", queryArray)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        serviceProvidersList.clear();
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                        } else {
-                            for (QueryDocumentSnapshot doc : value) {
-                                Service sv = doc.toObject(Service.class);
-                                serviceProvidersList.add(sv);
-                            }
-                        }
-                        serviceSearchAdapter.notifyDataSetChanged();
-                    }
-                });
     }
 
     private void goToBottomDetails() {
@@ -460,4 +264,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 
     }
 
+    private void goToNotificationFragment() {
+        Fragment notificationFragment = new Notification_Fragment();
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.add(R.id.nav_host_fragment, notificationFragment,"notificationFragment");
+        fragmentTransaction.commit();
+    }
+
+    private void goToSearchFragment() {
+        Fragment searchFragment = new SearchFragment();
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.add(R.id.nav_host_fragment, searchFragment,"searchFragment");
+        fragmentTransaction.commit();
+    }
 }

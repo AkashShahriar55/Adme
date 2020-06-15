@@ -4,11 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.adme.Architecture.FirebaseUtilClass;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_LOCATION_LATITUDE;
+import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE;
 
 public class User implements Parcelable {
 
@@ -166,6 +170,14 @@ public class User implements Parcelable {
 
     public Map<String, String> getLocation() {
         return location;
+    }
+
+    public LatLng getLatLng() {
+        if(location.get(ENTRY_LOCATION_LATITUDE).equals("") || location.get(ENTRY_LOCATION_LONGITUDE).equals("")){
+            return null;
+        } else {
+            return new LatLng(Double.parseDouble(location.get(ENTRY_LOCATION_LATITUDE)), Double.parseDouble(location.get(ENTRY_LOCATION_LONGITUDE)));
+        }
     }
 
     public void setLocation(Map<String, String> location) {
