@@ -18,13 +18,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,7 @@ public class FirebaseUtilClass {
     public static final String USER_COLLECTION_ID ="Adme_User";
     public static final String USER_MAIN_DATA_COLLECTION_NAME = "Main_Data";
     public static final String SERVICE_PROVIDER_DOCUMENT_NAME = "Service_Provider_Data";
+    public static final String COLLECTION_ADME_SERVICE_LIST = "Adme_Service_list";
 
     public static final String MODE_CLIENT = "Client";
     public static final String MODE_SERVICE_PROVIDER = "Service provider";
@@ -77,19 +81,27 @@ public class FirebaseUtilClass {
 
     public static final String STORAGE_FOLDER_SERVICE_PORTFOLIO = "service_portfolio";
 
+    public static final String ENTRY_SERVICE_CATEGORY = "category";
+    public static final String ENTRY_MAIN_SERVICE_DESCRIPTION = "description";
+    public static final String ENTRY_SERVICE_RATING = "rating";
+    public static final String ENTRY_SERVICE_REVIEWS = "reviews";
+
 
     //create database reference
     private FirebaseFirestore db;
     private CollectionReference userRef;
     private FirebaseAuth mAuth;
     private MutableLiveData<User> userData;
-    private MutableLiveData<List<Service>> services;
+    private MutableLiveData<List<Service>> services = new MutableLiveData<>();
+    private List<Service> serviceList = new ArrayList<>();
     private String user_id;
+    private CollectionReference servicesRef;
 
     public FirebaseUtilClass() {
         userData = new MutableLiveData<>();
         db = FirebaseFirestore.getInstance();
         userRef = db.collection(USER_COLLECTION_ID);
+        servicesRef = db.collection(COLLECTION_ADME_SERVICE_LIST);
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -102,11 +114,18 @@ public class FirebaseUtilClass {
     }
 
 
+    public MutableLiveData<List<Service>> getServices() {
+        fetchUserServices();
+        return services;
+    }
+
     private void fetchUserData() {
         userRef.document(user_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                userData.setValue(documentSnapshot.toObject(User.class));
+                User user = documentSnapshot.toObject(User.class);
+                user.setmUserId(user_id);
+                userData.setValue(user);
             }
         });
 
@@ -114,8 +133,10 @@ public class FirebaseUtilClass {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null) {
-
-                    userData.setValue(documentSnapshot.toObject(User.class));
+                    User user = documentSnapshot.toObject(User.class);
+                    user.setmUserId(user_id);
+                    userData.setValue(user);
+                    Log.d("akash_debug", "onEvent: "+userData.getValue().getService_reference().size());
                 }
             }
         });
@@ -200,6 +221,33 @@ public class FirebaseUtilClass {
     }
 
     public void fetchUserServices(){
+    }
+
+    DatabaseOperationListener uploadUserServiceListener;
+    public void uploadUserService(Service service,DatabaseOperationListener listener){
+        uploadUserServiceListener = listener;
+        servicesRef.add(service).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                updateServiceInUserDocument(service,documentReference.getId());
+            }
+        });
+
+    }
+
+    private void updateServiceInUserDocument(Service service,String service_id) {
+        Map<String,String> service_reference = new HashMap<>();
+        service_reference.put(ENTRY_SERVICE_CATEGORY,service.getCategory());
+        service_reference.put(ENTRY_MAIN_SERVICE_DESCRIPTION,service.getDescription());
+        service_reference.put(ENTRY_SERVICE_RATING,service.getRating());
+        service_reference.put(ENTRY_SERVICE_REVIEWS,service.getReviews());
+        service_reference.put(ENTRY_SERVICE_REFERENCE,service_id);
+        userRef.document(service.getUser_ref()).update(FirebaseUtilClass.ENTRY_SERVICE_REFERENCE, FieldValue.arrayUnion(service_reference)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                uploadUserServiceListener.onSuccess(null);
+            }
+        });
     }
 
     public void signInWithEmailAndPassword(String email, String password, DatabaseOperationListener listener) {

@@ -50,7 +50,7 @@ public class TodayBottomDetailsFragment extends Fragment {
     Button todayAddService;
     ImageView bottomDetailsButton,notificationButton;
 
-    List<Service> services = new ArrayList<>();
+    List<Map<String,String>> services = new ArrayList<>();
 
     public TodayBottomDetailsFragment(User user) {
         this.mCurrentUser = user;

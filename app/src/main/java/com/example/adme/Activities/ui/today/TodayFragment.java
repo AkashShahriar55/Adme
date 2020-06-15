@@ -87,12 +87,13 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
 
     CoordinatorLayout layout_coordinator;
     CardView bottom_details_toolbar;
-    RecyclerView.Adapter appointmentAdapter,serviceAdapter;
+    RecyclerView.Adapter appointmentAdapter;
+    ServiceAdapter serviceAdapter;
     boolean isMapLoaded=false;
     boolean isbottomSheetVisible=false;
     int oldPeekHeight;
 
-    List<Service> services = new ArrayList<>();
+    List<Map<String,String>> services = new ArrayList<>();
 
 
     TodayViewModel todayViewModel;
@@ -120,8 +121,10 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             public void onChanged(User user) {
                 mCurrentUser = user;
                 Log.d("view-model", "onChanged:  bottom details" + user.getStatus());
-                if(user.getService_reference().length <= 0){
+                if(user.getService_reference().size() <= 0){
 
+                }else{
+                    services = user.getService_reference();
                 }
                 updateUi();
             }
@@ -218,6 +221,16 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
         });
 
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        appointmentRecyclerView.setHasFixedSize(true);
+        appointmentRecyclerView.setLayoutManager(layoutManager);
+        appointmentAdapter = new AppointmentAdapter(getContext(),getParentFragmentManager());
+
+        RecyclerView.LayoutManager serviceLayoutManager = new LinearLayoutManager(getContext());
+        serviceRecyclerView.setHasFixedSize(true);
+        serviceRecyclerView.setLayoutManager(serviceLayoutManager);
+        serviceAdapter = new ServiceAdapter(getContext(),services);
+
     }
 
     private void updateUi() {
@@ -240,16 +253,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             todayStatusSwitch.setChecked(false);
         }
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        appointmentRecyclerView.setHasFixedSize(true);
-        appointmentRecyclerView.setLayoutManager(layoutManager);
-        appointmentAdapter = new AppointmentAdapter(getContext(),getParentFragmentManager());
-
-        RecyclerView.LayoutManager serviceLayoutManager = new LinearLayoutManager(getContext());
-        serviceRecyclerView.setHasFixedSize(true);
-        serviceRecyclerView.setLayoutManager(serviceLayoutManager);
-        serviceAdapter = new ServiceAdapter(getContext(),services);
-
+        serviceAdapter.setServices(services);
     }
 
     @Override

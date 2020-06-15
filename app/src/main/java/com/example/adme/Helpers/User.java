@@ -8,6 +8,7 @@ import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User implements Parcelable {
@@ -22,7 +23,7 @@ public class User implements Parcelable {
     private Map<String,String> contacts = new HashMap<>();
     private Map<String,String> service_provider_info = new HashMap<>();
     private Map<String,String> client_info = new HashMap<>();
-    private String[] service_reference = new String[]{};
+    private List<Map<String,String>> service_reference = new ArrayList<>();
 
 
     public User() {
@@ -62,7 +63,10 @@ public class User implements Parcelable {
         mUserId = in.readString();
 
 
-        in.readStringArray(service_reference);
+        /*int service_count = in.readInt();
+        for (int i = 0; i < service_count; i++) {
+            service_reference.add(in.readString());
+        }*/
 
 
         //write service provider info in parcelable
@@ -107,11 +111,11 @@ public class User implements Parcelable {
         }
     };
 
-    public String[] getService_reference() {
+    public List<Map<String,String>> getService_reference() {
         return service_reference;
     }
 
-    public void setService_reference(String[] service_reference) {
+    public void setService_reference(List<Map<String,String>> service_reference) {
         this.service_reference = service_reference;
     }
 
@@ -209,7 +213,11 @@ public class User implements Parcelable {
         dest.writeString(status);
         dest.writeString(mUserId);
 
-        dest.writeStringArray(service_reference);
+        int service_count = service_reference.size();
+       /* dest.writeInt(service_count);
+        for(String reference:service_reference){
+            dest.writeString(reference);
+        }*/
 
         int service_info_size = service_provider_info.size();
         int contacts_size = contacts.size();

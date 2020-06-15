@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -67,10 +68,13 @@ public class AddServicesActivity extends AppCompatActivity {
 
     Service newService = new Service();
     Uri imageUris[] = new Uri[3];
+    int main_count = 0,download_count = 0;
 
     FirebaseStorage storage = FirebaseStorage.getInstance("gs://adme-bf48a.appspot.com");
     StorageReference service_portfolio_ref = storage.getReference().child(FirebaseUtilClass.STORAGE_FOLDER_SERVICE_PORTFOLIO);
     UploadTask uploadTask ;
+    FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    LoadingDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,8 +225,14 @@ public class AddServicesActivity extends AppCompatActivity {
             tags.addAll(Arrays.asList(tokens));
         }
 
+        for (int i = 0; i < tags.size(); i++) {
+            
+        }
+
         newService.setTags(tags);
         newService.setStatus(currentUser.getStatus());
+        FirebaseUser user = firebaseUtilClass.getCurrentUser();
+        newService.setPic_url(String.valueOf(user.getPhotoUrl()));
         uploadImageToServer();
     }
 
@@ -301,8 +311,13 @@ public class AddServicesActivity extends AppCompatActivity {
     }
 
     private void uploadImageToServer() {
-        List<String> uris = new ArrayList<>();
-        LoadingDialog dialog = new LoadingDialog(this,"Uploading images","uploading: 0 mb");
+
+        for(Uri uri:imageUris){
+            if(uri!=null){
+                main_count+=1;
+            }
+        }
+        dialog = new LoadingDialog(this,"Uploading images","uploading: 0 mb");
         dialog.show();
         for(Uri uri:imageUris){
             if(uri != null){
@@ -323,7 +338,7 @@ public class AddServicesActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
                             Uri downloadUri = task.getResult();
-                            uris.add(downloadUri.getPath());
+                            handleUploadedImageUri(downloadUri);
                             Log.d("akash_debug", "onComplete: "+downloadUri);
                         } else {
                             // Handle failures
@@ -346,7 +361,6 @@ public class AddServicesActivity extends AppCompatActivity {
                 taskSnapshot.getUploadSessionUri();
                 Log.d("akash_debug", "onSuccess: "+taskSnapshot.getUploadSessionUri());
                 dialog.dismiss();
-                uploadToDatabase();
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -359,7 +373,31 @@ public class AddServicesActivity extends AppCompatActivity {
 
     }
 
+    List<String> uris = new ArrayList<>();
+    private void handleUploadedImageUri(Uri uri) {
+        uris.add(String.valueOf(uri));
+        download_count+=1;
+        if(main_count==download_count){
+            newService.setFeature_images(uris);
+            uploadToDatabase();
+        }
+    }
+
     private void uploadToDatabase() {
+        dialog.updateTitle("Creating service");
+        dialog.updateProgress("Please wait");
+        firebaseUtilClass.uploadUserService(newService, new FirebaseUtilClass.DatabaseOperationListener() {
+            @Override
+            public void onSuccess(Object object) {
+                dialog.dismiss();
+                finish();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
 
     }
 }
