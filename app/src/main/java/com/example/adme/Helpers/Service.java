@@ -31,6 +31,8 @@ public class Service implements Parcelable {
 
 
     public Service() {
+        this.rating = "0";
+        this.reviews = "0";
     }
 
 

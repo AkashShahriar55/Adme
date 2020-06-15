@@ -48,5 +48,9 @@ public class LoadingDialog extends Dialog {
         progressTV.setText(progress);
     }
 
+    public void updateTitle(String title){
+        titleTV.setText(title);
+    }
+
 
 }

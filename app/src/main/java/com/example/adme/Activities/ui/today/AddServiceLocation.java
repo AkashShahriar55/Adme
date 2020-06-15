@@ -120,6 +120,7 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
             Map<String,String > location = new HashMap<>();
             location.put(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE,latitude);
             location.put(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE,longitude);
+            location.put(FirebaseUtilClass.ENTRY_LOCATION_DISPLAY_NAME,display_name);
             location.put(FirebaseUtilClass.ENTRY_LOCATION_ADDRESS,full_address);
             newService.setLocation(location);
             isDataSaved = true;
@@ -138,6 +139,7 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
                 addressTextView.setText(address.getAddressLine(0));
                 latitude = String.valueOf(address.getLatitude());
                 longitude = String.valueOf(address.getLongitude());
+                display_name = address.getFeatureName();
                 full_address = address.getAddressLine(0);
             }
         });
