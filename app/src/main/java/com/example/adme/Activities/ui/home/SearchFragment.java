@@ -1,29 +1,20 @@
 package com.example.adme.Activities.ui.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adme.Activities.Notification_class;
-import com.example.adme.Activities.ui.today.NotificationItemInventoryAdapter;
-import com.example.adme.Activities.ui.today.NotificationViewModel;
-import com.example.adme.Activities.ui.today.Notification_Fragment;
 import com.example.adme.Helpers.Service;
 import com.example.adme.R;
 import com.google.firebase.firestore.EventListener;

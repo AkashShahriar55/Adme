@@ -35,6 +35,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.adme.Activities.ui.income.RatingHistoryAdapter;
 import com.example.adme.Activities.ui.today.ViewServiceImageSliderAdapter;
 import com.example.adme.Helpers.Appointment;
+import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.SelectServiceItem;
@@ -160,7 +161,8 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
                         til_service_time.setError(null);
 //                        SimpleDateFormat sd = new SimpleDateFormat("yyyyy.MMMMM.dd GGG hh:mm aaa", Locale.getDefault());
 //                        Log.d(TAG, myCalendar.getTimeInMillis()+" initializeFields: "+sd.format(myCalendar.getTime()));
-                        Log.d(TAG, myCalendar.getTimeInMillis()+" getTimeInMillis");
+//                        Log.d(TAG, myCalendar.getTimeInMillis()+" getTimeInMillis "+ CookieTechUtilityClass.getTimeDifference(String.valueOf(myCalendar.getTimeInMillis()),"1592647202542"));
+
                     }
                 }, hour, minute, false);
                 mTimePicker.show();
