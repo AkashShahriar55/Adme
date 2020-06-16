@@ -161,7 +161,7 @@
                 app:hdBarTitleSelectedColor="@color/black"
                 app:hdBarTitleTxtSize="12sp"
                 app:hdBarWidth="40dp"
-                app:hdEmptyColor="@color/android_default_layout_color"
+                app:hdEmptyColor="@color/barChartUnfill"
                 app:hdMaxValue="100"
                 app:hdPinBackgroundColor="@color/pin_background"
                 app:hdPinDrawable="@drawable/ic_pin"

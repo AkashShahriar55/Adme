@@ -24,6 +24,16 @@ public class ServiceSearchAdapter extends RecyclerView.Adapter<ServiceSearchAdap
     private List<Service> serviceProviderList;
     private ServiceSearchAdapterListener listener;
 
+    public interface ServiceSearchAdapterListener {
+        void onServiceProviderSelected(Service serviceProvider);
+    }
+
+    public ServiceSearchAdapter(Context context, List<Service> serviceProviderList, ServiceSearchAdapterListener listener) {
+        this.context = context;
+        this.listener = listener;
+        this.serviceProviderList = serviceProviderList;
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tv_username, tv_work_done, tv_distance, tv_details,tv_min_fee,tv_to,tv_max_fee;
         public CircleImageView profile_image;
@@ -51,13 +61,6 @@ public class ServiceSearchAdapter extends RecyclerView.Adapter<ServiceSearchAdap
                 }
             });
         }
-    }
-
-
-    public ServiceSearchAdapter(Context context, List<Service> serviceProviderList, ServiceSearchAdapterListener listener) {
-        this.context = context;
-        this.listener = listener;
-        this.serviceProviderList = serviceProviderList;
     }
 
     @Override
@@ -103,7 +106,4 @@ public class ServiceSearchAdapter extends RecyclerView.Adapter<ServiceSearchAdap
 //        return 5;
     }
 
-    public interface ServiceSearchAdapterListener {
-        void onServiceProviderSelected(Service serviceProvider);
-    }
 }

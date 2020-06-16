@@ -36,6 +36,7 @@
 
 <!--    service provider primary color-->
     <color name="sv_primary">#3F5AA6</color>
+    <color name="barChartUnfill">#F2F5F7</color>
 
     <color name="android_default_layout_color">#FAFAFA</color>
 
