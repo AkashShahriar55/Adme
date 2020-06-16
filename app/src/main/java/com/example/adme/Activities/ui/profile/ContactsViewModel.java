@@ -1,17 +1,15 @@
 package com.example.adme.Activities.ui.profile;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.adme.Architecture.DataRepository;
 import com.example.adme.Helpers.User;
 
-public class ProfileViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+public class ContactsViewModel extends ViewModel {
     private MutableLiveData<User> userData;
     private DataRepository repository;
-    public ProfileViewModel() {
+    public ContactsViewModel() {
         repository = new DataRepository();
         userData = repository.getUserData();
     }

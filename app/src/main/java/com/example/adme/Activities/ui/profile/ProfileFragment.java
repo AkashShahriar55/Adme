@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.LoginActivity;
 import com.example.adme.Activities.MainActivity;
 import com.example.adme.Activities.RegistrationActivity;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
@@ -36,6 +38,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
+import java.util.Observable;
+import androidx.lifecycle.Observer;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -49,7 +54,7 @@ public class ProfileFragment extends Fragment {
     EditText editProfileName;
 
     private User mCurrentUser;
-    private boolean isClient;
+    private String isClient;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -146,26 +151,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
-        isClient = ((LandingActivity)requireActivity()).isClient();
-        updateUiData();
+        //mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
+        //if(mCurrentUser == null)Log.e("null user:","current user seems null");
+        //isClient = ((LandingActivity)requireActivity()).isClient();
+        //updateUiData();
     }
 
-    private void updateUiData() {
-        //txtProfileName.setText(mCurrentUser.getUsername());
-        if(mAuth.getCurrentUser() != null){
-            long timeStamp = mAuth.getCurrentUser().getMetadata().getCreationTimestamp();
-            String date = CookieTechUtilityClass.getDate(timeStamp);
-            txtSinceTime.setText("Member since "+ date);
-        }
 
-        if(isClient){
-            ratingHolder.setVisibility(View.GONE);
-        }
-
-
-
-    }
 
     private void initializeFields(View root) {
 
@@ -219,6 +211,43 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         // TODO: Use the ViewModel
+
+        final Observer<User> userDataObserver = new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                mCurrentUser = user;
+                Log.d("view-model", "onChanged:  bottom details" + user.getStatus());
+                updateUiData();
+            }
+        };
+
+        mViewModel.getUserData().observe(requireActivity(),userDataObserver);
+
     }
+
+
+
+    private void updateUiData() {
+        //txtProfileName.setText(mCurrentUser.getUsername());
+        if(mAuth.getCurrentUser() != null){
+            long timeStamp = mAuth.getCurrentUser().getMetadata().getCreationTimestamp();
+            String date = CookieTechUtilityClass.getDate(timeStamp);
+            txtProfileName.setText(mCurrentUser.getUser_name());
+            txtSinceTime.setText("Member since "+ date);
+            isClient = mCurrentUser.getMode();
+            if(isClient.equals("Client")){
+                ratingHolder.setVisibility(View.GONE);
+            }
+
+        }
+
+
+
+
+
+    }
+
+
+
 
 }
