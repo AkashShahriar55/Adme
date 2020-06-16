@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.MessageQueue;
@@ -33,7 +34,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.adme.Activities.ui.income.RatingHistoryAdapter;
 import com.example.adme.Activities.ui.today.ViewServiceImageSliderAdapter;
+import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.GoogleMapHelper;
+import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.SelectServiceItem;
 import com.example.adme.Helpers.Service;
 import com.example.adme.R;
@@ -44,7 +47,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -76,7 +81,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     private TextInputLayout til_service_added,til_service_time,til_service_date;
     SelectServiceAdapter service_adapter;
     RatingHistoryAdapter reviewAdapter;
-    private List<SelectServiceItem> selectServiceList;
+    private List<SelectServiceItem> selectServiceList = new ArrayList<>();
     RecyclerView select_service_recyclerView,review_recyclerView;
     CircleImageView circleImageView;
     RatingBar ratingBar;
@@ -85,6 +90,12 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     SliderView sliderView;
     ViewServiceImageSliderAdapter feature_image_adapter;
     LatLng serviceProviderLocation;
+    Location clentLocation;
+    FirebaseFirestore db;
+    double distance=0;
+    Service service;
+    String selected_service_text;
+    String servicetext="";
 
 
     @Override
@@ -95,8 +106,6 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     }
 
     private void initializeFields() {
-        selectServiceList = new ArrayList<>();
-
         circleImageView = findViewById(R.id.circleImageView);
         ratingBar = findViewById(R.id.ratingBar);
         tv_username = findViewById(R.id.tv_username);
@@ -151,6 +160,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
                         til_service_time.setError(null);
 //                        SimpleDateFormat sd = new SimpleDateFormat("yyyyy.MMMMM.dd GGG hh:mm aaa", Locale.getDefault());
 //                        Log.d(TAG, myCalendar.getTimeInMillis()+" initializeFields: "+sd.format(myCalendar.getTime()));
+                        Log.d(TAG, myCalendar.getTimeInMillis()+" getTimeInMillis");
                     }
                 }, hour, minute, false);
                 mTimePicker.show();
@@ -168,25 +178,6 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
                         myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH));
                 mDatePickerDialog1.show();
-            }
-        });
-
-
-        send_button = findViewById(R.id.send_button);
-        send_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(selectServices.size()==0){
-                    til_service_added.setError("Select a service");
-                } else {
-                    til_service_added.setError(null);
-                }
-                if(tv_service_time.getText().toString().trim().equals("")){
-                    til_service_time.setError("Select a time");
-                }
-                    if(tv_service_date.getText().toString().trim().equals("")){
-                    til_service_date.setError("Select a date");
-                }
             }
         });
 
@@ -216,7 +207,86 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         reviewAdapter = new RatingHistoryAdapter();
 //        review_recyclerView.setAdapter(reviewAdapter);
 
+        //send button setting
+        send_button = findViewById(R.id.send_button);
+        send_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isInputError()){
+                    setFirebaseData("appointment10");
+                }
+            }
+        });
+
+
         updateView();
+    }
+
+    public void updateView() {
+        Intent intent = getIntent();
+        service = intent.getParcelableExtra("serviceProviderObject");
+        assert service != null;
+
+        tv_username.setText(service.getUser_name());
+        tv_work_done.setText(service.getReviews());
+        tv_catagory.setText(service.getCategory());
+        tv_short_discription.setText(service.getDescription());
+        tv_working_hour.setText(service.getWorking_hour());
+        tv_location_short.setText(service.getLocation().get(ENTRY_LOCATION_DISPLAY_NAME));
+        tv_location_details.setText(service.getLocation().get(ENTRY_LOCATION_ADDRESS));
+        ratingBar.setRating(Float.parseFloat(service.getRating()));
+
+        serviceProviderLocation = new LatLng(Double.parseDouble(service.getLocation().get(ENTRY_LOCATION_LATITUDE)),Double.parseDouble(service.getLocation().get(ENTRY_LOCATION_LONGITUDE)));
+
+        Glide.with(ServiceProviderDetailsActivity.this)
+                .load(service.getPic_url())
+                .apply(RequestOptions.circleCropTransform())
+                .into(circleImageView);
+
+        feature_image_adapter = new ViewServiceImageSliderAdapter(this, service.getFeature_images());
+
+        for (int i = 0; i < service.getServices().size(); i++) {
+            SelectServiceItem selectServiceItem= new SelectServiceItem();
+            selectServiceItem.setService_title(service.getServices().get(i).get(ENTRY_SERVICE_TITLE));
+            selectServiceItem.setService_details(service.getServices().get(i).get(ENTRY_SERVICE_DESCRIPTION));
+            selectServiceItem.setService_price(service.getServices().get(i).get(ENTRY_SERVICE_PRICE));
+            selectServiceList.add(selectServiceItem);
+        }
+
+        MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                sliderView.setSliderAdapter(feature_image_adapter);
+                select_service_recyclerView.setAdapter(service_adapter);
+                review_recyclerView.setAdapter(reviewAdapter);
+                return false;
+            }
+        };
+        Looper.myQueue().addIdleHandler(handler);
+
+        runOnUiThread(new Runnable(){
+            public void run() {
+                service_adapter.notifyDataSetChanged();
+            }
+        });
+
+        //Setup Map
+        checkPermission();
+    }
+
+    private boolean isInputError(){
+        if(selectServices.size()==0){
+            til_service_added.setError("Select a service");
+            return true;
+        } else if(tv_service_time.getText().toString().trim().equals("")){
+            til_service_time.setError("Select a time");
+            return true;
+        } else if(tv_service_date.getText().toString().trim().equals("")){
+            til_service_date.setError("Select a date");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void checkPermission() {
@@ -272,32 +342,6 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         }
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-//        GoogleMapHelper.markCurrentLocation(ServiceProviderDetailsActivity.this,mMap);
-        GoogleMapHelper.markLocation(ServiceProviderDetailsActivity.this, mMap, serviceProviderLocation);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(ServiceProviderDetailsActivity.this);
-                locationProviderClient.getLastLocation().addOnSuccessListener((Activity) ServiceProviderDetailsActivity.this, location -> {
-                    if(location != null){
-                        double distance = GoogleMapHelper.getDistanceInMiles(location.getLatitude(), location.getLongitude(), serviceProviderLocation.latitude, serviceProviderLocation.longitude);
-                        tv_distance.setText(String.format("%.1f", distance));
-                        Log.i(TAG, "distance: "+distance);
-                    }
-                }).addOnFailureListener((Activity) ServiceProviderDetailsActivity.this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //25.763402, 88.908705
-                    }
-                });
-
-            }
-        }).start();
-    }
-
     private void setUpMap() {
         new Thread(() -> {
             try {
@@ -313,18 +357,31 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
 
     }
 
-    private void initia() {
-        SelectServiceItem selectServiceItem1=new SelectServiceItem("Pattern Paint","It is call pattern paint.","90");
-        SelectServiceItem selectServiceItem2=new SelectServiceItem("Rubber Paint","It is call Rubber paint.","70");
-        SelectServiceItem selectServiceItem3=new SelectServiceItem("Artist Paint","It is call Artist paint.","110");
-        selectServiceList.add(selectServiceItem1);
-        selectServiceList.add(selectServiceItem2);
-        selectServiceList.add(selectServiceItem3);
-        runOnUiThread(new Runnable(){
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+//        GoogleMapHelper.markCurrentLocation(ServiceProviderDetailsActivity.this,mMap);
+        GoogleMapHelper.markLocation(ServiceProviderDetailsActivity.this, mMap, serviceProviderLocation);
+        new Thread(new Runnable() {
+            @Override
             public void run() {
-                service_adapter.notifyDataSetChanged();
+                FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(ServiceProviderDetailsActivity.this);
+                locationProviderClient.getLastLocation().addOnSuccessListener((Activity) ServiceProviderDetailsActivity.this, location -> {
+                    if(location != null){
+                        clentLocation=location;
+                        distance = GoogleMapHelper.getDistanceInMiles(location.getLatitude(), location.getLongitude(), serviceProviderLocation.latitude, serviceProviderLocation.longitude);
+                        tv_distance.setText(String.format("%.1f", distance));
+                        Log.i(TAG, "distance: "+distance);
+                    }
+                }).addOnFailureListener((Activity) ServiceProviderDetailsActivity.this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //25.763402, 88.908705
+                    }
+                });
+
             }
-        });
+        }).start();
     }
 
     @Override
@@ -341,65 +398,29 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         setServiceOnBottomSheet();
     }
 
-    public void updateView() {
-        Intent intent = getIntent();
-        Service service = intent.getParcelableExtra("serviceProviderObject");
-        assert service != null;
-
-        tv_username.setText(service.getUser_name());
-        tv_work_done.setText(service.getReviews());
-        tv_catagory.setText(service.getCategory());
-        tv_short_discription.setText(service.getDescription());
-        tv_working_hour.setText(service.getWorking_hour());
-        tv_location_short.setText(service.getLocation().get(ENTRY_LOCATION_DISPLAY_NAME));
-        tv_location_details.setText(service.getLocation().get(ENTRY_LOCATION_ADDRESS));
-        ratingBar.setRating(Float.parseFloat(service.getRating()));
-
-        serviceProviderLocation = new LatLng(Double.parseDouble(service.getLocation().get(ENTRY_LOCATION_LATITUDE)),Double.parseDouble(service.getLocation().get(ENTRY_LOCATION_LONGITUDE)));
-
-        Glide.with(ServiceProviderDetailsActivity.this)
-                .load(service.getPic_url())
-                .apply(RequestOptions.circleCropTransform())
-                .into(circleImageView);
-
-        feature_image_adapter = new ViewServiceImageSliderAdapter(this, service.getFeature_images());
-
-        for (int i = 0; i < service.getServices().size(); i++) {
-            SelectServiceItem selectServiceItem= new SelectServiceItem();
-            selectServiceItem.setService_title(service.getServices().get(i).get(ENTRY_SERVICE_TITLE));
-            selectServiceItem.setService_details(service.getServices().get(i).get(ENTRY_SERVICE_DESCRIPTION));
-            selectServiceItem.setService_price(service.getServices().get(i).get(ENTRY_SERVICE_PRICE));
-            selectServiceList.add(selectServiceItem);
-        }
-
-        MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
-            @Override
-            public boolean queueIdle() {
-                sliderView.setSliderAdapter(feature_image_adapter);
-                select_service_recyclerView.setAdapter(service_adapter);
-                review_recyclerView.setAdapter(reviewAdapter);
-                return false;
-            }
-        };
-        Looper.myQueue().addIdleHandler(handler);
-
+    private void initia() {
+        SelectServiceItem selectServiceItem1=new SelectServiceItem("Pattern Paint","It is call pattern paint.","90");
+        SelectServiceItem selectServiceItem2=new SelectServiceItem("Rubber Paint","It is call Rubber paint.","70");
+        SelectServiceItem selectServiceItem3=new SelectServiceItem("Artist Paint","It is call Artist paint.","110");
+        selectServiceList.add(selectServiceItem1);
+        selectServiceList.add(selectServiceItem2);
+        selectServiceList.add(selectServiceItem3);
         runOnUiThread(new Runnable(){
             public void run() {
                 service_adapter.notifyDataSetChanged();
             }
         });
-
-        //Setup Map
-        checkPermission();
     }
 
     public void setServiceOnBottomSheet(){
-        String selected_service_text = "No Service Added";
+        selected_service_text = "No Service Added";
         String selected_service_count = "0 Service";
         for (int i=0; i<selectServices.size(); i++) {
             selected_service_count = (i+1) + " Services";
             if(i==0) {
-                selected_service_text = (i+1) + ". " + selectServices.get(i)+ " ($" + selectServicesPrice.get(i) + ")";
+                selected_service_text = selectServices.get(i)+ " ($" + selectServicesPrice.get(i) + ")";
+            }else if(i==1) {
+                selected_service_text = i + ". " + selected_service_text + "\n" + (i+1) + ". " + selectServices.get(i)+ " ($" + selectServicesPrice.get(i) + ")";
             } else {
                 selected_service_text += "\n"+ (i+1) + ". " + selectServices.get(i)+ " ($" + selectServicesPrice.get(i) + ")";
             }
@@ -411,7 +432,49 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
             sum += Float.parseFloat(f);
         tv_total_price.setText("$ "+sum);
         til_service_added.setError(null);
+
+        if(selected_service_text.contains("\n")){
+            servicetext = selected_service_text.replace("\n",",,,");
+        } else {
+            servicetext = selected_service_text;
+        }
+//        String[] lines = servicetext.split(",,,");
+//        Log.d(TAG, servicetext+" setServiceOnBottomSheet: "+lines[0]);
     }
 
+    private void setFirebaseData(String doc){
+        Appointment appointment= new Appointment();
+
+        appointment.setClint_name("Amanullah Asraf");
+        appointment.setClint_phone("01532146589");
+        appointment.setClint_ref("Adme/user2");
+        MyPlaces clintPlace = new MyPlaces("Bashbari","Bashbari, Saidpur", String.valueOf(clentLocation.getLatitude()), String.valueOf(clentLocation.getLongitude()));
+        appointment.setClint_location(clintPlace);
+
+        appointment.setServices(servicetext);
+        appointment.setClint_time(String.valueOf(myCalendar.getTimeInMillis()));
+        appointment.setPrice_requested(tv_service_money.getText().toString());
+        appointment.setClint_text(tv_service_quotation.getText().toString());
+        appointment.setDistance(String.format("%.1f", distance));
+        appointment.setService_provider_name(service.getUser_name());
+        appointment.setService_provider_ref(service.getUser_ref());
+        appointment.setState("clientSent");
+
+        db = FirebaseFirestore.getInstance();
+        db.collection("Adme_Appointment_list").document(doc)
+                .set(appointment)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
 
 }

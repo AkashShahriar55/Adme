@@ -20,6 +20,7 @@
 
 
     <!-- for today activity -->
+    <dimen name="icon_small">15dp</dimen>
 
 <!--    for income-->
 

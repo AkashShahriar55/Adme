@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,7 +13,8 @@
         <Button
             android:id="@+id/button7"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:background="@drawable/appointment_call"
             android:drawableLeft="@drawable/ic_direction"
             android:drawablePadding="5dp"
@@ -22,10 +22,9 @@
             android:paddingEnd="10dp"
             android:text="Navigate"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView28"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView28" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/appointment_map"
@@ -39,6 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/imageView28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,10 +52,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/appointment_bottom_details"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bottom_details_background"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="@dimen/toolbar_height"
+        app:behavior_peekHeight="51dp"
+        android:focusableInTouchMode="true"
+        android:elevation="16dp"
+        android:outlineProvider="bounds"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +66,7 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,13 +78,14 @@
                 android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout6"
+                    android:id="@+id/constraintLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/border_ash_today"
                     android:padding="10dp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline34"
                     app:layout_constraintStart_toStartOf="@+id/guideline35"
@@ -144,15 +148,15 @@
                         app:layout_constraintTop_toBottomOf="@+id/price_tag" />
 
                     <TextView
+                        android:id="@+id/quatation_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="12dp"
                         android:text="Write a Quotation"
                         android:textColor="#3F5AA6"
-                        android:layout_marginStart="4dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginTop="12dp"
-                        app:layout_constraintTop_toBottomOf="@+id/textView56"
-                        android:id="@+id/quatation_text"/>
+                        app:layout_constraintTop_toBottomOf="@+id/textView56" />
 
                     <EditText
                         android:id="@+id/quotation_editText"
@@ -174,11 +178,181 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="9dp"
+                        android:background="@drawable/oval_button"
                         android:text="submit"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/quotation_editText"
-                        tools:layout_editor_absoluteX="19dp"
-                        android:background="@drawable/oval_button"/>
+                        tools:layout_editor_absoluteX="19dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/border_ash_today"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline34"
+                    app:layout_constraintStart_toStartOf="@+id/guideline35"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                        android:id="@+id/textInputLayout51"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:hint="Selected Services"
+                        app:errorEnabled="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tv_service_added"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="12dp"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:drawableStart="@drawable/ic_build_black_24dp"
+                            android:drawableLeft="@drawable/ic_build_black_24dp"
+                            android:drawablePadding="10dp"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:lineSpacingExtra="7dp"
+                            android:text="No service added"
+                            android:textSize="15sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout5"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:hint="Service Date"
+                        app:errorEnabled="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textInputLayout2"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout51">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tv_service_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableStart="@drawable/ic_date_range_black_24dp"
+                            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                            android:drawablePadding="10dp"
+                            android:textSize="15sp"
+                            android:focusable="false"
+                            android:imeOptions="actionNext"
+                            android:inputType="none"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout2"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:hint="Service Time"
+                        app:errorEnabled="true"
+                        app:layout_constraintEnd_toStartOf="@+id/textInputLayout5"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout51">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tv_service_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableStart="@drawable/ic_watch_later_black_24dp"
+                            android:drawableLeft="@drawable/ic_watch_later_black_24dp"
+                            android:drawablePadding="10dp"
+                            android:textSize="15sp"
+                            android:focusable="false"
+                            android:imeOptions="actionNext"
+                            android:inputType="none"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout4"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:hint="Write a quotation"
+                        app:errorEnabled="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tv_service_quotation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_email_black_24dp"
+                            android:drawableLeft="@drawable/ic_email_black_24dp"
+                            android:textSize="15sp"
+                            android:drawablePadding="10dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout3"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:hint="Needed price"
+                        app:errorEnabled="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tv_service_money"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_attach_money_black_24dp"
+                            android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+                            android:drawablePadding="10dp"
+                            android:textSize="15sp"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/send_button"
+                        android:layout_width="0dp"
+                        android:layout_height="66dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/oval_button"
+                        android:text="Send"
+                        android:elevation="0dp"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -202,7 +376,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/border_ash_today"
-                    android:padding="10dp"
+                    android:padding="16dp"
                     app:layout_constraintEnd_toStartOf="@+id/guideline34"
                     app:layout_constraintStart_toStartOf="@+id/guideline35"
                     app:layout_constraintTop_toTopOf="parent">
@@ -215,103 +389,110 @@
                         android:background="@drawable/appointment_call"
                         android:text="Call"
                         android:textColor="@color/white"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView47" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_service_list" />
 
                     <ImageView
                         android:id="@+id/imageView20"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:src="@drawable/ic_icon_user_green"
+                        android:layout_width="17dp"
+                        android:layout_height="17dp"
+                        android:layout_marginTop="2dp"
+                        android:src="@drawable/ic_person_black_24dp"
+                        android:tint="@color/color_active"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textView43" />
+                        app:layout_constraintTop_toTopOf="@+id/tv_clint_name" />
 
                     <ImageView
                         android:id="@+id/imageView21"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:src="@drawable/ic_icon_metro_location"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="2dp"
+                        android:src="@drawable/ic_location_on_black_24dp"
+                        android:tint="@color/color_active"
                         app:layout_constraintEnd_toEndOf="@+id/imageView20"
                         app:layout_constraintStart_toStartOf="@+id/imageView20"
-                        app:layout_constraintTop_toTopOf="@+id/textView44" />
+                        app:layout_constraintTop_toTopOf="@+id/tv_clint_address" />
 
                     <ImageView
                         android:id="@+id/imageView22"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/icon_small"
+                        android:layout_height="@dimen/icon_small"
                         android:layout_marginTop="3dp"
-                        android:src="@drawable/ic_icon_material_message"
+                        android:src="@drawable/ic_email_black_24dp"
+                        android:tint="@color/color_active"
                         app:layout_constraintEnd_toEndOf="@+id/imageView21"
                         app:layout_constraintStart_toStartOf="@+id/imageView21"
-                        app:layout_constraintTop_toTopOf="@+id/textView45" />
+                        app:layout_constraintTop_toTopOf="@+id/tv_clint_text" />
 
                     <ImageView
                         android:id="@+id/imageView23"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:src="@drawable/ic_icon_material_work"
+                        android:layout_width="@dimen/icon_small"
+                        android:layout_height="@dimen/icon_small"
+                        android:layout_marginTop="3dp"
+                        android:src="@drawable/ic_build_black_24dp"
+                        android:tint="@color/color_active"
                         app:layout_constraintEnd_toEndOf="@+id/imageView22"
                         app:layout_constraintStart_toStartOf="@+id/imageView22"
-                        app:layout_constraintTop_toTopOf="@+id/textView46" />
+                        app:layout_constraintTop_toTopOf="@+id/tv_service_title" />
 
                     <TextView
-                        android:id="@+id/textView43"
+                        android:id="@+id/tv_clint_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="Akash Shahriar"
-                        android:textSize="12sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageView20"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView44"
+                        android:id="@+id/tv_clint_address"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="54 Teligati Road, Daulotpur"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView43"
-                        app:layout_constraintStart_toStartOf="@+id/textView43"
-                        app:layout_constraintTop_toBottomOf="@+id/textView43" />
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_clint_name"
+                        app:layout_constraintStart_toStartOf="@+id/tv_clint_name"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_clint_name" />
 
                     <TextView
-                        android:id="@+id/textView45"
+                        android:id="@+id/tv_clint_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Kitchen light not running. Take bulb if need.. there is many more text here . so that we can do more. lets check what happen if there is more text here"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView44"
-                        app:layout_constraintStart_toStartOf="@+id/textView44"
-                        app:layout_constraintTop_toBottomOf="@+id/textView44" />
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_clint_address"
+                        app:layout_constraintStart_toStartOf="@+id/tv_clint_address"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_clint_address" />
 
                     <TextView
-                        android:id="@+id/textView46"
-                        android:layout_width="0dp"
+                        android:id="@+id/tv_service_title"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Services :"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView45"
-                        app:layout_constraintStart_toStartOf="@+id/textView45"
-                        app:layout_constraintTop_toBottomOf="@+id/textView45" />
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="@+id/tv_clint_text"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_clint_text" />
 
                     <TextView
-                        android:id="@+id/textView47"
+                        android:id="@+id/tv_service_list"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:text="1.something \n2. something2\nsomethign3"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toStartOf="@+id/textView46"
-                        app:layout_constraintTop_toBottomOf="@+id/textView46" />
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="1dp"
+                        android:text="1) something \n2) something"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toEndOf="@+id/tv_service_title"
+                        app:layout_constraintTop_toTopOf="@+id/tv_service_title" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.core.widget.NestedScrollView>
 
         <androidx.cardview.widget.CardView
@@ -341,31 +522,38 @@
                     app:layout_constraintGuide_percent="0.95" />
 
                 <TextView
-                    android:id="@+id/textView40"
+                    android:id="@+id/tv_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4.5 km"
+                    android:layout_marginTop="2dp"
+                    android:text="0.0 Miles"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline33"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView41"
+                    android:id="@+id/tv_clint_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$125"
-                    android:textColor="@color/material_green"
+                    android:layout_marginTop="2dp"
+                    android:text="$ 0.0"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline32"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView42"
+                    android:id="@+id/tv_clint_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3 PM,12 Jan 2020"
-                    android:textColor="@color/txt_highlight"
+                    android:layout_marginTop="2dp"
+                    android:text="3 PM, 12 Jan 2020"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline32"
                     app:layout_constraintStart_toStartOf="@+id/guideline33"

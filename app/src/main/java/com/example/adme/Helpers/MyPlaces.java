@@ -9,6 +9,8 @@ public class MyPlaces implements Parcelable {
     private String latitude;
     private String longitude;
 
+    public MyPlaces(){}
+
     public MyPlaces(String formattedAddress, String name, String latitude, String longitude) {
         this.formattedAddress = formattedAddress;
         this.name = name;
