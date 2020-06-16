@@ -125,7 +125,12 @@ public class SearchFragment extends Fragment implements ServiceSearchAdapter.Ser
                                 serviceProvidersList.add(sv);
                             }
                         }
-                        serviceSearchAdapter.notifyDataSetChanged();
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                serviceSearchAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
                 });
     }

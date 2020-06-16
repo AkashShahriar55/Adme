@@ -73,7 +73,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     private ServiceSearchAdapter serviceSearchAdapter;
     private CardView cv_search;
 
-    FirebaseFirestore db;
     private User mCurrentUser;
 
 

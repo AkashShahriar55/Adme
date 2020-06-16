@@ -1,7 +1,9 @@
 package com.example.adme.Helpers;
 
 import android.text.format.DateFormat;
+import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -15,4 +17,13 @@ public class CookieTechUtilityClass {
         String date = month+" "+year;
         return date;
     }
+
+    public static String getTimeDate(String timeInMillis, String format) {
+        long time = Long.parseLong(timeInMillis);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time);
+        SimpleDateFormat sd = new SimpleDateFormat(format, Locale.getDefault());
+        return sd.format(cal.getTime());
+    }
+
 }

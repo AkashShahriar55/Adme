@@ -49,6 +49,8 @@
         <activity android:name=".Activities.ui.profile.ManageProfile" />
         <activity android:name=".Activities.ui.profile.ChangePassword" /> <!-- for handling profile ends -->
         <activity android:name=".Activities.MainActivity">
+<!--        <activity android:name=".Activities.ui.today.ServiceProviderQuotationActivity"-->
+<!--            android:theme="@style/AppTheme2">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

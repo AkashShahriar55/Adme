@@ -15,13 +15,13 @@ public class Appointment {
     private String service_provider_ref;
     private String service_provider_text;
     private String service_provider_time;
+    private String services;
     private String state;
-    private Map<String,String> services;
     private MyPlaces clint_location;
 
     public Appointment(){}
 
-    public Appointment(String clint_name, String clint_phone, String clint_ref, String clint_text, String clint_time, String distance, String price_needed, String price_requested, String service_provider_name, String service_provider_ref, String service_provider_text, String service_provider_time, String state, Map<String, String> services, MyPlaces clint_location) {
+    public Appointment(String clint_name, String clint_phone, String clint_ref, String clint_text, String clint_time, String distance, String price_needed, String price_requested, String service_provider_name, String service_provider_ref, String service_provider_text, String service_provider_time, String state, String services, MyPlaces clint_location) {
         this.clint_name = clint_name;
         this.clint_phone = clint_phone;
         this.clint_ref = clint_ref;
@@ -143,11 +143,11 @@ public class Appointment {
         this.state = state;
     }
 
-    public Map<String, String> getServices() {
+    public String getServices() {
         return services;
     }
 
-    public void setServices(Map<String, String> services) {
+    public void setServices(String services) {
         this.services = services;
     }
 
