@@ -1,5 +1,6 @@
 package com.example.adme.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -22,14 +23,25 @@ import com.example.adme.Helpers.User;
 import com.example.adme.Helpers.Validation;
 import com.example.adme.R;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hbb20.CountryCodePicker;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 
 public class RegistrationActivity extends AppCompatActivity implements FirebaseUtilClass.CreateUserCommunicator {
@@ -37,8 +49,6 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
     private static final String TAG = "RegistrationActivity";
     private Button reg_join_btn,goto_login_btn;
     private FirebaseAuth mAuth;
-    private TextInputLayout reg_email, reg_password;
-    private TextView password_validation_text;
     private LoadingDialog dialog;
 
 
@@ -50,6 +60,15 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
 
     private SharedPreferences firstUsePreferences;
     private boolean isLocationSettingShowed = false;
+    private View contextView;
+    private CountryCodePicker ccp;
+    private TextInputLayout phoneText,codeText;
+
+    private int btnType = 0;
+    private String phoneNumber;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    private String mVerificationId;
+    private PhoneAuthProvider.ForceResendingToken mResendToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,82 +83,80 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
 
         reg_join_btn.setOnClickListener(v -> {
 
-            String email = Objects.requireNonNull(reg_email.getEditText()).getText().toString();
-            String pass = Objects.requireNonNull(reg_password.getEditText()).getText().toString();
+            if(btnType == 0){
 
-            if(validateForm(email,pass)){
-                dialog.show();
-                signUpWithEmailAndPass(email,pass);
+                phoneText.setEnabled(false);
+                reg_join_btn.setEnabled(false);
+
+                phoneNumber = ccp.getFullNumberWithPlus();
+
+                PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                        phoneNumber,        // Phone number to verify
+                        120,                 // Timeout duration
+                        TimeUnit.SECONDS,   // Unit of timeout
+                        RegistrationActivity.this,               // Activity (for callback binding)
+                        mCallbacks);        // OnVerificationStateChangedCallbacks
+
+            } else {
+
+                reg_join_btn.setEnabled(false);
+
+                String verificationCode = Objects.requireNonNull(codeText.getEditText()).getText().toString();
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, verificationCode);
+                signInWithPhoneAuthCredential(credential);
+
+
             }
 
         });
+
+        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
+
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+
+                signInWithPhoneAuthCredential(phoneAuthCredential);
+
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+
+                Toast.makeText(RegistrationActivity.this,"There Is Some Error In Verification",Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
+
+
+                // Save verification ID and resending token so we can use them later
+                mVerificationId = verificationId;
+                mResendToken = token;
+
+                btnType = 1;
+                reg_join_btn.setText("Verify Code");
+                reg_join_btn.setEnabled(true);
+
+
+
+
+
+                // ...
+            }
+        };
+
+
 
         goto_login_btn.setOnClickListener(v -> {
             onBackPressed();
         });
 
-        Objects.requireNonNull(reg_password.getEditText()).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if (!new Validation().isPasswordValid(String.valueOf(s))){
-                    password_validation_text.setTextColor(getResources().getColor(R.color.red));
-                }
-                else if (new Validation().isPasswordValid(String.valueOf(s))){
-                    password_validation_text.setTextColor(getResources().getColor(R.color.green));
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
-        
 
 
     }
 
-    private boolean validateForm(String email, String pass) {
 
-
-
-        if (email.isEmpty()){
-            reg_email.setErrorEnabled(true);
-            reg_email.setError("Field can't be empty");
-            return false;
-        }
-        else if (!new Validation().isEmailValid(email)){
-            reg_email.setErrorEnabled(true);
-            reg_email.setError("Please Enter a valid email address");
-            return false;
-        }
-
-        else if (pass.isEmpty()){
-            reg_email.setErrorEnabled(false);
-            reg_password.setErrorEnabled(true);
-            reg_password.setError("Field can't be empty");
-            return false;
-        }
-        else if (!new Validation().isPasswordValid(pass)){
-            reg_email.setErrorEnabled(false);
-            reg_password.setErrorEnabled(true);
-            reg_password.setError("Please Enter a valid email address");
-            return false;
-        }
-
-        else {
-            return true;
-        }
-    }
 
 
 
@@ -149,29 +166,7 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
         // Check if user is signed in (non-null) and update UI accordingly.
     }
 
-    private void signUpWithEmailAndPass(String email_address, String password) {
-        mAuth.createUserWithEmailAndPassword(email_address, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "createUserWithEmail:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
 
-                        firebaseUtilClass.createUser(user,RegistrationActivity.this);
-
-
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        dialog.dismiss();
-                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(RegistrationActivity.this, "Authentication failed\n"+ task.getException(),
-                                Toast.LENGTH_SHORT).show();
-
-                    }
-
-                    // ...
-                });
-    }
     private void startLandingActivity() {
         Intent intent = new Intent(RegistrationActivity.this, LandingActivity.class);
         startActivity(intent);
@@ -180,13 +175,20 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
 
     private void initializeFields() {
         reg_join_btn = findViewById(R.id.reg_join_btn);
-        reg_email = findViewById(R.id.reg_email);
-        reg_email = findViewById(R.id.reg_email);
-        reg_password = findViewById(R.id.reg_password);
-        password_validation_text = findViewById(R.id.password_validation_text);
+
         mAuth = FirebaseAuth.getInstance();
         dialog = new LoadingDialog(this,"Logging in",null);
         goto_login_btn = findViewById(R.id.goto_login_btn);
+        contextView = findViewById(R.id.contextView);
+
+        ccp = findViewById(R.id.ccp);
+        phoneText = findViewById(R.id.phoneText);
+        codeText = findViewById(R.id.codeText);
+        ccp.registerCarrierNumberEditText(phoneText.getEditText());
+
+
+
+
 
         /** To hide the keyboard after clicking a  button**/
         View view = this.getCurrentFocus();
@@ -220,5 +222,37 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
         }else{
             startAccessLocationActivity();
         }
+    }
+
+
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+
+                           /* Intent intent = new Intent(Main2Activity.this,MainActivity.class);
+                            startActivity(intent);
+                            finish();*/
+
+                            //FirebaseUser user = task.getResult().getUser();
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            assert user != null;
+                            /*firebaseUtilClass.createUser(user,RegistrationActivity.this);*/
+                            // ...
+                        } else {
+                            // Sign in failed, display a message and update the UI
+
+                            //Toast.makeText(Main2Activity.this,"There Is Some Error",Toast.LENGTH_LONG).show();
+                            Snackbar.make(contextView,"Error: " + Objects.requireNonNull(task.getException()).getMessage(),Snackbar.LENGTH_SHORT).show();
+
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                // The verification code entered was invalid
+                            }
+                        }
+                    }
+                });
     }
 }

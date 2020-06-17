@@ -1,6 +1,5 @@
 package com.example.adme.Activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -33,19 +32,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -53,9 +48,7 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity implements FirebaseUtilClass.CreateUserCommunicator {
 
-    private TextView txt_create_account;
-    private Button login_skip_btn,login_google_btn,login_facebook_btn,login_btn;
-    private TextInputLayout login_email, login_password;
+    private Button login_skip_btn,login_google_btn,login_facebook_btn,login_phone_btn;
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 1;
@@ -67,9 +60,6 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
     //create database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference userRef = db.collection(FirebaseUtilClass.USER_COLLECTION_ID);
-
-    private User mCurrentUser ;
 
     private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
 
@@ -92,7 +82,6 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
 
         //Goto Registration page when click on create an account text
-        txt_create_account.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegistrationActivity.class)));
 
         login_skip_btn.setOnClickListener(v ->{
 
@@ -102,14 +91,10 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
         login_facebook_btn.setOnClickListener(v -> signInWithFacebook());
 
-        login_btn.setOnClickListener(v -> {
-            if(!login_email.getEditText().getText().toString().trim().isEmpty() && !login_email.getEditText().getText().toString().trim().isEmpty()){
-                String email = Objects.requireNonNull(login_email.getEditText()).getText().toString();
-                String pass = Objects.requireNonNull(login_password.getEditText()).getText().toString();
-                signInWithEmailAndPassword(email,pass);
-            }else{
-                Snackbar.make(contextView,"Enter your email and password",Snackbar.LENGTH_SHORT).show();
-            }
+        login_phone_btn.setOnClickListener(v -> {
+
+            //start Registration Activity
+            startActivity(new Intent(LoginActivity.this,RegistrationActivity.class));
 
         });
 
@@ -140,13 +125,10 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
         Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.animate);
         container.startAnimation(hyperspaceJumpAnimation);
 
-        txt_create_account = findViewById(R.id.txt_create_account);
         login_skip_btn = findViewById(R.id.login_skip_btn);
         login_google_btn = findViewById(R.id.login_google_btn);
         login_facebook_btn = findViewById(R.id.login_facebook_btn);
-        login_btn= findViewById(R.id.login_btn);
-        login_email = findViewById(R.id.login_email);
-        login_password = findViewById(R.id.login_password);
+        login_phone_btn= findViewById(R.id.login_phone_btn);
         dialog = new LoadingDialog(this,"Logging in",null);
 
         mAuth = FirebaseAuth.getInstance();
@@ -286,28 +268,6 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
     }
 
 
-
-    private void signInWithEmailAndPassword(String email, String password) {
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success");
-                         FirebaseUser user = Objects.requireNonNull(task.getResult()).getUser();
-                        //updateUI(user);
-                        dialog.show();
-                        firebaseUtilClass.createUser(user,LoginActivity.this);
-
-
-                    }else{
-                        Snackbar.make(contextView,task.getException().getMessage(),Snackbar.LENGTH_SHORT).show();
-                    }
-
-
-                    // ...
-                });
-    }
 
     @Override
     public void onBackPressed() {
