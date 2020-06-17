@@ -41,13 +41,16 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         holder.appointmentDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: ");
-                Fragment appointmentFragment = new QuotationDetails();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.add(R.id.nav_host_fragment,appointmentFragment,"appointmentFragment");
-                transaction.addToBackStack(null);
-                transaction.commit();
+//                Log.i(TAG, "onClick: ");
+//                Fragment appointmentFragment = new QuotationDetails();
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                transaction.add(R.id.nav_host_fragment,appointmentFragment,"appointmentFragment");
+//                transaction.addToBackStack(null);
+//                transaction.commit();
 
+                Intent intent = new Intent(context, ServiceProviderQuotationActivity.class);
+//                intent.putExtra("reference", notification.getReference());
+                context.startActivity(intent);
             }
         });
     }

@@ -6,7 +6,11 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -66,12 +70,13 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     private TextInputLayout til_service_time,til_service_date;
     FirebaseFirestore db;
     Appointment appointment;
+    LatLng currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quotation_details_fragment);
-        checkPermission();
+//        checkPermission();
         initializeFields();
         getFirebaseData("appointment1");
     }
@@ -148,13 +153,17 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                 }
             }
         });
+
+        if(mMap == null){
+            setUpMap();
+        }
     }
 
     public void updateView() {
 //        Intent intent = getIntent();
 //        service = intent.getParcelableExtra("serviceProviderObject");
 //        assert service != null;
-//      tv_distance,tv_clint_time,tv_clint_money,tv_clint_name,tv_clint_address,tv_clint_text,tv_service_title,tv_service_list,
+//        tv_distance,tv_clint_time,tv_clint_money,tv_clint_name,tv_clint_address,tv_clint_text,tv_service_title,tv_service_list,
 
         runOnUiThread(new Runnable(){
             public void run() {
@@ -184,7 +193,15 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         appointment = documentSnapshot.toObject(Appointment.class);
-                        updateView();
+                        MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
+                            @Override
+                            public boolean queueIdle() {
+                                updateView();
+                                updateMap();
+                                return false;
+                            }
+                        };
+                        Looper.myQueue().addIdleHandler(handler);
                     }
                 });
     }
@@ -201,7 +218,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
             Date mDate = sdf.parse(givenDateString);
             long timeInMilliseconds = mDate.getTime();
             appointment.setService_provider_time(String.valueOf(timeInMilliseconds));
-            Log.d(TAG, CookieTechUtilityClass.getTimeDate(String.valueOf(timeInMilliseconds),"hh:mm aa, dd MMM yyyy")+" in milli :: " + timeInMilliseconds);
+//            Log.d(TAG, CookieTechUtilityClass.getTimeDate(String.valueOf(timeInMilliseconds),"hh:mm aa, dd MMM yyyy")+" in milli :: " + timeInMilliseconds);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -276,7 +293,11 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
             }
         } else {
             // Permission has already been granted
-//            setUpMap();
+            if(mMap == null){
+                setUpMap();
+            }else{
+//                updateMap();
+            }
         }
     }
 
@@ -292,40 +313,28 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
 
             }
         }).start();
-
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
+    public void updateMap() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(ServiceProviderQuotationActivity.this);
                 locationProviderClient.getLastLocation().addOnSuccessListener( ServiceProviderQuotationActivity.this, location -> {
                     if(location != null){
-                        LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+                        currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
-                                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
-                                //24.819978, 88.323079
-                                //24.820738, 88.319482
-                                LatLng origin = new LatLng(24.819978,88.323079);
-                                LatLng dest = new LatLng(24.820738,88.319482);
-                                mMap.addMarker(new MarkerOptions().position(origin).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.service_provider)));
-                                mMap.addMarker(new MarkerOptions().position(dest).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.client)));
-                                LatLngBounds zoomBound = LatLngBounds.builder().include(origin).include(dest).build();
-
-                                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin,17));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 10));
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBound, 100));
+                                mMap.addMarker(new MarkerOptions().position(currentLocation).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromBitmap(getIcon(R.drawable.client,90,78))));
+                                mMap.addMarker(new MarkerOptions().position(appointment.getLatLng()).title(getString(R.string.client_current_location)).icon(BitmapDescriptorFactory.fromBitmap(getIcon(R.drawable.service_provider,90,78))));
+                                LatLngBounds zoomBound = LatLngBounds.builder().include(currentLocation).include(appointment.getLatLng()).build();
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBound, 300));
 
                                 // Getting URL to the Google Directions API
                                 GoogleMapHelper helper = new GoogleMapHelper(mMap);
-                                String url = helper.getDirectionsUrl(origin, dest);
+                                String url = helper.getDirectionsUrl(currentLocation, appointment.getLatLng());
                                 Log.i(TAG, "run: " + url);
                                 helper.downloadJson(url);
                             }
@@ -339,5 +348,17 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                 });
             }
         }).start();
+    }
+
+    public Bitmap getIcon(int name,int height, int width){
+        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(name);
+        Bitmap bitmap = bitmapdraw.getBitmap();
+        Bitmap marker = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        return marker;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
     }
 }
