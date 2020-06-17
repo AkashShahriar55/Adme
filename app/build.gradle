@@ -107,4 +107,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
     implementation 'com.google.firebase:firebase-storage:19.1.1'
+
+    //For Coutry Code Picker
+    implementation 'com.hbb20:ccp:2.1.9'
 }

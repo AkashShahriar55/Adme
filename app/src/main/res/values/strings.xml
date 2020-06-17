@@ -86,5 +86,7 @@
     <string name="SHARED_PREFERENCE_FIRST_USE">shared_preference_first_use</string>
     <string name="SP_IS_LOGIN_SKIPPED">is_login_skipped</string>
     <string name="SP_IS_LOCATION_SETTING_SHOWED">is_location_setting_skipped</string>
+    <string name="_6_digit_code">6-digit code</string>
+    <string name="phone_number">Phone Number</string>
 
 </resources>
