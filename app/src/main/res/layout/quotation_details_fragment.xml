@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
 
         <Button
+            android:visibility="gone"
             android:id="@+id/button7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
-            android:id="@+id/appointment_map"
+            android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="50dp"
@@ -407,7 +408,7 @@
                         android:id="@+id/imageView21"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:src="@drawable/ic_location_on_black_24dp"
                         android:tint="@color/color_active"
                         app:layout_constraintEnd_toEndOf="@+id/imageView20"
@@ -485,6 +486,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="1dp"
+                        android:lineSpacingExtra="5dp"
                         android:text="1) something \n2) something"
                         android:textSize="15sp"
                         app:layout_constraintStart_toEndOf="@+id/tv_service_title"

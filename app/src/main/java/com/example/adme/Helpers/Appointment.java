@@ -1,6 +1,6 @@
 package com.example.adme.Helpers;
 
-import java.util.Map;
+import com.google.android.gms.maps.model.LatLng;
 
 public class Appointment {
     private String clint_name;
@@ -37,6 +37,14 @@ public class Appointment {
         this.state = state;
         this.services = services;
         this.clint_location = clint_location;
+    }
+
+    public LatLng getLatLng() {
+        if(clint_location.getLatitude().equals("") || clint_location.getLongitude().equals("")){
+            return null;
+        } else {
+            return new LatLng(Double.parseDouble(clint_location.getLatitude()), Double.parseDouble(clint_location.getLongitude()));
+        }
     }
 
     public String getClint_name() {
