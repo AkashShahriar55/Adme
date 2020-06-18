@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.LoginActivity;
@@ -50,7 +51,7 @@ public class ProfileFragment extends Fragment {
     private ConstraintLayout ratingHolder;
 
     Button editProfileBtn;
-    TextView txtProfileName,txtSinceTime;
+    TextView txtProfileName,txtSinceTime, saveChangesBtn;
     EditText editProfileName;
 
     private User mCurrentUser;
@@ -76,10 +77,27 @@ public class ProfileFragment extends Fragment {
         editProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                txtProfileName.setVisibility(View.INVISIBLE);
+                editProfileName.setVisibility(View.VISIBLE);
+                editProfileName.setText(txtProfileName.getText().toString());
+                txtSinceTime.setVisibility(View.INVISIBLE);
+                saveChangesBtn.setVisibility(View.VISIBLE);
             }
         });
 
+
+        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentUser.setUser_name(editProfileName.getText().toString());
+                mViewModel.updateUserName(editProfileName.getText().toString());
+                Toast.makeText(getContext(), "Your user name has been updated", Toast.LENGTH_SHORT).show();
+                txtProfileName.setVisibility(View.VISIBLE);
+                editProfileName.setVisibility(View.INVISIBLE);
+                txtSinceTime.setVisibility(View.VISIBLE);
+                saveChangesBtn.setVisibility(View.INVISIBLE);
+            }
+        });
 
 
         cardContacts.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +180,10 @@ public class ProfileFragment extends Fragment {
     private void initializeFields(View root) {
 
         editProfileBtn = root.findViewById(R.id.editProfileBtn);
+        editProfileName = root.findViewById(R.id.edtprofileName);
         txtProfileName = root.findViewById(R.id.profileName);
         txtSinceTime = root.findViewById(R.id.sinceTime);
+        saveChangesBtn = root.findViewById(R.id.txtSaveChanges);
 
         cardContacts = root.findViewById(R.id.cardContacts);
         cardPrivacySettings = root.findViewById(R.id.cardPrivacySettings);

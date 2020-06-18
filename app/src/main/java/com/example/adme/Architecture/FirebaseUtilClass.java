@@ -40,6 +40,7 @@ public class FirebaseUtilClass {
     public static final String LOCATION = "langLat";
     public static final String CURRENT_USER_ID = "current_user";
     public static final String USER_COLLECTION_ID ="Adme_User";
+    public static final String USER_NAME ="user_name";
     public static final String USER_MAIN_DATA_COLLECTION_NAME = "Main_Data";
     public static final String SERVICE_PROVIDER_DOCUMENT_NAME = "Service_Provider_Data";
     public static final String COLLECTION_ADME_SERVICE_LIST = "Adme_Service_list";
@@ -290,4 +291,18 @@ public class FirebaseUtilClass {
         void onUserCreatedSuccessfully(User user);
     }
 
+    public void updateUserName(String name)
+    {
+        userRef.document(getCurrentUser().getUid()).update(USER_NAME,name).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("user name update","success");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("user name update","failed");
+            }
+        });
+    }
 }

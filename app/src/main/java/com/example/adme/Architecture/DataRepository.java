@@ -14,6 +14,10 @@ public class DataRepository {
     }
 
 
+    public void updateUserName(String name)
+    {
+        firebaseUtilClass.updateUserName(name);
+    }
     public MutableLiveData<User> getUserData() {
         return userData;
     }

@@ -16,6 +16,11 @@ public class ProfileViewModel extends ViewModel {
         userData = repository.getUserData();
     }
 
+    public void updateUserName(String name)
+    {
+        repository.updateUserName(name);
+    }
+
     public MutableLiveData<User> getUserData() {
         return userData;
     }
