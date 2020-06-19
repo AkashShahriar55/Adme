@@ -43,4 +43,6 @@
     <color name="client_primary">#FA6D01</color>
 
     <color name="rating_bar_golden">#FFCC00</color>
+
+    <color name="transparent_black">#99000000</color>
 </resources>

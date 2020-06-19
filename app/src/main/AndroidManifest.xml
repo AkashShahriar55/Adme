@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.FindLocationActivity"></activity>
+        <activity android:name=".Activities.UserInfoActivity"></activity>
+        <activity android:name=".Activities.FindLocationActivity" />
         <activity android:name=".Activities.AccessLocationActivity" />
         <activity android:name=".Activities.ui.today.ViewServiceDetails" />
         <activity android:name=".Activities.ui.today.AddServicesActivity" />
@@ -48,8 +49,9 @@
         <activity android:name=".Activities.ui.profile.NotificationSettings" />
         <activity android:name=".Activities.ui.profile.ManageProfile" />
         <activity android:name=".Activities.ui.profile.ChangePassword" /> <!-- for handling profile ends -->
-        <activity android:name=".Activities.ui.today.ServiceProviderQuotationActivity"
-            android:theme="@style/AppTheme2"/>
+        <activity
+            android:name=".Activities.ui.today.ServiceProviderQuotationActivity"
+            android:theme="@style/AppTheme2" />
         <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -80,14 +82,15 @@
         </activity> <!-- for income -->
         <activity android:name=".Activities.ui.income.RatingAndHistoryActicity" />
         <activity android:name=".Activities.ui.income.MoneyHistoryActicity" />
-        <activity android:name=".Activities.ui.home.ServiceProviderDetailsActivity"
+        <activity
+            android:name=".Activities.ui.home.ServiceProviderDetailsActivity"
             android:theme="@style/AppTheme2">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
 
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
     </application>
 
 </manifest>

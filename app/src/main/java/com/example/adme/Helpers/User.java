@@ -18,7 +18,7 @@ import static com.example.adme.Architecture.FirebaseUtilClass.ENTRY_LOCATION_LON
 public class User implements Parcelable {
 
     private String user_name;
-    private String email;
+    private String profile_image_url;
     private String joined;
     private String mode;
     private String status;
@@ -33,11 +33,11 @@ public class User implements Parcelable {
     public User() {
     }
 
-    public User(String mUsername, String mEmail, String mJoined, String mUserId) {
+    public User(String mUsername, String mEmail, String phone, String profile_image_url, String mJoined, String mUserId) {
         this.user_name = mUsername;
-        this.email = mEmail;
         this.joined = mJoined;
         this.mUserId = mUserId;
+        this.profile_image_url = profile_image_url;
 
         mode = FirebaseUtilClass.MODE_CLIENT;
         status = FirebaseUtilClass.STATUS_ONLINE;
@@ -51,20 +51,20 @@ public class User implements Parcelable {
         service_provider_info.put(FirebaseUtilClass.ENTRY_MONTHLY_SUBSCRIPTION,FirebaseUtilClass.ENTRY_MONTHLY_SUBSCRIPTION_PAID);
 
 
-        contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_ONE,null);
-        contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_ONE_PRIVACY,FirebaseUtilClass.ENTRY_PHONE_NO_PRIVACY_PUBLIC);
-        contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_TWO,null);
-        contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_TWO_PRIVACY,FirebaseUtilClass.ENTRY_PHONE_NO_PRIVACY_PUBLIC);
+        contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO,phone);
+        contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_PRIVACY,FirebaseUtilClass.ENTRY_PRIVACY_PUBLIC);
+        contacts.put(FirebaseUtilClass.ENTRY_EMAIL,mEmail);
+        contacts.put(FirebaseUtilClass.ENTRY_EMAIL_PRIVACY,FirebaseUtilClass.ENTRY_PRIVACY_PUBLIC);
 
 
     }
 
     protected User(Parcel in) {
         user_name = in.readString();
-        email = in.readString();
         mode = in.readString();
         status = in.readString();
         mUserId = in.readString();
+        profile_image_url = in.readString();
 
 
         /*int service_count = in.readInt();
@@ -139,13 +139,6 @@ public class User implements Parcelable {
         this.user_name = user_name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getMode() {
         return mode;
@@ -163,6 +156,14 @@ public class User implements Parcelable {
         this.status = status;
     }
 
+    public String getProfile_image_url() {
+        return profile_image_url;
+    }
+
+    public void setProfile_image_url(String profile_image_url) {
+        this.profile_image_url = profile_image_url;
+    }
+
     @Exclude
     public String getmUserId() {
         return mUserId;
@@ -176,6 +177,7 @@ public class User implements Parcelable {
         return location;
     }
 
+    @Exclude
     public LatLng getLatLng() {
         if(location.get(ENTRY_LOCATION_LATITUDE).equals("") || location.get(ENTRY_LOCATION_LONGITUDE).equals("")){
             return null;
@@ -220,10 +222,10 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(user_name);
-        dest.writeString(email);
         dest.writeString(mode);
         dest.writeString(status);
         dest.writeString(mUserId);
+        dest.writeString(profile_image_url);
 
         int service_count = service_reference.size();
        /* dest.writeInt(service_count);

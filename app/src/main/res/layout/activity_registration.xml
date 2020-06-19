@@ -76,7 +76,8 @@
             app:layout_constraintBottom_toBottomOf="@id/phoneText"
             app:layout_constraintEnd_toStartOf="@+id/barrier12"
             app:layout_constraintStart_toEndOf="@id/guideline3"
-            app:layout_constraintTop_toTopOf="@id/phoneText">
+            app:layout_constraintTop_toTopOf="@id/phoneText"
+           >
 
         </com.hbb20.CountryCodePicker>
 
@@ -92,7 +93,6 @@
             android:id="@+id/phoneText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             app:hintEnabled="false"
             app:layout_constraintBottom_toTopOf="@+id/codeText"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
@@ -100,14 +100,16 @@
             app:layout_constraintHorizontal_weight="6"
             app:layout_constraintStart_toEndOf="@+id/barrier12"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintVertical_bias="0.40"
             app:layout_constraintVertical_chainStyle="packed">
 
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/phone_number"/>
+                android:hint="@string/phone_number"
+                android:inputType="phone"
+                android:maxLength="11" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.constraintlayout.widget.Barrier
@@ -119,35 +121,113 @@
             tools:layout_editor_absoluteY="486dp" />
 
 
-        <com.google.android.material.textfield.TextInputLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/codeText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            app:hintEnabled="false"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView10"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/policy_text"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/phoneText"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/phoneText">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/_6_digit_code"
-                android:gravity="center"/>
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:maxLength="1"
+                app:layout_constraintEnd_toStartOf="@+id/editText6"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="numberDecimal"
+                android:maxLength="1"
+                app:layout_constraintBottom_toBottomOf="@+id/editText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/editText3"
+                app:layout_constraintTop_toTopOf="@+id/editText" />
 
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="numberDecimal"
+                android:maxLength="1"
+                app:layout_constraintBottom_toBottomOf="@+id/editText"
+                app:layout_constraintEnd_toStartOf="@+id/editText2"
+                app:layout_constraintStart_toEndOf="@+id/editText4"
+                app:layout_constraintTop_toTopOf="@+id/editText" />
+
+            <EditText
+                android:id="@+id/editText4"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="numberDecimal"
+                android:maxLength="1"
+                app:layout_constraintBottom_toBottomOf="@+id/editText"
+                app:layout_constraintEnd_toStartOf="@+id/editText3"
+                app:layout_constraintStart_toEndOf="@+id/editText5"
+                app:layout_constraintTop_toTopOf="@+id/editText" />
+
+            <EditText
+                android:id="@+id/editText5"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="numberDecimal"
+                android:maxLength="1"
+                app:layout_constraintBottom_toBottomOf="@+id/editText"
+                app:layout_constraintEnd_toStartOf="@+id/editText4"
+                app:layout_constraintStart_toEndOf="@+id/editText6"
+                app:layout_constraintTop_toTopOf="@+id/editText" />
+
+            <EditText
+                android:id="@+id/editText6"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="numberDecimal"
+                android:maxLength="1"
+                app:layout_constraintBottom_toBottomOf="@+id/editText"
+                app:layout_constraintEnd_toStartOf="@+id/editText5"
+                app:layout_constraintStart_toEndOf="@+id/editText"
+                app:layout_constraintTop_toTopOf="@+id/editText" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/enter_6_digit_code"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/policy_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="@string/privacy_policy"
             android:textAlignment="center"
             android:textColor="@color/privacy_policy_text"
@@ -162,7 +242,7 @@
             android:id="@+id/reg_join_btn"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/login_btn"
             android:backgroundTint="@color/login_btn_color"
             android:paddingTop="12dp"
@@ -171,51 +251,22 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView11"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/textView10">
+            app:layout_constraintTop_toBottomOf="@+id/policy_text"
+            tools:visibility="visible">
 
         </Button>
 
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/already_have_an"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/goto_login_btn"
-            app:layout_constraintEnd_toStartOf="@+id/textView13"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reg_join_btn">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/account"
-            android:textColor="@color/login_btn_color"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView11"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView11"
-            app:layout_constraintTop_toTopOf="@+id/textView11" />
 
         <Button
             android:id="@+id/goto_login_btn"
             android:layout_width="wrap_content"
             android:layout_height="30sp"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
             android:background="@drawable/go_to_login_btn"
             android:paddingStart="40dp"
             android:paddingEnd="40dp"
@@ -224,9 +275,37 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+        <TextView
+            android:id="@+id/resend_code_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:enabled="false"
+            android:text="@string/resend_code"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/timer_txt"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reg_join_btn"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/timer_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/resend_code_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/resend_code_btn"
+            app:layout_constraintTop_toTopOf="@+id/resend_code_btn"
+            android:visibility="gone"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

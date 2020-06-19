@@ -44,7 +44,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity implements FirebaseUtilClass.CreateUserCommunicator {
 
@@ -65,7 +64,6 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
     private View contextView;
 
-    private SharedPreferences firstUsePreferences;
     private boolean isLocationSettingShowed = false;
 
 
@@ -76,8 +74,8 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
         setContentView(R.layout.activity_login);
         contextView = findViewById(R.id.contextView);
 
-        firstUsePreferences = getSharedPreferences(String.valueOf(R.string.SHARED_PREFERENCE_FIRST_USE),MODE_PRIVATE);
-        isLocationSettingShowed = firstUsePreferences.getBoolean(String.valueOf(R.string.SP_IS_LOCATION_SETTING_SHOWED),false);
+        /*firstUsePreferences = getSharedPreferences(String.valueOf(R.string.SHARED_PREFERENCE_FIRST_USE),MODE_PRIVATE);
+        isLocationSettingShowed = firstUsePreferences.getBoolean(String.valueOf(R.string.SP_IS_LOCATION_SETTING_SHOWED),false);*/
         initializeFields();
 
 
@@ -117,6 +115,13 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
         Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
         startActivity(intent);
     }
+
+    private void startUserInfoActivity() {
+        Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
+        startActivity(intent);
+    }
+
+
 
 
 
@@ -282,20 +287,13 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
     @Override
     public void userAlreadyExists(User user) {
         dialog.dismiss();
-        if(isLocationSettingShowed){
-            startLandingActivity();
-        }else{
-            startAccessLocationActivity();
-        }
+        startAccessLocationActivity();
     }
 
     @Override
     public void onUserCreatedSuccessfully(User user) {
         dialog.dismiss();
-        if(isLocationSettingShowed){
-            startLandingActivity();
-        }else{
-            startAccessLocationActivity();
-        }
+        startUserInfoActivity();
+
     }
 }

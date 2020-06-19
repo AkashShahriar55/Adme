@@ -264,7 +264,7 @@
 
 
                     <TextView
-                        android:id="@+id/textView10"
+                        android:id="@+id/policy_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
@@ -282,8 +282,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Change contact info"
-                        app:layout_constraintStart_toStartOf="@+id/textView10"
-                        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                        app:layout_constraintStart_toStartOf="@+id/policy_text"
+                        app:layout_constraintTop_toBottomOf="@+id/policy_text" />
 
                     <ImageView
                         android:id="@+id/imageView7"

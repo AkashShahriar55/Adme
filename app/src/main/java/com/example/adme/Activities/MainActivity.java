@@ -29,33 +29,26 @@ public class MainActivity extends AppCompatActivity {
         isLocationSettingShowed = firstUsePreferences.getBoolean(String.valueOf(R.string.SP_IS_LOCATION_SETTING_SHOWED),false);
 
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(firebaseUtilClass.checkIfAlreadyLoggedIn()){
-                                if(isLocationSettingShowed){
-                                    startLandingActivity();
-                                }else{
-                                    startAccessLocationActivity();
-                                }
-                            }else{
-                                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,bannerLogo,"banner_logo");
-                                Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
-                                loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(loginActivity,activityOptionsCompat.toBundle());
-                            }
-
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(firebaseUtilClass.checkIfAlreadyLoggedIn()){
+                            startLandingActivity();
+                        }else{
+                            ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,bannerLogo,"banner_logo");
+                            Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
+                            loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(loginActivity,activityOptionsCompat.toBundle());
                         }
-                    });
 
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    }
+                });
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }).start();
 
