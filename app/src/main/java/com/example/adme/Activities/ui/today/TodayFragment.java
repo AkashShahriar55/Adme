@@ -154,7 +154,9 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         notificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToNotificationFragment();
+//                goToNotificationFragment();
+                Intent intent = new Intent(getActivity(), NotificationActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -267,6 +269,9 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.add(R.id.nav_host_fragment,notificationFragment,"notificationFragment");
         fragmentTransaction.commit();
+
+        Intent intent = new Intent(getActivity(), NotificationActivity.class);
+        startActivity(intent);
     }
 
 

@@ -82,6 +82,7 @@
         </activity> <!-- for income -->
         <activity android:name=".Activities.ui.income.RatingAndHistoryActicity" />
         <activity android:name=".Activities.ui.income.MoneyHistoryActicity" />
+        <activity android:name=".Activities.ui.today.NotificationActivity" />
         <activity
             android:name=".Activities.ui.home.ServiceProviderDetailsActivity"
             android:theme="@style/AppTheme2">

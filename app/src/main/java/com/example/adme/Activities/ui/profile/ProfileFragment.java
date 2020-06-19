@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.LoginActivity;
-import com.example.adme.Activities.MainActivity;
 import com.example.adme.Activities.RegistrationActivity;
 import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.CookieTechUtilityClass;
@@ -128,7 +127,8 @@ public class ProfileFragment extends Fragment {
         cardChangeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), ChangeMode.class));
+//                startActivity(new Intent(getContext(), ChangeMode.class));
+                ((LandingActivity)getActivity()).changeMode();
             }
         });
         cardHelp.setOnClickListener(new View.OnClickListener() {
