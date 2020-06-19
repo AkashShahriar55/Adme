@@ -138,6 +138,8 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
 
                 Toast.makeText(RegistrationActivity.this,"There Is Some Error In Verification",Toast.LENGTH_LONG).show();
 
+                Log.d(TAG, "onVerificationFailed: "+e);
+
             }
 
             @Override

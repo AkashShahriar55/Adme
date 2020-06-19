@@ -1,6 +1,7 @@
 package com.example.adme.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -64,7 +65,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getMode();
         mCurrentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
 
         if(isClient){
@@ -123,6 +124,34 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
 
     public boolean isTodayVisible() {
         return active == fragment1;
+    }
+
+    public void changeMode(){
+        if(isClient){
+            isClient = false;
+            setMode(false);
+        } else {
+            isClient = true;
+            setMode(true);
+        }
+//        recreate();
+        finish();
+        startActivity(getIntent());
+    }
+
+    public void setMode(boolean mode){
+        SharedPreferences.Editor editor = getSharedPreferences("Settings", MODE_PRIVATE).edit();
+        editor.putBoolean("isClient", mode);
+        editor.apply();
+    }
+
+    public void getMode(){
+        SharedPreferences preferences=getSharedPreferences("Settings", MODE_PRIVATE);
+        if(preferences.getBoolean("isClient",true)){
+            isClient = true;
+        } else {
+            isClient = false;
+        }
     }
 
     @Override

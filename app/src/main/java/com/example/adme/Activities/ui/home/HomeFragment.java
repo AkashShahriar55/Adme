@@ -31,6 +31,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.adme.Activities.LandingActivity;
+import com.example.adme.Activities.ui.today.NotificationActivity;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
 import com.example.adme.Activities.ui.today.TodayViewModel;
 import com.example.adme.Helpers.GoogleMapHelper;
@@ -264,11 +265,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     }
 
     private void goToNotificationFragment() {
-        Fragment notificationFragment = new Notification_Fragment();
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.add(R.id.nav_host_fragment, notificationFragment,"notificationFragment");
-        fragmentTransaction.commit();
+//        Fragment notificationFragment = new Notification_Fragment();
+//        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.add(R.id.nav_host_fragment, notificationFragment,"notificationFragment");
+//        fragmentTransaction.commit();
+        Intent intent = new Intent(getActivity(), NotificationActivity.class);
+        startActivity(intent);
     }
 
     private void goToSearchFragment() {
