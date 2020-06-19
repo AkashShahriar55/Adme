@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class FirebaseUtilClass {
 
@@ -59,12 +60,12 @@ public class FirebaseUtilClass {
     public static final String ENTRY_MONTHLY_SUBSCRIPTION = "monthly_subscription";
     public static final String ENTRY_SERVICE_REFERENCE = "service_reference";
 
-    public static final String ENTRY_PHONE_NO_ONE = "phone_no_one";
-    public static final String ENTRY_PHONE_NO_TWO = "phone_no_two";
-    public static final String ENTRY_PHONE_NO_ONE_PRIVACY = "privacy_one";
-    public static final String ENTRY_PHONE_NO_TWO_PRIVACY = "privacy_two";
-    public static final String ENTRY_PHONE_NO_PRIVACY_PUBLIC = "Public";
-    public static final String ENTRY_PHONE_NO_PRIVACY_PRIVATE = "Private";
+    public static final String ENTRY_PHONE_NO = "phone_no";
+    public static final String ENTRY_EMAIL = "email";
+    public static final String ENTRY_PHONE_NO_PRIVACY = "privacy_phone";
+    public static final String ENTRY_EMAIL_PRIVACY = "privacy_email";
+    public static final String ENTRY_PRIVACY_PUBLIC = "Public";
+    public static final String ENTRY_PRIVACY_PRIVATE = "Private";
 
     public static final String ENTRY_LOCATION = "location";
     public static final String ENTRY_LOCATION_DISPLAY_NAME = "display_name";
@@ -159,21 +160,32 @@ public class FirebaseUtilClass {
                     Log.d(TAG, "No such document");
                     String username;
                     String email = null;
+                    String phone = null;
+                    String profile_photo_url = "default_avatar";
                     String NULL = "";
-                    assert user != null;
+
                     if (user.getDisplayName() != null){
                         username = user.getDisplayName();
                     }
                     else{
-                        username = "Adme_User";
+                        username = "Adme User";
                     }
+
                     if(user.getEmail() != null){
                         email = user.getEmail();
                     }
 
-                    String joined = String.valueOf(user.getMetadata().getCreationTimestamp());
+                    if (user.getPhoneNumber() != null){
+                        phone = user.getPhoneNumber();
+                    }
+
+                    if (user.getPhotoUrl() !=null){
+                        profile_photo_url = "user_photo";
+                    }
+
+                    String joined = String.valueOf(Objects.requireNonNull(user.getMetadata()).getCreationTimestamp());
                     String user_id = user.getUid();
-                    User new_user = new User(username,email,joined,user_id);
+                    User new_user = new User(username,email,phone,profile_photo_url,joined,user_id);
                     /*** Insert into fireStore database**/
                     userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
                         Log.d(TAG, "onSuccess: successfully created user");

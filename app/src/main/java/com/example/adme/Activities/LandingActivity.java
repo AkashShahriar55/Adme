@@ -21,6 +21,7 @@ import com.example.adme.Helpers.User;
 import com.example.adme.Architecture.UserDataModel;
 import com.example.adme.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +39,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
     private long mBackPressed;
     private NavController navController;
     private String label = null;
-    private boolean isClient = true;
+    private boolean isClient = false;
     private User mCurrentUser;
 
     final Fragment fragment1 = new TodayFragment();

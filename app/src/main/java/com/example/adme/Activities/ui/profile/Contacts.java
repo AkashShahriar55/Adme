@@ -93,7 +93,7 @@ public class Contacts extends AppCompatActivity {
 
     private void updateUiData() {
         //txtProfileName.setText(mCurrentUser.getUsername());
-        if (mAuth.getCurrentUser() != null) {
+        /*if (mAuth.getCurrentUser() != null) {
             long timeStamp = mAuth.getCurrentUser().getMetadata().getCreationTimestamp();
             String date = CookieTechUtilityClass.getDate(timeStamp);
             Map<String, String> contacts = mCurrentUser.getContacts();
@@ -110,7 +110,7 @@ public class Contacts extends AppCompatActivity {
                 Log.e("first phone:" , contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_TWO));
             }
 
-        }
+        }*/
     }
 
 
