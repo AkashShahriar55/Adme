@@ -338,7 +338,7 @@ public class FirebaseUtilClass {
         });
     }
 
-    public void deletPhoneNumber()
+    public void deletePhoneNumber()
     {
 
         userRef.document(getCurrentUser().getUid()).update(CONTACTS+"."+ENTRY_PHONE_NO,null).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -350,6 +350,70 @@ public class FirebaseUtilClass {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e("failed",e.toString()+"phone number deletion failed");
+            }
+        });
+    }
+
+    public void addPhoneNumber(String number)
+    {
+
+        userRef.document(getCurrentUser().getUid()).update(CONTACTS+"."+ENTRY_PHONE_NO,number).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("success","phone number added");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("failed",e.toString()+"phone number addition failed");
+            }
+        });
+    }
+
+    public void updateEmailMode(String mode)
+    {
+
+        userRef.document(getCurrentUser().getUid()).update(CONTACTS+"."+ENTRY_EMAIL_PRIVACY,mode).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("success","email privacy updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("failed",e.toString()+"email privacy update failed");
+            }
+        });
+    }
+
+    public void deleteEmail()
+    {
+
+        userRef.document(getCurrentUser().getUid()).update(CONTACTS+"."+ENTRY_EMAIL,null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("success","email deleted");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("failed",e.toString()+"email deletion failed");
+            }
+        });
+    }
+
+    public void addEmail(String number)
+    {
+
+        userRef.document(getCurrentUser().getUid()).update(CONTACTS+"."+ENTRY_EMAIL,number).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("success","email added");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("failed",e.toString()+"email addition failed");
             }
         });
     }

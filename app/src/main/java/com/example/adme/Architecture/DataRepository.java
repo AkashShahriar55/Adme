@@ -19,7 +19,11 @@ public class DataRepository {
         firebaseUtilClass.updateUserName(name);
     }
     public void updatePhoneNumberMode(String mode){firebaseUtilClass.updatePhoneNumberMode(mode);}
-    public void deletePhoneNumber(){firebaseUtilClass.deletPhoneNumber();}
+    public void deletePhoneNumber(){firebaseUtilClass.deletePhoneNumber();}
+    public void addPhoneNumber(String number){firebaseUtilClass.addPhoneNumber(number);}
+    public void updateEmailMode(String mode){firebaseUtilClass.updateEmailMode(mode);}
+    public void deleteEmail(){firebaseUtilClass.deleteEmail();}
+    public void addEmail(String email){firebaseUtilClass.addEmail(email);}
 
     // for profile update ends
 

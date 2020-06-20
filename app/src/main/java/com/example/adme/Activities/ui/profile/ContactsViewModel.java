@@ -16,6 +16,10 @@ public class ContactsViewModel extends ViewModel {
 
     public void updatePhoneNumberMode(String mode) {repository.updatePhoneNumberMode(mode);}
     public void deletePhoneNumber(){repository.deletePhoneNumber();}
+    public void addPhoneNumber(String number){repository.addPhoneNumber(number);}
+    public void updateEmailMode(String mode){repository.updateEmailMode(mode);}
+    public void deleteEmail(){repository.deleteEmail();}
+    public void addEmail(String email){repository.addEmail(email);}
 
     public MutableLiveData<User> getUserData() {
         return userData;

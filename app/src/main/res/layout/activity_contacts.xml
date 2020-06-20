@@ -131,6 +131,7 @@
                     android:id="@+id/edtNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="phone"
                     android:hint="Enter phone no." />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -190,6 +191,7 @@
                     android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
                     android:hint="Enter email." />
             </com.google.android.material.textfield.TextInputLayout>
 

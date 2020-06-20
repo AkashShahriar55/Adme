@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +37,7 @@ public class Contacts extends AppCompatActivity {
     ConstraintLayout firstPhoneLayout, secondPhoneLayout,emailLayout;
     TextInputEditText edtNumber,edtEmail;
     Button addContactBtn, addEmailBtn;
-    TextView txtFirstPhoneNumber, txtSecondPhoneNumber, txtEmail, txtContactMode;
+    TextView txtFirstPhoneNumber, txtSecondPhoneNumber, txtEmail, txtContactMode,txtEmailMode;
 
     ImageButton firstContactModeBtn, scndContactModeBtn, firstContactDelBtn, scndContactDelBtn, emailModeBtn, emailDelBtn;
 
@@ -56,7 +57,9 @@ public class Contacts extends AppCompatActivity {
         backBtn = findViewById(R.id.backBtn);
 
         edtNumber = findViewById(R.id.edtNumber);
+        edtEmail = findViewById(R.id.edtEmail);
         addContactBtn = findViewById(R.id.addContactBtn);
+        addEmailBtn = findViewById(R.id.addEmailBtn);
 
         //phoneView = (View) findViewById(R.id.phoneNumberLayout);
         firstPhoneLayout = findViewById(R.id.firstPhone);
@@ -69,6 +72,12 @@ public class Contacts extends AppCompatActivity {
         txtContactMode = phoneView.findViewById(R.id.contactMode);
         firstContactModeBtn = phoneView.findViewById(R.id.changeModeBtn);
         firstContactDelBtn = phoneView.findViewById(R.id.delBtn);
+
+        emailView = (View) emailLayout;
+        txtEmail = emailView.findViewById(R.id.contact);
+        txtEmailMode = emailView.findViewById(R.id.contactMode);
+        emailModeBtn = emailView.findViewById(R.id.changeModeBtn);
+        emailDelBtn = emailView.findViewById(R.id.delBtn);
 
         firstContactModeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +102,65 @@ public class Contacts extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mViewModel.deletePhoneNumber();
+            }
+        });
+
+        addContactBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(phoneView.getVisibility() == View.GONE)
+                {
+                    String number = edtNumber.getText().toString();
+                    mViewModel.addPhoneNumber(number);
+                    edtNumber.setText("");
+                    //phoneView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Your can add only one number", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        emailModeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(txtEmailMode.getText().toString().equals(getString(R.string.contactModePublic)))
+                {
+                    mViewModel.updateEmailMode("Private");
+                    Log.e("mode chnage","public to private");
+                    //updateUiData();
+                }
+                else if(txtEmailMode.getText().toString().equals(getString(R.string.contactModePrivate)))
+                {
+                    mViewModel.updateEmailMode("Public");
+                    Log.e("mode chnage","private to public");
+                    //updateUiData();
+                }
+            }
+        });
+
+
+        emailDelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.deleteEmail();
+            }
+        });
+
+        addEmailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(emailView.getVisibility() == View.GONE)
+                {
+                    String email = edtEmail.getText().toString();
+                    mViewModel.addEmail(email);
+                    edtEmail.setText("");
+                    //phoneView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Your can add only one email", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -138,7 +206,7 @@ public class Contacts extends AppCompatActivity {
             Map<String, String> contacts = mCurrentUser.getContacts();
             if (contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO) != null) {
 
-
+                phoneView.setVisibility(View.VISIBLE);
                 txtFirstPhoneNumber.setText("1. "+contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO));
                 if(Objects.equals(contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_PRIVACY), "Public"))
                 {
@@ -152,6 +220,10 @@ public class Contacts extends AppCompatActivity {
                 }
                 Log.e("first phone:" , contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO));
             }
+            else
+            {
+                phoneView.setVisibility(View.GONE);
+            }
             // for the second phone number
             /*if (contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_TWO) != null) {
                 phoneView = (View) secondPhoneLayout;
@@ -159,6 +231,28 @@ public class Contacts extends AppCompatActivity {
                 txtSecondPhoneNumber.setText("1. "+contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_TWO));
                 Log.e("first phone:" , contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_TWO));
             }*/
+
+            if (contacts.get(FirebaseUtilClass.ENTRY_EMAIL) != null) {
+
+                emailView.setVisibility(View.VISIBLE);
+                txtEmail.setText("1. "+contacts.get(FirebaseUtilClass.ENTRY_EMAIL));
+                if(Objects.equals(contacts.get(FirebaseUtilClass.ENTRY_EMAIL_PRIVACY), "Public"))
+                {
+                    txtEmailMode.setText(R.string.contactModePublic);
+                    emailModeBtn.setImageResource(R.drawable.ic_unlock);
+                }
+                else
+                {
+                    txtEmailMode.setText(R.string.contactModePrivate);
+                    emailModeBtn.setImageResource(R.drawable.ic_lock);
+                }
+                Log.e("email:" , contacts.get(FirebaseUtilClass.ENTRY_EMAIL));
+            }
+            else
+            {
+                Log.e("no email:" ,"no email in contacts");
+                emailView.setVisibility(View.GONE);
+            }
 
         }
     }
