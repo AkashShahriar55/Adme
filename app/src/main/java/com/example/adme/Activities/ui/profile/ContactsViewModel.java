@@ -14,6 +14,8 @@ public class ContactsViewModel extends ViewModel {
         userData = repository.getUserData();
     }
 
+    public void updatePhoneNumberMode(String mode) {repository.updatePhoneNumberMode(mode);}
+
     public MutableLiveData<User> getUserData() {
         return userData;
     }

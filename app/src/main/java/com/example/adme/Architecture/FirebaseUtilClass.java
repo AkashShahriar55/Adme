@@ -317,4 +317,19 @@ public class FirebaseUtilClass {
             }
         });
     }
+
+    public void updatePhoneNumberMode(String mode)
+    {
+        userRef.document(getCurrentUser().getUid()).update(ENTRY_PHONE_NO_PRIVACY,mode).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("success","phone number privacy updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("failed","phone number privacy update failed");
+            }
+        });
+    }
 }

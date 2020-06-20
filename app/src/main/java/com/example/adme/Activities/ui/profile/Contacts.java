@@ -1,10 +1,12 @@
 package com.example.adme.Activities.ui.profile;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,19 +26,21 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Contacts extends AppCompatActivity {
 
 
     ConstraintLayout backBtn;
-    View phoneView;
-    ConstraintLayout firstPhoneLayout, secondPhoneLayout;
-    TextInputEditText edtNumber;
-    Button addContactBtn, firstContactModeBtn, scndContactModeBtn, firstContactDelBtn, scndContactDelBtn;
-    TextView txtFirstPhoneNumber, txtSecondPhoneNumber;
+    View phoneView, emailView;
+    ConstraintLayout firstPhoneLayout, secondPhoneLayout,emailLayout;
+    TextInputEditText edtNumber,edtEmail;
+    Button addContactBtn, addEmailBtn;
+    TextView txtFirstPhoneNumber, txtSecondPhoneNumber, txtEmail, txtContactMode;
 
+    ImageButton firstContactModeBtn, scndContactModeBtn, firstContactDelBtn, scndContactDelBtn, emailModeBtn, emailDelBtn;
 
-    private ProfileViewModel mViewModel;
+    private ContactsViewModel mViewModel;
     private User mCurrentUser;
     private String isClient;
 
@@ -57,6 +61,32 @@ public class Contacts extends AppCompatActivity {
         //phoneView = (View) findViewById(R.id.phoneNumberLayout);
         firstPhoneLayout = findViewById(R.id.firstPhone);
         secondPhoneLayout = findViewById(R.id.secondPhone);
+        emailLayout = findViewById(R.id.emailLayout);
+
+
+        phoneView = (View) firstPhoneLayout;
+        txtFirstPhoneNumber = phoneView.findViewById(R.id.contact);
+        txtContactMode = phoneView.findViewById(R.id.contactMode);
+        firstContactModeBtn = phoneView.findViewById(R.id.changeModeBtn);
+        firstContactDelBtn = phoneView.findViewById(R.id.delBtn);
+
+        firstContactModeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(txtContactMode.getText().toString().equals(getString(R.string.contactModePublic)))
+                {
+                    mViewModel.updatePhoneNumberMode("Private");
+                    Log.e("mode chnage","public to private");
+                    updateUiData();
+                }
+                else if(txtContactMode.getText().toString().equals(getString(R.string.contactModePrivate)))
+                {
+                    mViewModel.updatePhoneNumberMode("Public");
+                    Log.e("mode chnage","private to public");
+                    updateUiData();
+                }
+            }
+        });
 
 
 
@@ -75,7 +105,7 @@ public class Contacts extends AppCompatActivity {
     public void onContentChanged() {
         super.onContentChanged();
 
-        mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(ContactsViewModel.class);
 
         final Observer<User> userDataObserver = new Observer<User>() {
             @Override
@@ -87,30 +117,44 @@ public class Contacts extends AppCompatActivity {
         };
 
        mViewModel.getUserData().observe(this,userDataObserver);
+
+
     }
 
 
 
+    @SuppressLint("SetTextI18n")
     private void updateUiData() {
         //txtProfileName.setText(mCurrentUser.getUsername());
-        /*if (mAuth.getCurrentUser() != null) {
+        if (mAuth.getCurrentUser() != null) {
             long timeStamp = mAuth.getCurrentUser().getMetadata().getCreationTimestamp();
             String date = CookieTechUtilityClass.getDate(timeStamp);
             Map<String, String> contacts = mCurrentUser.getContacts();
-            if (contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_ONE) != null) {
-                phoneView = (View) firstPhoneLayout;
-                txtFirstPhoneNumber = phoneView.findViewById(R.id.phoneNumber);
-                txtFirstPhoneNumber.setText("1. "+contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_ONE));
-                Log.e("first phone:" , contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_ONE));
+            if (contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO) != null) {
+
+
+                txtFirstPhoneNumber.setText("1. "+contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO));
+                if(Objects.equals(contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_PRIVACY), "Public"))
+                {
+                    txtContactMode.setText(R.string.contactModePublic);
+                    firstContactModeBtn.setImageResource(R.drawable.ic_unlock);
+                }
+                else
+                {
+                    txtContactMode.setText(R.string.contactModePrivate);
+                    firstContactModeBtn.setImageResource(R.drawable.ic_lock);
+                }
+                Log.e("first phone:" , contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO));
             }
-            if (contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_TWO) != null) {
+            // for the second phone number
+            /*if (contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_TWO) != null) {
                 phoneView = (View) secondPhoneLayout;
                 txtSecondPhoneNumber = phoneView.findViewById(R.id.phoneNumber);
                 txtSecondPhoneNumber.setText("1. "+contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_TWO));
                 Log.e("first phone:" , contacts.get(FirebaseUtilClass.ENTRY_PHONE_NO_TWO));
-            }
+            }*/
 
-        }*/
+        }
     }
 
 

@@ -18,6 +18,7 @@ public class DataRepository {
     {
         firebaseUtilClass.updateUserName(name);
     }
+    public  void updatePhoneNumberMode(String mode){firebaseUtilClass.updatePhoneNumberMode(mode);}
     public MutableLiveData<User> getUserData() {
         return userData;
     }
