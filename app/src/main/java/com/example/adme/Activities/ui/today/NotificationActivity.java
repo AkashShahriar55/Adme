@@ -55,7 +55,8 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
-        getFirebaseQueryList();
+        String mode = getIntent().getStringExtra("mode");
+        getFirebaseQueryList(mode);
     }
 
     private void getFirebaseData(String doc) {
@@ -72,10 +73,10 @@ public class NotificationActivity extends AppCompatActivity {
                 });
     }
 
-    private void getFirebaseQueryList() {
+    private void getFirebaseQueryList(String mode) {
         db = FirebaseFirestore.getInstance();
         db.collection("Adme_User/user1/notification_list")
-                .whereEqualTo("mode", "Client")
+                .whereEqualTo("mode", mode)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {

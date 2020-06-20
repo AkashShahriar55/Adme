@@ -37,6 +37,7 @@ import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Activities.ui.today.NotificationActivity;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
 import com.example.adme.Activities.ui.today.TodayViewModel;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
@@ -277,6 +278,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 //        fragmentTransaction.add(R.id.nav_host_fragment, notificationFragment,"notificationFragment");
 //        fragmentTransaction.commit();
         Intent intent = new Intent(getActivity(), NotificationActivity.class);
+        intent.putExtra("mode", FirebaseUtilClass.MODE_CLIENT);
         startActivity(intent);
     }
 

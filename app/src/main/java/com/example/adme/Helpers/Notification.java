@@ -6,18 +6,16 @@ public class Notification {
     private String type;
     private String reference;
     private String mode;
-    private boolean onClick;
     private boolean isSeen;
 
     Notification(){}
 
-    public Notification(String text, String time, String type, String reference, String mode, boolean onClick, boolean isSeen) {
+    public Notification(String text, String time, String type, String reference, String mode, boolean isSeen) {
         this.text = text;
         this.time = time;
         this.type = type;
         this.reference = reference;
         this.mode = mode;
-        this.onClick = onClick;
         this.isSeen = isSeen;
     }
 
@@ -59,14 +57,6 @@ public class Notification {
 
     public void setMode(String mode) {
         this.mode = mode;
-    }
-
-    public boolean isOnClick() {
-        return onClick;
-    }
-
-    public void setOnClick(boolean onClick) {
-        this.onClick = onClick;
     }
 
     public boolean isSeen() {

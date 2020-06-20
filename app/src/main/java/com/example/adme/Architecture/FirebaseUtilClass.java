@@ -47,7 +47,7 @@ public class FirebaseUtilClass {
     public static final String COLLECTION_ADME_SERVICE_LIST = "Adme_Service_list";
 
     public static final String MODE_CLIENT = "Client";
-    public static final String MODE_SERVICE_PROVIDER = "Service provider";
+    public static final String MODE_SERVICE_PROVIDER = "ServiceProvider";
     public static final String STATUS_ONLINE = "Online";
     public static final String  STATUS_OFFLINE = "Offline";
     public static final String CONTACTS = "contacts";
