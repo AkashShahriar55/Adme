@@ -156,6 +156,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             public void onClick(View v) {
 //                goToNotificationFragment();
                 Intent intent = new Intent(getActivity(), NotificationActivity.class);
+                intent.putExtra("mode", FirebaseUtilClass.MODE_SERVICE_PROVIDER);
                 startActivity(intent);
             }
         });
@@ -269,9 +270,6 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.add(R.id.nav_host_fragment,notificationFragment,"notificationFragment");
         fragmentTransaction.commit();
-
-        Intent intent = new Intent(getActivity(), NotificationActivity.class);
-        startActivity(intent);
     }
 
 

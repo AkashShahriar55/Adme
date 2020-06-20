@@ -2,6 +2,7 @@ package com.example.adme.Activities.ui.today;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import java.util.Calendar;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<NotificationItemInventoryAdapter.InventoryViewHolder> {
@@ -92,6 +94,10 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
             holder.img_details.setVisibility(View.GONE);
         }
         holder.mv_icon.setImageDrawable(saveIcon);
+
+        if(!notification.isSeen()){
+            holder.cl_view.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent_blue));
+        }
         holder.notification_text.setText(notification.getText());
         holder.time.setText(CookieTechUtilityClass.getTimeDifference(notification.getTime(), String.valueOf(Calendar.getInstance().getTimeInMillis())));
     }
