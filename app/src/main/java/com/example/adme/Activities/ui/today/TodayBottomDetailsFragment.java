@@ -201,8 +201,8 @@ public class TodayBottomDetailsFragment extends Fragment {
             serviceRecyclerView.setHasFixedSize(true);
             serviceRecyclerView.setLayoutManager(serviceLayoutManager);
 
-            RecyclerView.Adapter serviceAdapter = new ServiceAdapter(getContext(),services);
-            serviceRecyclerView.setAdapter(serviceAdapter);
+            //RecyclerView.Adapter serviceAdapter = new ServiceAdapter(getContext(),services);
+            //serviceRecyclerView.setAdapter(serviceAdapter);
         }).start();
     }
 

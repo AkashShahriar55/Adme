@@ -3,6 +3,8 @@ package com.example.adme.Activities.ui.today;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +45,7 @@ public class AdServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         LayoutInflater inflater = LayoutInflater.from(context);
         View view;
         Log.d("akash-debug", "onCreateViewHolder: ");
-        view = inflater.inflate(R.layout.ad_service_item,parent,false);
+        view = inflater.inflate(R.layout.select_service_item,parent,false);
         return new AddServiceViewHolder(view);
     }
 
@@ -53,14 +55,20 @@ public class AdServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Map<String,String> service = serviceList.get(position);
         AddServiceViewHolder serviceHolder = (AddServiceViewHolder) holder;
         serviceHolder.tv_service_title.setText(service.get(FirebaseUtilClass.ENTRY_SERVICE_TITLE));
-        serviceHolder.tv_service_description.setText(service.get(FirebaseUtilClass.ENTRY_SERVICE_DESCRIPTION));
+        serviceHolder.tv_service_details.setText(service.get(FirebaseUtilClass.ENTRY_SERVICE_DESCRIPTION));
         serviceHolder.tv_service_price.setText("$"+service.get(FirebaseUtilClass.ENTRY_SERVICE_PRICE));
-        serviceHolder.btn_service_delete.setOnClickListener(new View.OnClickListener() {
+        serviceHolder.tv_service_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.deleteService(position);
             }
         });
+        serviceHolder.tv_service_button.setText("Delete");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            serviceHolder.tv_service_button.setTextColor(context.getResources().getColor(R.color.color_negative,null));
+        }else{
+            serviceHolder.tv_service_button.setTextColor(Color.RED);
+        }
 
     }
 
@@ -71,15 +79,16 @@ public class AdServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     static class AddServiceViewHolder extends RecyclerView.ViewHolder {
         TextView tv_service_title;
-        TextView tv_service_description;
+        TextView tv_service_details;
         TextView tv_service_price;
-        TextView btn_service_delete;
+        TextView tv_service_button;
         AddServiceViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_service_title = itemView.findViewById(R.id.tv_service_title);
-            tv_service_description = itemView.findViewById(R.id.tv_service_description);
+            tv_service_details = itemView.findViewById(R.id.tv_service_details);
             tv_service_price = itemView.findViewById(R.id.tv_service_price);
-            btn_service_delete = itemView.findViewById(R.id.btn_service_delete);
+            tv_service_button = itemView.findViewById(R.id.tv_service_button);
+
         }
     }
 

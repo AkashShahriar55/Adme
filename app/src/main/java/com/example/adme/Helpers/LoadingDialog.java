@@ -31,7 +31,7 @@ public class LoadingDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_progress_dialog);
         setCancelable(false);
-         titleTV = findViewById(R.id.custom_dialog_title);
+        titleTV = findViewById(R.id.custom_dialog_title);
         titleTV.setText(title);
         progressTV = findViewById(R.id.tv_progress);
         progressTV.setText(progress);

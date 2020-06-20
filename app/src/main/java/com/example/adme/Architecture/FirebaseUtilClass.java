@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.Service;
-import com.example.adme.Helpers.ServiceProviderData;
 import com.example.adme.Helpers.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,11 +20,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,6 +88,11 @@ public class FirebaseUtilClass {
     public static final String ENTRY_SERVICE_RATING = "rating";
     public static final String ENTRY_SERVICE_REVIEWS = "reviews";
 
+    public static final String VALUE_USER_PHOTO = "user_photo";
+    public static final String VALUE_DEFAULT_AVATAR = "default_avatar";
+
+    public static final String ENTRY_FEATURE_IMAGES = "feature_images";
+
 
     //create database reference
     private FirebaseFirestore db;
@@ -96,9 +100,11 @@ public class FirebaseUtilClass {
     private FirebaseAuth mAuth;
     private MutableLiveData<User> userData;
     private MutableLiveData<List<Service>> services = new MutableLiveData<>();
+    private MutableLiveData<Service> serviceData = new MutableLiveData<>();
     private List<Service> serviceList = new ArrayList<>();
     private String user_id;
     private CollectionReference servicesRef;
+    private FirebaseStorage storage;
 
     public FirebaseUtilClass() {
         userData = new MutableLiveData<>();
@@ -106,6 +112,7 @@ public class FirebaseUtilClass {
         userRef = db.collection(USER_COLLECTION_ID);
         servicesRef = db.collection(COLLECTION_ADME_SERVICE_LIST);
         mAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance("gs://adme-bf48a.appspot.com");
     }
 
     public MutableLiveData<User> getUserData() {
@@ -126,9 +133,12 @@ public class FirebaseUtilClass {
         userRef.document(user_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User user = documentSnapshot.toObject(User.class);
-                user.setmUserId(user_id);
-                userData.setValue(user);
+                if(documentSnapshot != null){
+                    User user = documentSnapshot.toObject(User.class);
+                    user.setmUserId(user_id);
+                    userData.setValue(user);
+                }
+
             }
         });
 
@@ -243,13 +253,13 @@ public class FirebaseUtilClass {
         servicesRef.add(service).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                updateServiceInUserDocument(service,documentReference.getId());
+                addServiceInUserDocument(service,documentReference.getId());
             }
         });
 
     }
 
-    private void updateServiceInUserDocument(Service service,String service_id) {
+    private void addServiceInUserDocument(Service service, String service_id) {
         Map<String,String> service_reference = new HashMap<>();
         service_reference.put(ENTRY_SERVICE_CATEGORY,service.getCategory());
         service_reference.put(ENTRY_MAIN_SERVICE_DESCRIPTION,service.getDescription());
@@ -278,6 +288,80 @@ public class FirebaseUtilClass {
                 listener.onFailure(e);
             }
         });
+    }
+
+
+    public MutableLiveData<Service> getServiceData(String service_id){
+        servicesRef.document(service_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot != null){
+                    Service service = documentSnapshot.toObject(Service.class);
+                    service.setmServiceId(documentSnapshot.getId());
+                    serviceData.setValue(service);
+                }
+
+            }
+        });
+
+        servicesRef.document(service_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot != null){
+                    Service service = documentSnapshot.toObject(Service.class);
+                    service.setmServiceId(documentSnapshot.getId());
+                    serviceData.setValue(service);
+                }
+            }
+        });
+        return serviceData;
+    }
+
+
+
+    public void updateUserService(String serviceId,Service service,DatabaseOperationListener listener){
+        servicesRef.document(serviceId).set(service).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(null);
+            }
+        });
+
+    }
+
+    public void updateServiceInUserInfo(Service service,User userData,int serviceIndex,DatabaseOperationListener listener) {
+        Log.d("akash_debug", "updateServiceInUserInfo: "+userData.getService_reference().size());
+        List<Map<String,String>> services = userData.getService_reference();
+        Map<String,String> service_reference = new HashMap<>();
+        service_reference.put(ENTRY_SERVICE_CATEGORY,service.getCategory());
+        service_reference.put(ENTRY_MAIN_SERVICE_DESCRIPTION,service.getDescription());
+        service_reference.put(ENTRY_SERVICE_RATING,service.getRating());
+        service_reference.put(ENTRY_SERVICE_REVIEWS,service.getReviews());
+        service_reference.put(ENTRY_SERVICE_REFERENCE,service.getmServiceId());
+        services.set(serviceIndex,service_reference);
+        userRef.document(service.getUser_ref()).update(FirebaseUtilClass.ENTRY_SERVICE_REFERENCE,services).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                listener.onSuccess(null);
+            }
+        });
+    }
+
+    public void deleteImageFromDatabase(String imageUrl){
+        StorageReference imageRef = storage.getReferenceFromUrl(imageUrl);
+
+        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("akash_debug", "onSuccess: image delete");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("akash_debug", "onFailure: image delete "+e);
+            }
+        });
+
     }
 
 

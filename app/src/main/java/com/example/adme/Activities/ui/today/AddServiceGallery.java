@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.List;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
@@ -43,7 +45,6 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
 
     private static final int PERMISSION_REQUEST_CODE = 1;
     private static final int IMAGE_PICK_CODE_1 = 100,IMAGE_PICK_CODE_2 = 101, IMAGE_PICK_CODE_3 = 102;
-    private AddServiceGalleryViewModel mViewModel;
     private boolean isValidationChecked= false;
     private boolean isDataSaved = false;
     private Uri imageUris[];
@@ -51,11 +52,19 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
     private ImageView service_image_1,service_image_2,service_image_3;
     private int code;
 
+    private ImageButton btn_delete_image_1,btn_delete_image_2,btn_delete_image_3;
+
+    private boolean isEditing;
+    private List<String> imageUrls;
+    private String serviceRef= "";
+    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
 
 
-    public AddServiceGallery(Uri imageUris[] ) {
+    public AddServiceGallery(Uri imageUris[],List<String> imageUrls,boolean isEditing,String serviceRef ) {
         this.imageUris = imageUris;
-
+        this.imageUrls = imageUrls;
+        this.isEditing = isEditing;
+        this.serviceRef = serviceRef;
     }
 
 
@@ -72,6 +81,9 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
         service_image_1 = root.findViewById(R.id.service_image_1);
         service_image_2 = root.findViewById(R.id.service_image_2);
         service_image_3 = root.findViewById(R.id.service_image_3);
+        btn_delete_image_1 = root.findViewById(R.id.btn_delete_image_1);
+        btn_delete_image_2 = root.findViewById(R.id.btn_delete_image_2);
+        btn_delete_image_3 = root.findViewById(R.id.btn_delete_image_3);
 
         service_image_1.setOnClickListener(v -> {
             code = IMAGE_PICK_CODE_1;
@@ -95,8 +107,42 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
 
         });
 
+        if(isEditing){
+            updateUi();
+        }
 
 
+
+
+
+    }
+
+    private void updateUi() {
+        ImageView[] imageViewList = {service_image_1,service_image_2,service_image_3};
+        ImageButton[] deleteButtonList = {btn_delete_image_1,btn_delete_image_2,btn_delete_image_3};
+        for (int i = 0; i < imageUrls.size(); i++) {
+            final int position = i;
+            Glide.with(requireContext())
+                    .load(imageUrls.get(i))
+                    .fitCenter()
+                    .into(imageViewList[i]);
+            isValidationChecked = true;
+            imageViewList[i].setClickable(false);
+            deleteButtonList[i].setVisibility(View.VISIBLE);
+            deleteButtonList[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageViewList[position].setClickable(true);
+                    deleteButtonList[position].setVisibility(View.INVISIBLE);
+                    int drawableResourceId = getActivity().getResources().getIdentifier("ic_upload", "drawable", getActivity().getPackageName());
+                    Glide.with(requireContext())
+                            .load(drawableResourceId)
+                            .centerInside()
+                            .into(imageViewList[position]);
+                    imageUrls.remove(position);
+                }
+            });
+        }
     }
 
     private void uploadImage(){
@@ -274,6 +320,9 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
             isDataSaved = true;
         }
     }
+
+
+
 
 
 }
