@@ -16,6 +16,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adme.Activities.LandingActivity;
@@ -61,19 +64,16 @@ import java.util.List;
 public class HomeFragment extends Fragment implements OnMapReadyCallback, ServiceSearchAdapter.ServiceSearchAdapterListener {
     private static final String TAG = "HomeFragment";
     private HomeViewModel mViewModel;
-
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 15;
     private TodayViewModel homeViewModel;
     private GoogleMap mMap;
     private FloatingActionButton locationButton;
     private ImageView client_notification_btn, bottomDetailsButton;
-
     private RecyclerView search_service_rv;
     private List<Service> serviceProvidersList;
     private ServiceSearchAdapter serviceSearchAdapter;
     private CardView cv_search;
-
     private User mCurrentUser;
 
 
@@ -107,15 +107,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
-        final InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (inputMethodManager.isActive()) {
-            if (activity.getCurrentFocus() != null) {
-                inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-            }
-        }
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -127,12 +118,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         // TODO: Use the ViewModel
+//        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+//        mViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+////                textView.setText(s);
+//            }
+//        });
 
         locationButton.setOnClickListener(v -> checkPermission());
-
         client_notification_btn.setOnClickListener(v -> goToNotificationFragment());
-
         bottomDetailsButton.setOnClickListener(v -> goToBottomDetails());
     }
 
@@ -140,6 +137,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     public void onStart() {
         super.onStart();
         mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        final InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager.isActive()) {
+            if (activity.getCurrentFocus() != null) {
+                inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+            }
+        }
     }
 
     private void markUserLocationInMap() {
