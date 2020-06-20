@@ -77,18 +77,24 @@ public class Contacts extends AppCompatActivity {
                 {
                     mViewModel.updatePhoneNumberMode("Private");
                     Log.e("mode chnage","public to private");
-                    updateUiData();
+                    //updateUiData();
                 }
                 else if(txtContactMode.getText().toString().equals(getString(R.string.contactModePrivate)))
                 {
                     mViewModel.updatePhoneNumberMode("Public");
                     Log.e("mode chnage","private to public");
-                    updateUiData();
+                    //updateUiData();
                 }
             }
         });
 
 
+        firstContactDelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.deletePhoneNumber();
+            }
+        });
 
 
         backBtn.setOnClickListener(new View.OnClickListener() {

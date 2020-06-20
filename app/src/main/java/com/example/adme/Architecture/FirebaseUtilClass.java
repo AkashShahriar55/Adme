@@ -50,6 +50,7 @@ public class FirebaseUtilClass {
     public static final String MODE_SERVICE_PROVIDER = "Service provider";
     public static final String STATUS_ONLINE = "Online";
     public static final String  STATUS_OFFLINE = "Offline";
+    public static final String CONTACTS = "contacts";
     public static final String ENTRY_MONTHLY_SUBSCRIPTION_PAID = "Paid";
 
     public static final String ENTRY_PRESSED_TODAY = "pressed_today";
@@ -303,6 +304,9 @@ public class FirebaseUtilClass {
         void onUserCreatedSuccessfully(User user);
     }
 
+
+    //for profile update
+
     public void updateUserName(String name)
     {
         userRef.document(getCurrentUser().getUid()).update(USER_NAME,name).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -320,7 +324,8 @@ public class FirebaseUtilClass {
 
     public void updatePhoneNumberMode(String mode)
     {
-        userRef.document(getCurrentUser().getUid()).update(ENTRY_PHONE_NO_PRIVACY,mode).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+        userRef.document(getCurrentUser().getUid()).update(CONTACTS+"."+ENTRY_PHONE_NO_PRIVACY,mode).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.e("success","phone number privacy updated");
@@ -328,8 +333,27 @@ public class FirebaseUtilClass {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("failed","phone number privacy update failed");
+                Log.e("failed",e.toString()+"phone number privacy update failed");
             }
         });
     }
+
+    public void deletPhoneNumber()
+    {
+
+        userRef.document(getCurrentUser().getUid()).update(CONTACTS+"."+ENTRY_PHONE_NO,null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("success","phone number deleted");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("failed",e.toString()+"phone number deletion failed");
+            }
+        });
+    }
+
+
+    //for profile ends
 }

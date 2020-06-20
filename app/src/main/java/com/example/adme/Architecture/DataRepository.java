@@ -13,12 +13,16 @@ public class DataRepository {
         userData = firebaseUtilClass.getUserData();
     }
 
-
+    //for profile update
     public void updateUserName(String name)
     {
         firebaseUtilClass.updateUserName(name);
     }
-    public  void updatePhoneNumberMode(String mode){firebaseUtilClass.updatePhoneNumberMode(mode);}
+    public void updatePhoneNumberMode(String mode){firebaseUtilClass.updatePhoneNumberMode(mode);}
+    public void deletePhoneNumber(){firebaseUtilClass.deletPhoneNumber();}
+
+    // for profile update ends
+
     public MutableLiveData<User> getUserData() {
         return userData;
     }
