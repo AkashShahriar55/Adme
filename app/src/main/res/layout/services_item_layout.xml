@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/ic_paint" />
 
     <TextView
-        android:id="@+id/tv_empty_recycleview_title"
+        android:id="@+id/tv_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -43,18 +43,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/rb_rating"
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:rating="4.5"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_empty_recycleview_title"
-        app:layout_constraintStart_toEndOf="@+id/tv_empty_recycleview_title"
-        app:layout_constraintTop_toTopOf="@+id/tv_empty_recycleview_title" />
+        app:layout_constraintStart_toStartOf="@+id/tv_category"
+        app:layout_constraintTop_toBottomOf="@+id/tv_category" />
 
     <TextView
-        android:id="@+id/textView74"
+        android:id="@+id/tv_reviews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
@@ -69,23 +68,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
-        app:layout_constraintStart_toEndOf="@+id/ratingBar"
-        app:layout_constraintTop_toTopOf="@+id/ratingBar"
+        app:layout_constraintBottom_toBottomOf="@+id/rb_rating"
+        app:layout_constraintStart_toEndOf="@+id/rb_rating"
+        app:layout_constraintTop_toTopOf="@+id/rb_rating"
         app:srcCompat="@drawable/ic_people" />
 
     <TextView
-        android:id="@+id/tv_empty_recycleview_button"
+        android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:lineSpacingExtra="3dp"
         android:text="@string/i_will_provide_with_hint"
         android:textColor="@color/txt_Dark"
         android:textSize="10sp"
-        android:lineSpacingExtra="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textView74"
-        app:layout_constraintStart_toStartOf="@+id/tv_empty_recycleview_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_empty_recycleview_title" />
+        app:layout_constraintEnd_toStartOf="@+id/view_service_button"
+        app:layout_constraintStart_toStartOf="@+id/tv_category"
+        app:layout_constraintTop_toBottomOf="@+id/rb_rating" />
 </androidx.constraintlayout.widget.ConstraintLayout>

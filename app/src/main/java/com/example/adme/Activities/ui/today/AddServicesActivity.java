@@ -33,7 +33,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,8 +66,9 @@ public class AddServicesActivity extends AppCompatActivity {
     User currentUser;
 
     Service newService = new Service();
-    Uri imageUris[] = new Uri[3];
+    Uri[] imageUris = new Uri[3];
     int main_count = 0,download_count = 0;
+    private String serviceRef = null;
 
     FirebaseStorage storage = FirebaseStorage.getInstance("gs://adme-bf48a.appspot.com");
     StorageReference service_portfolio_ref = storage.getReference().child(FirebaseUtilClass.STORAGE_FOLDER_SERVICE_PORTFOLIO);
@@ -76,12 +76,37 @@ public class AddServicesActivity extends AppCompatActivity {
     FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
     LoadingDialog dialog;
 
+    private boolean isEditing = false;
+    List<String> imageUrls = new ArrayList<>();
+    List<String> previousGalleryList = new ArrayList<>();
+
+    int serviceIndex = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_services);
 
-        currentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
+        dialog = new LoadingDialog(this,"none","none");
+
+        isEditing = getIntent().getBooleanExtra("is_editing",false);
+
+        if(isEditing){
+            newService = getIntent().getParcelableExtra("edit_service");
+            serviceRef = newService.getmServiceId();
+            previousGalleryList.addAll(newService.getFeature_images());
+            imageUrls = newService.getFeature_images();
+            currentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
+            serviceIndex = getIntent().getIntExtra("service_index",-1);
+            overviewCompleted = true;
+            servicesCompleted = true;
+            galleryCompleted = true;
+            locationCompleted = true;
+        }else{
+            currentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
+        }
+
+
 
 
         addServiceOne = findViewById(R.id.add_service_1_image);
@@ -105,14 +130,14 @@ public class AddServicesActivity extends AppCompatActivity {
         });
 
 
-        fragmentOverview = new AddServiceOverview(newService);
-        fragmentServices = new AddServiceServices(newService);
-        fragmentGallery = new AddServiceGallery(imageUris);
-        fragmentLocation = new AddServiceLocation(newService);
+        fragmentOverview = new AddServiceOverview(newService,isEditing);
+        fragmentServices = new AddServiceServices(newService,isEditing);
+        fragmentGallery = new AddServiceGallery(imageUris,imageUrls,isEditing,serviceRef);
+        fragmentLocation = new AddServiceLocation(newService,isEditing);
         fragmentManager = getSupportFragmentManager();
 
         showFragment(fragmentOverview,OVERVIEW,STATE_OVERVIEW);
-
+        updateStepNavigationUi();
     }
 
 
@@ -208,9 +233,37 @@ public class AddServicesActivity extends AppCompatActivity {
             showFragment(fragmentLocation,LOCATION,STATE_LOCATION);
         }else{
 
-            finishAddingNewService();
+            if(isEditing){
+                Log.d("akash_debug", "saveDataAndFinish: ");
+                updateService();
+            }else{
+                finishAddingNewService();
+            }
+
 
         }
+    }
+
+    private void updateService() {
+        List<String> tags = new ArrayList<>();
+        String tokens[] = newService.getCategory().toLowerCase().split("\\s+");
+        tags.addAll(Arrays.asList(tokens));
+        for(Map<String,String> service: newService.getServices()){
+            tokens = service.get(FirebaseUtilClass.ENTRY_SERVICE_TITLE).toLowerCase().split("\\s+");
+            tags.addAll(Arrays.asList(tokens));
+        }
+
+        newService.setTags(tags);
+        Log.d("akash_debug", "onCreate: size of gallary"+previousGalleryList.size());
+        for(String url:previousGalleryList){
+            Log.d("akash_debug", "updateService: all image in previous"+url);
+            if(!imageUrls.contains(url)){
+                Log.d("akash_debug", "updateService: image to be deleted"+url);
+                firebaseUtilClass.deleteImageFromDatabase(url);
+            }
+        }
+
+        uploadImageToServer();
     }
 
     private void finishAddingNewService() {
@@ -218,15 +271,11 @@ public class AddServicesActivity extends AppCompatActivity {
         newService.setUser_ref(currentUser.getmUserId());
         newService.setStatus(currentUser.getStatus());
         List<String> tags = new ArrayList<>();
-        String tokens[] = newService.getCategory().split("\\s+");
+        String tokens[] = newService.getCategory().toLowerCase().split("\\s+");
         tags.addAll(Arrays.asList(tokens));
         for(Map<String,String> service: newService.getServices()){
-            tokens = service.get(FirebaseUtilClass.ENTRY_SERVICE_TITLE).split("\\s+");
+            tokens = service.get(FirebaseUtilClass.ENTRY_SERVICE_TITLE).toLowerCase().split("\\s+");
             tags.addAll(Arrays.asList(tokens));
-        }
-
-        for (int i = 0; i < tags.size(); i++) {
-            
         }
 
         newService.setTags(tags);
@@ -305,7 +354,12 @@ public class AddServicesActivity extends AppCompatActivity {
             case STATE_LOCATION:
                 addServiceFour.setImageResource(R.drawable.ic_4_blue);
                 addServiceLocation.setTextColor(ContextCompat.getColor(this, R.color.txt_highlight));
-                addServiceSaveButton.setText("Save and Finish");
+                if(isEditing){
+                    addServiceSaveButton.setText("Update and Finish");
+                }else{
+                    addServiceSaveButton.setText("Save and Finish");
+                }
+
                 break;
         }
     }
@@ -317,8 +371,18 @@ public class AddServicesActivity extends AppCompatActivity {
                 main_count+=1;
             }
         }
-        dialog = new LoadingDialog(this,"Uploading images","uploading: 0 mb");
+        if(main_count <= 0){
+            if(isEditing){
+                updateToDatabase();
+            }
+            else{
+                uploadToDatabase();
+            }
+            return;
+        }
         dialog.show();
+        dialog.updateTitle("Uploading images");
+        dialog.updateProgress("uploading: 0 mb");
         for(Uri uri:imageUris){
             if(uri != null){
                 StorageReference image = service_portfolio_ref.child(uri.getLastPathSegment());
@@ -350,40 +414,81 @@ public class AddServicesActivity extends AppCompatActivity {
             }
 
         }
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
 
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                taskSnapshot.getUploadSessionUri();
-                Log.d("akash_debug", "onSuccess: "+taskSnapshot.getUploadSessionUri());
-                dialog.dismiss();
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                //long percent = (taskSnapshot.getBytesTransferred()/ finalTotal_size) * 100;
-                String mb = String.format("%.2f",taskSnapshot.getBytesTransferred()/125000.0);
-                dialog.updateProgress("Uploading: "+mb+" mb");
-            }
-        });
+        if(main_count > 0){
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    taskSnapshot.getUploadSessionUri();
+                    Log.d("akash_debug", "onSuccess: "+taskSnapshot.getUploadSessionUri());
+                    dialog.dismiss();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                    //long percent = (taskSnapshot.getBytesTransferred()/ finalTotal_size) * 100;
+                    String mb = String.format("%.2f",taskSnapshot.getBytesTransferred()/125000.0);
+                    dialog.updateProgress("Uploading: "+mb+" mb");
+                }
+            });
+        }
+
 
     }
 
-    List<String> uris = new ArrayList<>();
+
     private void handleUploadedImageUri(Uri uri) {
-        uris.add(String.valueOf(uri));
+        imageUrls.add(String.valueOf(uri));
         download_count+=1;
         if(main_count==download_count){
-            newService.setFeature_images(uris);
-            uploadToDatabase();
+            newService.setFeature_images(imageUrls);
+            if(isEditing){
+                updateToDatabase();
+            }
+            else{
+                uploadToDatabase();
+            }
+
         }
     }
 
+    private void updateToDatabase() {
+        dialog.show();
+        dialog.updateTitle("Updating service");
+        dialog.updateProgress("Please wait");
+        Log.d("akash_debug", "service id: "+newService.getUser_name());
+        firebaseUtilClass.updateUserService(newService.getmServiceId(), newService, new FirebaseUtilClass.DatabaseOperationListener() {
+            @Override
+            public void onSuccess(Object object) {
+                firebaseUtilClass.updateServiceInUserInfo(newService, currentUser, serviceIndex, new FirebaseUtilClass.DatabaseOperationListener() {
+                    @Override
+                    public void onSuccess(Object object) {
+                        dialog.dismiss();
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+    }
+
     private void uploadToDatabase() {
+        dialog.show();
         dialog.updateTitle("Creating service");
         dialog.updateProgress("Please wait");
         firebaseUtilClass.uploadUserService(newService, new FirebaseUtilClass.DatabaseOperationListener() {

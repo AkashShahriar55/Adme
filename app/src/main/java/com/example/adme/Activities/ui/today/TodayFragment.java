@@ -98,6 +98,8 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
 
     TodayViewModel todayViewModel;
 
+    ConstraintLayout empty_recyclerview;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_today, container, false);
@@ -148,7 +150,14 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         tv_income_total = view.findViewById(R.id.tv_total_income);
 
         appointmentRecyclerView = view.findViewById(R.id.appointment_container);
-        serviceRecyclerView = view.findViewById(R.id.service_container);
+        serviceRecyclerView = view.findViewById(R.id.service_recyclerview);
+        empty_recyclerview = view.findViewById(R.id.empty_recyclerview);
+
+        if(services.size() == 0){
+            empty_recyclerview.setVisibility(View.VISIBLE);
+        }else{
+            empty_recyclerview.setVisibility(View.GONE);
+        }
 
         notificationButton = view.findViewById(R.id.client_notification_btn);
         notificationButton.setOnClickListener(new View.OnClickListener() {
@@ -232,7 +241,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         RecyclerView.LayoutManager serviceLayoutManager = new LinearLayoutManager(getContext());
         serviceRecyclerView.setHasFixedSize(true);
         serviceRecyclerView.setLayoutManager(serviceLayoutManager);
-        serviceAdapter = new ServiceAdapter(getContext(),services);
+        serviceAdapter = new ServiceAdapter(getContext(),services,mCurrentUser);
 
     }
 
@@ -257,6 +266,13 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         }
 
         serviceAdapter.setServices(services);
+        serviceAdapter.setmCurrentUser(mCurrentUser);
+
+        if(services.size() == 0){
+            empty_recyclerview.setVisibility(View.VISIBLE);
+        }else{
+            empty_recyclerview.setVisibility(View.GONE);
+        }
     }
 
     @Override

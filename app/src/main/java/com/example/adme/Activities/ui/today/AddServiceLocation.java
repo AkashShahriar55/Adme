@@ -50,7 +50,6 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
 
     private static final String TAG = "AddServiceLocation";
 
-    private AddServiceLocationViewModel mViewModel;
     private boolean isValidationChecked= false;
     private boolean isDataSaved = false;
     private CheckBox testCheckbox;
@@ -67,8 +66,11 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
     private String display_name;
     private String full_address;
 
-    public AddServiceLocation(Service newService) {
+    private boolean isEditing= false;
+
+    public AddServiceLocation(Service newService,boolean isEditing) {
         this.newService = newService;
+        this.isEditing = isEditing;
     }
 
 
@@ -131,6 +133,20 @@ public class AddServiceLocation extends Fragment implements AddServicesActivity.
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         btn_fetch_your_location.setEnabled(true);
+        if(isEditing){
+            latitude = newService.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE);
+            longitude = newService.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE);
+            if(!latitude.isEmpty() && !longitude.isEmpty()){
+                isValidationChecked = true;
+                double lat = Double.parseDouble(latitude);
+                double lng = Double.parseDouble(longitude);
+                LatLng latLng = new LatLng(lat,lng);
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(latLng).draggable(true).title(requireContext().getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
+                return;
+            }
+        }
         GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
         GoogleMapHelper.getCurrentLocationAddress(requireContext(), new GoogleMapHelper.OnLocationAddressCallback() {
             @Override

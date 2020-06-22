@@ -27,7 +27,6 @@ import java.util.Map;
 
 public class AddServiceServices extends Fragment implements AddServicesActivity.SaveFragmentListener, AdServiceDialog.AdServiceDialogListener, AdServiceAdapter.AddServiceAdapterListener {
 
-    private AddServiceServicesViewModel mViewModel;
     private boolean isValidationChecked= true;
     private boolean isDataSaved = false;
     private TextView ad_service_btn;
@@ -40,8 +39,11 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
 
     private List<Map<String,String>> services = new ArrayList<>();
 
-    public AddServiceServices(Service newService) {
+    private boolean isEditing;
+
+    public AddServiceServices(Service newService,boolean isEditing) {
         this.newService = newService;
+        this.isEditing = isEditing;
     }
 
 
@@ -63,6 +65,13 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
         ad_service_recyclerView.setAdapter(adServiceAdapter);
         ad_service_btn = root.findViewById(R.id.ad_service_btn);
 
+        if(isEditing){
+            services = newService.getServices();
+            adServiceAdapter.setServiceList(services);
+        }
+
+
+
         if(services.size()<=0){
             ad_service_recyclerView.setVisibility(View.GONE);
             empty_recyclerview_layout.setVisibility(View.VISIBLE);
@@ -74,7 +83,9 @@ public class AddServiceServices extends Fragment implements AddServicesActivity.
             openDialogFromFragment();
         });
 
+
     }
+
 
     private void openDialogFromFragment() {
 

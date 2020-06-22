@@ -67,10 +67,16 @@ public class User implements Parcelable {
         profile_image_url = in.readString();
 
 
-        /*int service_count = in.readInt();
+        int service_count = in.readInt();
         for (int i = 0; i < service_count; i++) {
-            service_reference.add(in.readString());
-        }*/
+            Map<String,String> service_reference_info = new HashMap<>();
+            service_reference_info.put(FirebaseUtilClass.ENTRY_SERVICE_CATEGORY,in.readString());
+            service_reference_info.put(FirebaseUtilClass.ENTRY_MAIN_SERVICE_DESCRIPTION,in.readString());
+            service_reference_info.put(FirebaseUtilClass.ENTRY_SERVICE_RATING,in.readString());
+            service_reference_info.put(FirebaseUtilClass.ENTRY_SERVICE_REVIEWS,in.readString());
+            service_reference_info.put(FirebaseUtilClass.ENTRY_SERVICE_REFERENCE,in.readString());
+            service_reference.add(service_reference_info);
+        }
 
 
         //write service provider info in parcelable
@@ -228,10 +234,14 @@ public class User implements Parcelable {
         dest.writeString(profile_image_url);
 
         int service_count = service_reference.size();
-       /* dest.writeInt(service_count);
-        for(String reference:service_reference){
-            dest.writeString(reference);
-        }*/
+        dest.writeInt(service_count);
+        for(Map<String,String> reference:service_reference){
+            dest.writeString(reference.get(FirebaseUtilClass.ENTRY_SERVICE_CATEGORY));
+            dest.writeString(reference.get(FirebaseUtilClass.ENTRY_MAIN_SERVICE_DESCRIPTION));
+            dest.writeString(reference.get(FirebaseUtilClass.ENTRY_SERVICE_RATING));
+            dest.writeString(reference.get(FirebaseUtilClass.ENTRY_SERVICE_REVIEWS));
+            dest.writeString(reference.get(FirebaseUtilClass.ENTRY_SERVICE_REFERENCE));
+        }
 
         int service_info_size = service_provider_info.size();
         int contacts_size = contacts.size();

@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.adme.Helpers.Service;
 import com.example.adme.R;
@@ -28,14 +29,18 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.collection.LLRBNode;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AddServiceOverview extends Fragment implements AddServicesActivity.SaveFragmentListener {
 
     private static final String TAG = "AddServiceOverview";
 
-    private AddServiceOverviewViewModel mViewModel;
     private boolean isValidationChecked= false;
     private boolean isDataSaved = false;
     private Spinner service_category_spinner;
@@ -50,9 +55,12 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
     private int previousSpinnerPosition = 0;
 
     private Service newService;
+    ArrayAdapter<CharSequence> mCategoryAdapter;
+    private boolean isEditing = false;
 
-    public AddServiceOverview(Service newService) {
+    public AddServiceOverview(Service newService,boolean isEditing) {
         this.newService = newService;
+        this.isEditing = isEditing;
     }
 
 
@@ -68,9 +76,9 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
 
     private void initializeFields(View root) {
         service_category_spinner = root.findViewById(R.id.service_category_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),R.array.service_category,android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        service_category_spinner.setAdapter(adapter);
+        mCategoryAdapter = ArrayAdapter.createFromResource(requireContext(),R.array.service_category,android.R.layout.simple_spinner_item);
+        mCategoryAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        service_category_spinner.setAdapter(mCategoryAdapter);
         start_time_btn = root.findViewById(R.id.start_time_btn);
         end_time_btn = root.findViewById(R.id.end_time_btn);
         edt_service_description = root.findViewById(R.id.edt_service_description);
@@ -229,6 +237,43 @@ public class AddServiceOverview extends Fragment implements AddServicesActivity.
             dialog.show();
 
         });
+
+        if(isEditing)
+            updateUi();
+
+    }
+
+    private void updateUi(){
+        if(!newService.getCategory().isEmpty()){
+            service_category_spinner.setSelection(mCategoryAdapter.getPosition(newService.getCategory()));
+        }
+
+        if(!newService.getDescription().isEmpty()){
+            edt_service_description.getEditText().setText(newService.getDescription());
+        }
+
+        if(!newService.getWorking_hour().isEmpty()){
+            String times[] = newService.getWorking_hour().split(" to ");
+            Calendar sTime = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+            try {
+                sTime.setTime(sdf.parse(times[0]));// all done
+            }catch (ParseException e){
+                Log.e(TAG, "updateUi: ",e );
+            }
+            startTime.setTime(sTime.getTime());
+            start_time_btn.setText(times[0]);
+            Calendar eTime = Calendar.getInstance();
+            sdf = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+            try {
+                eTime.setTime(sdf.parse(times[1]));// all done
+            }catch (ParseException e){
+                Log.e(TAG, "updateUi: ",e );
+            }
+            endTime.setTime(eTime.getTime());
+            end_time_btn.setText(times[1]);
+        }
+
 
     }
 
