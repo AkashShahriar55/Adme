@@ -123,12 +123,12 @@ public class TodayBottomDetailsFragment extends Fragment {
                 buttonView.setText(R.string.online_status);
                 buttonView.setTextColor(getResources().getColor(R.color.color_active));
                 mCurrentUser.setStatus(FirebaseUtilClass.STATUS_ONLINE);
-                userDataModel.getCurrentUser().setValue(mCurrentUser);
+                userDataModel.setCurrentUser(mCurrentUser);
             }else{
                 buttonView.setText(R.string.offline_status);
                 buttonView.setTextColor(getResources().getColor(R.color.color_not_active));
                 mCurrentUser.setStatus(FirebaseUtilClass.STATUS_OFFLINE);
-                userDataModel.getCurrentUser().setValue(mCurrentUser);
+                userDataModel.setCurrentUser(mCurrentUser);
             }
         });
 

@@ -29,7 +29,9 @@
     <string name="offline_status">You\'re Offline</string>
     <string name="online_status">You\'re Online</string>
     <string name="your_current_location">Your Current Location</string>
-    <string name="client_current_location">Client Current Location</string>
+    <string name="your_location">Your Location</string>
+    <string name="client_current_location">Client Location</string>
+    <string name="sv_current_location">Service Providers Location</string>
     <string name="current_location">Current Location</string>
 
 

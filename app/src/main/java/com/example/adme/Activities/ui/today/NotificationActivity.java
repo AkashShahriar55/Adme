@@ -8,11 +8,14 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.adme.Architecture.UserDataModel;
 import com.example.adme.Helpers.Notification;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +27,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NotificationActivity extends AppCompatActivity {
@@ -34,11 +38,14 @@ public class NotificationActivity extends AppCompatActivity {
     private NotificationItemInventoryAdapter notificationItemInventoryAdapter;
     FirebaseFirestore db;
     Notification notification;
+    UserDataModel userDataModel;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notification__fragment);
+        userDataModel = new ViewModelProvider(this).get(UserDataModel.class);
 
         notificationItemInventoryAdapter = new NotificationItemInventoryAdapter(itemList, NotificationActivity.this);
         recyclerView_notificaiton = findViewById(R.id.notification);
@@ -56,7 +63,11 @@ public class NotificationActivity extends AppCompatActivity {
         });
 
         String mode = getIntent().getStringExtra("mode");
-        getFirebaseQueryList(mode);
+        userDataModel.getCurrentUser().observe(this, user -> {
+            currentUser = user;
+            getFirebaseQueryList(user.getmUserId(), mode);
+            Log.d(TAG, "onCreate: currentUser2 "+currentUser.getUser_name());
+        });
     }
 
     private void getFirebaseData(String doc) {
@@ -73,10 +84,12 @@ public class NotificationActivity extends AppCompatActivity {
                 });
     }
 
-    private void getFirebaseQueryList(String mode) {
+    private void getFirebaseQueryList(String userID, String mode) {
+//        Log.d(TAG, "onCreate: currentUser3 "+currentUser.getUser_name());
         db = FirebaseFirestore.getInstance();
-        db.collection("Adme_User/user1/notification_list")
-                .whereEqualTo("mode", mode)
+        db.collection("Adme_User/"+userID+"/notification_list")
+//                .whereEqualTo("mode", mode)
+                .whereIn("mode", Arrays.asList(mode, "both"))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
