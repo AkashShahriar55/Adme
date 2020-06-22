@@ -8,7 +8,7 @@ public class Notification {
     private String mode;
     private boolean isSeen;
 
-    Notification(){}
+    public Notification(){}
 
     public Notification(String text, String time, String type, String reference, String mode, boolean isSeen) {
         this.text = text;

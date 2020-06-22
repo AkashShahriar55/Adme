@@ -79,7 +79,6 @@ public class FirebaseUtilClass {
     public static final String ENTRY_SERVICE_DESCRIPTION = "service_description";
     public static final String ENTRY_SERVICE_PRICE = "service_price";
 
-
     public static final String ENTRY_CLIENT_APPOINTMENTS = "client_appointments";
 
     public static final String STORAGE_FOLDER_SERVICE_PORTFOLIO = "service_portfolio";
@@ -88,6 +87,17 @@ public class FirebaseUtilClass {
     public static final String ENTRY_MAIN_SERVICE_DESCRIPTION = "description";
     public static final String ENTRY_SERVICE_RATING = "rating";
     public static final String ENTRY_SERVICE_REVIEWS = "reviews";
+
+    public static final String NOTIFICATION_APPOINTMENT_TYPE = "appointment";
+    public static final String NOTIFICATION_RATING_TYPE = "rating";
+    public static final String NOTIFICATION_NONE_TYPE = "none";
+
+    public static final String APPOINTMENT_STATE_CLINT_SEND = "clientSent";
+    public static final String APPOINTMENT_STATE_SERVICE_PROVIDER_SEND = "serviceProviderSent";
+    public static final String APPOINTMENT_STATE_CLINT_APPROVED = "clientApproved";
+    public static final String APPOINTMENT_STATE_FINISHED = "finished";
+    public static final String APPOINTMENT_STATE_CLINT_CANCELED = "clientCanceled";
+    public static final String APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED = "serviceProviderCanceled";
 
 
     //create database reference

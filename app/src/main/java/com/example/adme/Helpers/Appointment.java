@@ -1,6 +1,7 @@
 package com.example.adme.Helpers;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.Exclude;
 
 public class Appointment {
     private String clint_name;
@@ -18,6 +19,7 @@ public class Appointment {
     private String services;
     private String state;
     private MyPlaces clint_location;
+    private MyPlaces service_provider_location;
 
     public Appointment(){}
 
@@ -39,11 +41,40 @@ public class Appointment {
         this.clint_location = clint_location;
     }
 
-    public LatLng getLatLng() {
+    public Appointment(String clint_name, String clint_phone, String clint_ref, String clint_text, String clint_time, String distance, String price_needed, String price_requested, String service_provider_name, String service_provider_ref, String service_provider_text, String service_provider_time, String services, String state, MyPlaces clint_location, MyPlaces service_provider_location) {
+        this.clint_name = clint_name;
+        this.clint_phone = clint_phone;
+        this.clint_ref = clint_ref;
+        this.clint_text = clint_text;
+        this.clint_time = clint_time;
+        this.distance = distance;
+        this.price_needed = price_needed;
+        this.price_requested = price_requested;
+        this.service_provider_name = service_provider_name;
+        this.service_provider_ref = service_provider_ref;
+        this.service_provider_text = service_provider_text;
+        this.service_provider_time = service_provider_time;
+        this.services = services;
+        this.state = state;
+        this.clint_location = clint_location;
+        this.service_provider_location = service_provider_location;
+    }
+
+    @Exclude
+    public LatLng getClintLatLng() {
         if(clint_location.getLatitude().equals("") || clint_location.getLongitude().equals("")){
             return null;
         } else {
             return new LatLng(Double.parseDouble(clint_location.getLatitude()), Double.parseDouble(clint_location.getLongitude()));
+        }
+    }
+
+    @Exclude
+    public LatLng getServiceProviderLatLng() {
+        if(service_provider_location.getLatitude().equals("") || service_provider_location.getLongitude().equals("")){
+            return null;
+        } else {
+            return new LatLng(Double.parseDouble(service_provider_location.getLatitude()), Double.parseDouble(service_provider_location.getLongitude()));
         }
     }
 
@@ -165,5 +196,13 @@ public class Appointment {
 
     public void setClint_location(MyPlaces clint_location) {
         this.clint_location = clint_location;
+    }
+
+    public MyPlaces getService_provider_location() {
+        return service_provider_location;
+    }
+
+    public void setService_provider_location(MyPlaces service_provider_location) {
+        this.service_provider_location = service_provider_location;
     }
 }

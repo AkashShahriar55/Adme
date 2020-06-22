@@ -5,6 +5,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,12 +36,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.adme.Activities.ui.income.RatingHistoryAdapter;
 import com.example.adme.Activities.ui.today.ViewServiceImageSliderAdapter;
+import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Architecture.UserDataModel;
 import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.MyPlaces;
+import com.example.adme.Helpers.Notification;
 import com.example.adme.Helpers.SelectServiceItem;
 import com.example.adme.Helpers.Service;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -50,6 +56,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -94,15 +101,20 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     Location clentLocation;
     FirebaseFirestore db;
     double distance=0;
+    float sum=0;
     Service service;
     String selected_service_text;
     String servicetext="";
+    UserDataModel userDataModel;
+    User currentUser;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.client_view_service_provider);
+        userDataModel = new ViewModelProvider(this).get(UserDataModel.class);
+        userDataModel.getCurrentUser().observe(this, user -> { currentUser = user; });
         initializeFields();
     }
 
@@ -429,7 +441,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         }
         tv_service_added.setText(selected_service_text);
         tv_item_count.setText(selected_service_count);
-        float sum = 0;
+        sum = 0;
         for(String f : selectServicesPrice)
             sum += Float.parseFloat(f);
         tv_total_price.setText("$ "+sum);
@@ -447,34 +459,80 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     private void setFirebaseData(String doc){
         Appointment appointment= new Appointment();
 
-        appointment.setClint_name("Amanullah Asraf");
-        appointment.setClint_phone("01532146589");
-        appointment.setClint_ref("Adme/user2");
-        MyPlaces clintPlace = new MyPlaces("Bashbari","Bashbari, Saidpur", String.valueOf(clentLocation.getLatitude()), String.valueOf(clentLocation.getLongitude()));
-        appointment.setClint_location(clintPlace);
+        appointment.setClint_name(currentUser.getUser_name());
+        appointment.setClint_phone(currentUser.getContacts().get(FirebaseUtilClass.ENTRY_PHONE_NO));
+        appointment.setClint_ref(currentUser.getmUserId());
+        if(currentUser.getLatLng()!=null) {
+            MyPlaces clintPlace = new MyPlaces(
+                    currentUser.getLocation().get(ENTRY_LOCATION_DISPLAY_NAME),
+                    currentUser.getLocation().get(ENTRY_LOCATION_ADDRESS),
+                    currentUser.getLocation().get(ENTRY_LOCATION_LATITUDE),
+                    currentUser.getLocation().get(ENTRY_LOCATION_LONGITUDE)
+            );
+            appointment.setClint_location(clintPlace);
+        }
+        MyPlaces serviceProviderPlace = new MyPlaces(
+                service.getLocation().get(ENTRY_LOCATION_DISPLAY_NAME),
+                service.getLocation().get(ENTRY_LOCATION_ADDRESS),
+                service.getLocation().get(ENTRY_LOCATION_LATITUDE),
+                service.getLocation().get(ENTRY_LOCATION_LONGITUDE)
+        );
+        appointment.setService_provider_location(serviceProviderPlace);
 
+        if(tv_service_money.getText().toString().trim().equals("")){
+            appointment.setPrice_requested(String.valueOf(sum));
+        } else {
+            appointment.setPrice_requested(tv_service_money.getText().toString());
+        }
         appointment.setServices(servicetext);
         appointment.setClint_time(String.valueOf(myCalendar.getTimeInMillis()));
-        appointment.setPrice_requested(tv_service_money.getText().toString());
         appointment.setClint_text(tv_service_quotation.getText().toString());
         appointment.setDistance(String.format("%.1f", distance));
         appointment.setService_provider_name(service.getUser_name());
         appointment.setService_provider_ref(service.getUser_ref());
-        appointment.setState("clientSent");
+        appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND);
 
+        String newDocumentID = String.valueOf(Calendar.getInstance().getTimeInMillis());
         db = FirebaseFirestore.getInstance();
-        db.collection("Adme_Appointment_list").document(doc)
+        db.collection("Adme_Appointment_list").document(newDocumentID)
                 .set(appointment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Log.d(TAG, "Appointment successfully written!");
+
+                        Notification notification = new Notification();
+                        notification.setSeen(false);
+                        notification.setTime(newDocumentID);
+                        notification.setText("You've new $"+sum+" appointment request");
+                        notification.setMode(FirebaseUtilClass.MODE_SERVICE_PROVIDER);
+                        notification.setType(FirebaseUtilClass.NOTIFICATION_APPOINTMENT_TYPE);
+                        notification.setReference(newDocumentID);
+
+                        db.collection("Adme_User/"+service.getUser_ref()+"/notification_list")
+                                .document(newDocumentID)
+                                .set(notification)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "Notification successfully written!");
+                                        Toast.makeText(getApplicationContext(), "Successfully send request to service provider.", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error writing document", e);
+                                    }
+                                });
+                        onBackPressed();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(getApplicationContext(), "Failed to send request. Please, try again.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
