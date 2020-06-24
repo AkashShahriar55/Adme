@@ -26,6 +26,11 @@ public class DataRepository {
     public void deleteEmail(){firebaseUtilClass.deleteEmail();}
     public void addEmail(String email){firebaseUtilClass.addEmail(email);}
 
+    //For status update
+    public void updateStatus( String status){
+        firebaseUtilClass.updateStatus(status);
+    }
+
     // for profile update ends
 
     public MutableLiveData<User> getUserData() {

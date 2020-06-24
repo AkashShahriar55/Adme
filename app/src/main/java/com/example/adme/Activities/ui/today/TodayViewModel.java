@@ -19,4 +19,8 @@ public class TodayViewModel extends ViewModel {
     public MutableLiveData<User> getUserData() {
         return userData;
     }
+
+    public void updateStatus( String status){
+        repository.updateStatus(status);
+    }
 }
