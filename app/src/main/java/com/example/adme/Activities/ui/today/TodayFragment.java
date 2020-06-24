@@ -172,6 +172,8 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
 
         todayStatusSwitch = view.findViewById(R.id.today_status_switch);
         todayStatusSwitch.setChecked(isOnline);
+
+
         if(isOnline){
             todayStatusSwitch.setText(R.string.online_status);
             todayStatusSwitch.setTextColor(getResources().getColor(R.color.color_active));
@@ -179,17 +181,21 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             todayStatusSwitch.setText(R.string.offline_status);
             todayStatusSwitch.setTextColor(getResources().getColor(R.color.color_not_active));
         }
+
+
         todayStatusSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 buttonView.setText(R.string.online_status);
                 buttonView.setTextColor(getResources().getColor(R.color.color_active));
                 mCurrentUser.setStatus(FirebaseUtilClass.STATUS_ONLINE);
                 isOnline = true;
+                todayViewModel.updateStatus(FirebaseUtilClass.STATUS_ONLINE);
             }else{
                 buttonView.setText(R.string.offline_status);
                 buttonView.setTextColor(getResources().getColor(R.color.color_not_active));
                 mCurrentUser.setStatus(FirebaseUtilClass.STATUS_OFFLINE);
                 isOnline = false;
+                todayViewModel.updateStatus(FirebaseUtilClass.STATUS_OFFLINE);
             }
         });
 

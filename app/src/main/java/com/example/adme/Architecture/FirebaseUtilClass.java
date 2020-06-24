@@ -49,6 +49,7 @@ public class FirebaseUtilClass {
     public static final String MODE_SERVICE_PROVIDER = "ServiceProvider";
     public static final String STATUS_ONLINE = "Online";
     public static final String  STATUS_OFFLINE = "Offline";
+    private static final String STATUS = "status";
     public static final String CONTACTS = "contacts";
     public static final String ENTRY_MONTHLY_SUBSCRIPTION_PAID = "Paid";
 
@@ -515,4 +516,19 @@ public class FirebaseUtilClass {
 
 
     //for profile ends
+
+    //For Status update
+    public void updateStatus(String status){
+        userRef.document(mAuth.getCurrentUser().getUid()).update(STATUS,status).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("SUCCESS","Status Updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("FAILURE","Status Update failed");
+            }
+        });
+    }
 }
