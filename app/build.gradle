@@ -43,6 +43,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "com.google.android.material:material:1.1.0"
+    //noinspection GradleCompatible
     implementation 'com.android.support:design:28.0.0'
     implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
     implementation 'androidx.navigation:navigation-fragment:2.2.2'
@@ -54,6 +55,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android.material:material:1.1.0'
+
+
 
 
     // for circle image view
@@ -96,12 +99,17 @@ dependencies {
 
     //firebase
     //  Firebase SDK for Google Analytics.
-    implementation 'com.google.firebase:firebase-analytics:17.4.2'
+    // Add the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+
+    // Add the SDK for Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging:20.2.1'
 
     //  Crashlytics SDK.
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    implementation 'com.google.guava:guava:27.0.1-android'
 
     //for loading animation
     implementation "com.airbnb.android:lottie:$lottieVersion"
@@ -110,4 +118,5 @@ dependencies {
 
     //For Country Code Picker
     implementation 'com.hbb20:ccp:2.3.9'
+    implementation 'androidx.work:work-runtime:2.1.0'
 }
