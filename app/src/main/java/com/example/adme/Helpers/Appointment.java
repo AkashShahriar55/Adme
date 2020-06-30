@@ -20,6 +20,7 @@ public class Appointment {
     private String state;
     private MyPlaces clint_location;
     private MyPlaces service_provider_location;
+    private String appointmentID;
 
     public Appointment(){}
 
@@ -204,5 +205,15 @@ public class Appointment {
 
     public void setService_provider_location(MyPlaces service_provider_location) {
         this.service_provider_location = service_provider_location;
+    }
+
+    @Exclude
+    public String getAppointmentID() {
+        return appointmentID;
+    }
+
+    @Exclude
+    public void setAppointmentID(String appointmentID) {
+        this.appointmentID = appointmentID;
     }
 }

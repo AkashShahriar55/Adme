@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import com.example.adme.Activities.ui.home.ServiceProviderDetailsActivity;
 import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.Appointment;
+import com.example.adme.Helpers.AppointmentRef;
 import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.MyPlaces;
@@ -65,9 +66,6 @@ import java.util.Locale;
 
 public class ServiceProviderQuotationActivity  extends AppCompatActivity  implements OnMapReadyCallback {
     private static final String TAG = "QuotationDetails";
-
-    private QuotationDetailsViewModel mViewModel;
-
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 15;
     private GoogleMap mMap;
@@ -97,6 +95,8 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     }
 
     private void initializeFields() {
+        db = FirebaseFirestore.getInstance();
+
         bottomSheet = findViewById(R.id.appointment_bottom_details);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
@@ -181,7 +181,58 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
         bt_approve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_APPROVED);
+                db.collection("Adme_Appointment_list").document(appointmentID)
+                        .set(appointment)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "appointment successfully written!");
 
+//                                AppointmentRef appointmentRef = new AppointmentRef();
+//                                appointmentRef.setReference(appointmentID);
+//                                appointmentRef.setMode(FirebaseUtilClass.MODE_SERVICE_PROVIDER);
+
+//                                db.collection("Adme_User/"+ appointment.getService_provider_ref() +"/appointment_list")
+//                                        .document(appointmentID)
+//                                        .set(appointmentRef)
+//                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                            @Override
+//                                            public void onSuccess(Void aVoid) {
+//                                                Log.d(TAG, "appointmentID successfully written "+appointmentID);
+////                                                Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
+//                                            }
+//                                        })
+//                                        .addOnFailureListener(new OnFailureListener() {
+//                                            @Override
+//                                            public void onFailure(@NonNull Exception e) {
+//                                                Log.w(TAG, "Error writing document appointmentID", e);
+//                                            }
+//                                        });
+
+                                createNotification(
+                                        appointment.getClint_name()+" approved your request",
+                                        FirebaseUtilClass.MODE_SERVICE_PROVIDER+"",
+                                        appointment.getService_provider_ref()+"",
+                                        "Appointment approved successful."
+                                );
+
+                                createNotification(
+                                        "You've successfully created an appointment",
+                                        FirebaseUtilClass.MODE_CLIENT+"",
+                                        appointment.getClint_ref()+"",
+                                        "Appointment approved successful."
+                                );
+
+                                onBackPressed();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error writing document", e);
+                            }
+                        });
             }
         });
 
@@ -190,6 +241,37 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
         bt_decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_CANCELED);
+                db.collection("Adme_Appointment_list").document(appointmentID)
+                        .set(appointment)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "appointment successfully written!");
+
+                                createNotification(
+                                        appointment.getClint_name()+" decline your request",
+                                        FirebaseUtilClass.MODE_SERVICE_PROVIDER+"",
+                                        appointment.getService_provider_ref()+"",
+                                        "Appointment declined successful."
+                                );
+
+                                createNotification(
+                                        "You've declined an appointment",
+                                        FirebaseUtilClass.MODE_CLIENT+"",
+                                        appointment.getClint_ref()+"",
+                                        "Appointment declined successful."
+                                );
+
+                                onBackPressed();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error writing document", e);
+                            }
+                        });
 
             }
         });
@@ -252,20 +334,24 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                     tv_service_list.setText(servicetext);
                     tv_distance.setText(appointment.getDistance() + " Miles");
                     tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa, dd MMM yyyy"));
-                    tv_clint_money.setText("$ " + appointment.getPrice_requested());
+                    tv_clint_money.setText("$ " + appointment.getPrice_needed());
                     tv_clint_name.setText(appointment.getClint_name());
                     String loc = appointment.getClint_location().getName().substring(0, appointment.getClint_location().getName().lastIndexOf(","));
                     tv_clint_address.setText(loc);
                     tv_clint_text.setText(appointment.getClint_text());
-                    tv_money.setText("Requested Money : $" + appointment.getPrice_requested());
+                    tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
                     if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_FINISHED)){
                         tv_state.setText("State : Finished");
                     }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_CANCELED)){
                         tv_state.setText("State : Canceled by client");
                     }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED)){
                         tv_state.setText("State : Canceled by service provider");
+                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND)){
+                        tv_state.setText("State : Request sent to service provider");
+                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND)){
+                        tv_state.setText("State : Quotation sent to client");
                     }else{
-                        tv_state.setText("State : Pending");
+                        tv_state.setText("State : Active Appointment");
                     }
                 } else {
                     inputField.setVisibility(View.GONE);
@@ -278,24 +364,68 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                     tv_service_list.setText(servicetext);
                     tv_distance.setText(appointment.getDistance() + " Miles");
                     tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa, dd MMM yyyy"));
-                    tv_clint_money.setText("$ " + appointment.getPrice_requested());
+                    tv_clint_money.setText("$ " + appointment.getPrice_needed());
                     tv_clint_name.setText(appointment.getService_provider_name());
                     String loc = appointment.getService_provider_location().getName().substring(0, appointment.getService_provider_location().getName().lastIndexOf(","));
                     tv_clint_address.setText(loc);
                     tv_clint_text.setText(appointment.getClint_text());
-                    tv_money.setText("Requested Money : $" + appointment.getPrice_requested());
+                    tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
                     if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_FINISHED)){
                         tv_state.setText("State : Finished");
                     }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_CANCELED)){
                         tv_state.setText("State : Canceled by client");
                     }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED)){
                         tv_state.setText("State : Canceled by service provider");
+                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND)){
+                        tv_state.setText("State : Request sent to service provider");
+                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND)){
+                        tv_state.setText("State : Quotation sent to client");
                     }else{
-                        tv_state.setText("State : Pending");
+                        tv_state.setText("State : Active Appointment");
                     }
                 }
             }
         });
+    }
+
+    public void seenNotification(){
+        String notiID = CookieTechUtilityClass.getSharedPreferences("notification", this);
+        db = FirebaseFirestore.getInstance();
+
+        String reference = "";
+        if(isClientMode()){
+            reference = appointment.getClint_ref();
+        }else {
+            reference = appointment.getService_provider_ref();
+        }
+        String finalReference = reference;
+
+        db.collection("Adme_User/"+ finalReference +"/notification_list")
+                .document(notiID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Notification noti = documentSnapshot.toObject(Notification.class);
+                        noti.setSeen(true);
+                        db.collection("Adme_User/"+ finalReference +"/notification_list")
+                                .document(notiID)
+                                .set(noti)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "Notification successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error writing document", e);
+                                    }
+                                });
+                    }
+                });
+
     }
 
     private void getFirebaseData() {
@@ -311,6 +441,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                             public boolean queueIdle() {
                                 updateView();
                                 updateMap();
+                                seenNotification();
                                 return false;
                             }
                         };
@@ -320,8 +451,13 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     }
 
     private void setFirebaseData(){
-        db = FirebaseFirestore.getInstance();
-        appointment.setPrice_needed(tv_service_money.getText().toString());
+        String requestedMoney = "";
+        if(tv_service_money.getText().toString().trim().equals("")){
+            requestedMoney = appointment.getPrice_requested();
+        } else {
+            requestedMoney = tv_service_money.getText().toString();
+        }
+        appointment.setPrice_needed(requestedMoney);
         appointment.setService_provider_text(tv_service_quotation.getText().toString());
         appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND);
 
@@ -343,32 +479,40 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
 
-                        String newDocumentID = String.valueOf(Calendar.getInstance().getTimeInMillis());
-                        Notification notification = new Notification();
-                        notification.setSeen(false);
-                        notification.setTime(newDocumentID);
-                        notification.setText(appointment.getClint_name()+" response to your request");
-                        notification.setMode(FirebaseUtilClass.MODE_CLIENT);
-                        notification.setType(FirebaseUtilClass.NOTIFICATION_APPOINTMENT_TYPE);
-                        notification.setReference(appointmentID);
+                        createNotification(
+                                appointment.getClint_name()+" response to your request",
+                                FirebaseUtilClass.MODE_CLIENT+"",
+                                appointment.getClint_ref()+"",
+                                "Successfully send quotation to client."
+                        );
 
-                        db.collection("Adme_User/"+appointment.getClint_ref()+"/notification_list")
-                                .document(newDocumentID)
-                                .set(notification)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "Notification successfully written!");
-                                        Toast.makeText(getApplicationContext(), "Successfully send quotation to client.", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error writing document", e);
-                                    }
-                                });
                         onBackPressed();
+
+//                        String newDocumentID = String.valueOf(Calendar.getInstance().getTimeInMillis());
+//                        Notification notification = new Notification();
+//                        notification.setSeen(false);
+//                        notification.setTime(newDocumentID);
+//                        notification.setText(appointment.getClint_name()+" response to your request");
+//                        notification.setMode(FirebaseUtilClass.MODE_CLIENT);
+//                        notification.setType(FirebaseUtilClass.NOTIFICATION_APPOINTMENT_TYPE);
+//                        notification.setReference(appointmentID);
+//
+//                        db.collection("Adme_User/"+appointment.getClint_ref()+"/notification_list")
+//                                .document(newDocumentID)
+//                                .set(notification)
+//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void aVoid) {
+//                                        Log.d(TAG, "Notification successfully written!");
+//                                        Toast.makeText(getApplicationContext(), "Successfully send quotation to client.", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        Log.w(TAG, "Error writing document", e);
+//                                    }
+//                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -459,7 +603,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (appointment.getState().equals("clientSent")) {
+                if (!isClientMode()) {
                     FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(ServiceProviderQuotationActivity.this);
                     locationProviderClient.getLastLocation().addOnSuccessListener(ServiceProviderQuotationActivity.this, location -> {
                         if (location != null) {
@@ -470,9 +614,13 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                                     mMap.addMarker(new MarkerOptions().position(currentLocation).title(getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromBitmap(getIcon(R.drawable.service_provider, 90, 78))));
                                     mMap.addMarker(new MarkerOptions().position(appointment.getClintLatLng()).title(getString(R.string.client_current_location)).icon(BitmapDescriptorFactory.fromBitmap(getIcon(R.drawable.client, 90, 78))));
 
-                                    LatLngBounds zoomBound = LatLngBounds.builder().include(currentLocation).include(appointment.getClintLatLng()).build();
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
-                                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBound, 300));
+                                    try {
+                                        LatLngBounds zoomBound = LatLngBounds.builder().include(currentLocation).include(appointment.getClintLatLng()).build();
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBound, 300));
+                                    }catch (Exception e){
+                                        Log.d(TAG, "queueIdle: map load faild");
+                                    }
 
                                     // Getting URL to the Google Directions API
                                     GoogleMapHelper helper = new GoogleMapHelper(mMap);
@@ -488,7 +636,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
 
                         }
                     });
-                } else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND)) {
+                } else if(isClientMode()) {
                     if (appointment.getClintLatLng() != null && appointment.getServiceProviderLatLng() != null) {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -496,9 +644,13 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                                 mMap.addMarker(new MarkerOptions().position(appointment.getClintLatLng()).title(getString(R.string.your_location)).icon(BitmapDescriptorFactory.fromBitmap(getIcon(R.drawable.client, 90, 78))));
                                 mMap.addMarker(new MarkerOptions().position(appointment.getServiceProviderLatLng()).title(getString(R.string.sv_current_location)).icon(BitmapDescriptorFactory.fromBitmap(getIcon(R.drawable.service_provider, 90, 78))));
 
-                                LatLngBounds zoomBound = LatLngBounds.builder().include(appointment.getServiceProviderLatLng()).include(appointment.getClintLatLng()).build();
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(appointment.getClintLatLng(), 10));
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBound, 300));
+                                try {
+                                    LatLngBounds zoomBound = LatLngBounds.builder().include(appointment.getServiceProviderLatLng()).include(appointment.getClintLatLng()).build();
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(appointment.getClintLatLng(), 10));
+                                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBound, 300));
+                                }catch (Exception e){
+                                    Log.d(TAG, "queueIdle: map load faild");
+                                }
 
                                 // Getting URL to the Google Directions API
                                 GoogleMapHelper helper = new GoogleMapHelper(mMap);
@@ -514,6 +666,34 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                 }
             }
         }).start();
+    }
+
+    public void createNotification(String text, String mode, String reference, String toastText){
+        String newDocumentID = String.valueOf(Calendar.getInstance().getTimeInMillis());
+        Notification notification = new Notification();
+        notification.setSeen(false);
+        notification.setTime(newDocumentID);
+        notification.setText(text);
+        notification.setMode(mode);
+        notification.setType(FirebaseUtilClass.NOTIFICATION_APPOINTMENT_TYPE);
+        notification.setReference(appointmentID);
+
+        db.collection("Adme_User/"+ reference +"/notification_list")
+                .document(newDocumentID)
+                .set(notification)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Notification successfully written!");
+                        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
 
     public Bitmap getIcon(int name,int height, int width){
@@ -536,4 +716,5 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
     }
+
 }

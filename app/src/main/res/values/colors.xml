@@ -9,7 +9,6 @@
     <color name="color_active">#4CAF50</color>
     <color name="color_negative">#F44336</color>
     <color name="color_not_active">#575757</color>
-    <color name="default_background">#eeeeee</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="login_btn_color">#FFCC00</color>
@@ -38,7 +37,11 @@
     <color name="sv_primary">#3F5AA6</color>
     <color name="barChartUnfill">#F2F5F7</color>
 
+<!--    <color name="default_background">#eeeeee</color>-->
+    <color name="default_background">#F1F2F6</color>
     <color name="android_default_layout_color">#FAFAFA</color>
+    <color name="android_default_layout_color2">#F1F2F6</color>
+    <color name="android_default_layout_color3">#FAFBFF</color>
 
     <color name="client_primary">#FA6D01</color>
 

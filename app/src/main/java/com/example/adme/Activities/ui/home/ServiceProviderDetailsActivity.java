@@ -479,11 +479,15 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         );
         appointment.setService_provider_location(serviceProviderPlace);
 
+        String requestedMoney = "";
         if(tv_service_money.getText().toString().trim().equals("")){
-            appointment.setPrice_requested(String.valueOf(sum));
+            requestedMoney = String.valueOf(sum);
         } else {
-            appointment.setPrice_requested(tv_service_money.getText().toString());
+            requestedMoney = tv_service_money.getText().toString();
         }
+        String finalRequestedMoney = requestedMoney;
+        appointment.setPrice_requested(finalRequestedMoney);
+
         appointment.setServices(servicetext);
         appointment.setClint_time(String.valueOf(myCalendar.getTimeInMillis()));
         appointment.setClint_text(tv_service_quotation.getText().toString());
@@ -504,7 +508,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
                         Notification notification = new Notification();
                         notification.setSeen(false);
                         notification.setTime(newDocumentID);
-                        notification.setText("You've new $"+sum+" appointment request");
+                        notification.setText("You've new $"+ finalRequestedMoney +" appointment request");
                         notification.setMode(FirebaseUtilClass.MODE_SERVICE_PROVIDER);
                         notification.setType(FirebaseUtilClass.NOTIFICATION_APPOINTMENT_TYPE);
                         notification.setReference(newDocumentID);

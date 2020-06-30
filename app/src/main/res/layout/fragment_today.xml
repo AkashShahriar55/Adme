@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/default_background"
     tools:context=".Activities.ui.today.TodayFragment">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -75,7 +75,7 @@
             app:behavior_hideable="true"
             app:behavior_peekHeight="156dp"
             app:layout_behavior="@string/bottom_sheet_behavior"
-            android:background="@drawable/login_background"
+            android:background="@color/default_background"
             android:transitionName="bottom_details">
 
             <androidx.cardview.widget.CardView
@@ -476,7 +476,9 @@
                                 app:layout_constraintStart_toStartOf="@+id/tv_total_income"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_total_income" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </androidx.cardview.widget.CardView>
+
                     <LinearLayout
                         android:id="@+id/service_container"
                         android:layout_width="0dp"
@@ -487,19 +489,23 @@
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="@+id/guideline11"
                         app:layout_constraintTop_toBottomOf="@+id/textView37" >
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/service_recyclerview"
+                            android:clipToPadding="false"
+                            android:paddingBottom="4dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                        <include   layout="@layout/layout_empty_recycleview"/>
-                    </LinearLayout>
 
+                        <include layout="@layout/layout_empty_recycleview"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/textView37"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="0dp"
                         android:layout_marginTop="20dp"
                         android:text="Your services "
                         android:textColor="@color/txt_highlight"
@@ -522,17 +528,74 @@
                         android:id="@+id/textView38"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="0dp"
                         android:text="Active Appointments"
                         android:textColor="@color/txt_highlight"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/guideline11"
                         app:layout_constraintTop_toBottomOf="@+id/service_container" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/appointment_container"
+                    <LinearLayout
+                        android:id="@+id/service_container2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                        app:layout_constraintStart_toStartOf="@+id/guideline11"
+                        app:layout_constraintTop_toBottomOf="@+id/textView38">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/appointment_container"
+                            android:clipToPadding="false"
+                            android:paddingBottom="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/empty_recyclerview_appointment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/default_background">
+
+                            <ImageView
+                                android:id="@+id/imageView34"
+                                android:layout_width="wrap_content"
+                                android:layout_height="90dp"
+                                android:src="@drawable/empty1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textView11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginBottom="40dp"
+                                android:text="No active appointment found"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/imageView34" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="gone"
+                        android:background="@color/default_background"
+                        android:id="@+id/appointment_container0"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:paddingBottom="6dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="20dp"
                         android:nestedScrollingEnabled="false"
@@ -540,9 +603,10 @@
                         app:layout_constraintEnd_toStartOf="@+id/guideline12"
                         app:layout_constraintStart_toStartOf="@+id/guideline11"
                         app:layout_constraintTop_toBottomOf="@+id/textView38" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.core.widget.NestedScrollView>
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

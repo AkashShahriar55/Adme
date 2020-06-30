@@ -1,5 +1,7 @@
 package com.example.adme.Helpers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.format.DateFormat;
 import android.util.Log;
 
@@ -7,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class CookieTechUtilityClass {
 
@@ -68,4 +72,14 @@ public class CookieTechUtilityClass {
         }
     }
 
+    public static void setSharedPreferences(String key, String value, Context context){
+        SharedPreferences.Editor editor = context.getSharedPreferences("Settings", MODE_PRIVATE).edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    public static String getSharedPreferences(String key, Context context){
+        SharedPreferences preferences = context.getSharedPreferences("Settings", MODE_PRIVATE);
+        return preferences.getString(key,"");
+    }
 }

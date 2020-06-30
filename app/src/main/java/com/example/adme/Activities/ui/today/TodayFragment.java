@@ -33,6 +33,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Helpers.Appointment;
+import com.example.adme.Helpers.AppointmentRef;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.UiHelper;
@@ -85,6 +87,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
     RecyclerView appointmentRecyclerView,serviceRecyclerView;
     Button todayAddService;
 
+    ConstraintLayout empty_recyclerview,empty_recyclerview_appointment;
     CoordinatorLayout layout_coordinator;
     CardView bottom_details_toolbar;
     RecyclerView.Adapter appointmentAdapter;
@@ -94,11 +97,11 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
     int oldPeekHeight;
 
     List<Map<String,String>> services = new ArrayList<>();
-
+//    List<AppointmentRef> appointmentRefList = new ArrayList<>();
+    List<Appointment> appointmentList = new ArrayList<>();
 
     TodayViewModel todayViewModel;
 
-    ConstraintLayout empty_recyclerview;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -122,10 +125,9 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onChanged(User user) {
                 mCurrentUser = user;
+                todayViewModel.fatchActiveAppointmentList(user.getmUserId());
                 Log.d("view-model", "onChanged:  bottom details" + user.getStatus());
-                if(user.getService_reference().size() <= 0){
-
-                }else{
+                if(user.getService_reference().size() > 0){
                     services = user.getService_reference();
                 }
                 updateUi();
@@ -133,6 +135,27 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         };
 
         todayViewModel.getUserData().observe(requireActivity(),userDataObserver);
+
+        todayViewModel.getAppointmentList().observe(this, new Observer<List<Appointment>>() {
+            @Override
+            public void onChanged(List<Appointment> appointments) {
+                Log.d(TAG, "onChanged: appointments "+appointments.size());
+                appointmentList.clear();
+                appointmentList.addAll(appointments);
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        appointmentAdapter.notifyDataSetChanged();
+                        if(appointmentList.size() == 0){
+                            empty_recyclerview_appointment.setVisibility(View.VISIBLE);
+                        }else{
+                            empty_recyclerview_appointment.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        });
+
     }
 
     private void initialization(View view) {
@@ -152,11 +175,18 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         appointmentRecyclerView = view.findViewById(R.id.appointment_container);
         serviceRecyclerView = view.findViewById(R.id.service_recyclerview);
         empty_recyclerview = view.findViewById(R.id.empty_recyclerview);
+        empty_recyclerview_appointment = view.findViewById(R.id.empty_recyclerview_appointment);
 
         if(services.size() == 0){
             empty_recyclerview.setVisibility(View.VISIBLE);
         }else{
             empty_recyclerview.setVisibility(View.GONE);
+        }
+
+        if(appointmentList.size() == 0){
+            empty_recyclerview_appointment.setVisibility(View.VISIBLE);
+        }else{
+            empty_recyclerview_appointment.setVisibility(View.GONE);
         }
 
         notificationButton = view.findViewById(R.id.client_notification_btn);
@@ -242,7 +272,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         appointmentRecyclerView.setHasFixedSize(true);
         appointmentRecyclerView.setLayoutManager(layoutManager);
-        appointmentAdapter = new AppointmentAdapter(getContext(),getParentFragmentManager());
+        appointmentAdapter = new AppointmentAdapter(getContext(), appointmentList);
 
         RecyclerView.LayoutManager serviceLayoutManager = new LinearLayoutManager(getContext());
         serviceRecyclerView.setHasFixedSize(true);
@@ -279,6 +309,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         }else{
             empty_recyclerview.setVisibility(View.GONE);
         }
+
     }
 
     @Override
@@ -293,7 +324,6 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         fragmentTransaction.add(R.id.nav_host_fragment,notificationFragment,"notificationFragment");
         fragmentTransaction.commit();
     }
-
 
     private void checkPermission() {
         // Here, thisActivity is the current activity
