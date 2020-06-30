@@ -46,6 +46,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -59,7 +60,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class TodayFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
+public class TodayFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback, GoogleMap.OnMarkerClickListener {
     private static final String TAG = "TodayFragment";
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -401,11 +402,45 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             double latitude = Double.parseDouble(Objects.requireNonNull(mCurrentUser.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE)));
             double longitude = Double.parseDouble(Objects.requireNonNull(mCurrentUser.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE)));
             LatLng currentLocation = new LatLng(latitude,longitude);
+            updateCurrentAppointmentsPin();
             mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(requireContext().getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
         }else{
             GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
         }
+
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                return null;
+            }
+        });
+
+
+
+    }
+
+    private void updateCurrentAppointmentsPin() {
+        LatLng location1 = new LatLng(24.8215038,88.3160202);
+        LatLng location2 = new LatLng(24.8213869,88.3198963);
+        mMap.addMarker(new MarkerOptions()
+                .position(location1)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.client))
+                .title("location1")
+                .snippet("something"));
+
+        mMap.addMarker(new MarkerOptions()
+                .position(location2)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.client))
+                .title("location2")
+                .snippet("something"));
+
 
     }
 
@@ -460,4 +495,9 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
 //        Log.d(TAG, "onViewCreated: "+bottomSheetBehavior.getPeekHeight());
     }
 
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
+    }
 }

@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,15 +45,19 @@ import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
+import com.google.android.gms.common.util.ScopeUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.api.LogDescriptor;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -58,39 +65,46 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firestore.v1.FirestoreGrpc;
+import com.google.firestore.v1.StructuredQuery;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, ServiceSearchAdapter.ServiceSearchAdapterListener {
     private static final String TAG = "HomeFragment";
     private HomeViewModel mViewModel;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 15;
-    private TodayViewModel homeViewModel;
+    private HomeViewModel homeViewModel;
     private GoogleMap mMap;
     private FloatingActionButton locationButton;
     private ImageView client_notification_btn, bottomDetailsButton;
     private RecyclerView search_service_rv;
-    private List<Service> serviceProvidersList;
+    private List<Service> serviceProvidersList = new ArrayList<>();
     private ServiceSearchAdapter serviceSearchAdapter;
     private CardView cv_search;
     private User mCurrentUser;
+    private Marker userLocation;
 
+    private List<Service> localizedServiceList = new ArrayList<>();
+    private boolean isLocalizedServiceListObserverSet = false;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root= inflater.inflate(R.layout.home_fragment, container, false);
         initializeFields(root);
+
         return root;
     }
 
     private void initializeFields(View root) {
-        checkPermission();
+
+
         RecyclerView available_service_rv = root.findViewById(R.id.available_service_rv);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         available_service_rv.setLayoutManager(layoutManager);
@@ -105,7 +119,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
                 goToSearchFragment();
             }
         });
-
+        //setUpMap();
     }
 
     @Override
@@ -114,6 +128,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
         locationButton = view.findViewById(R.id.client_location_button);
         client_notification_btn = view.findViewById(R.id.client_notification_btn);
         bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
+
+
     }
 
     @Override
@@ -137,7 +153,84 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     @Override
     public void onStart() {
         super.onStart();
-        mCurrentUser = ((LandingActivity)requireActivity()).getmCurrentUser();
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        final Observer<User> userDataObserver = new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                mCurrentUser = user;
+                Log.d("akash_debug", "on user data update: " + localizedServiceList.size());
+                checkPermission();
+
+
+            }
+        };
+
+        homeViewModel.getUserData().observe(requireActivity(),userDataObserver);
+
+
+    }
+
+
+    private void setUpLocalizedServices(){
+        homeViewModel.getAllServiceList().observe(this, new Observer<List<Service>>() {
+            @Override
+            public void onChanged(List<Service> services) {
+                serviceProvidersList = services;
+                Log.d("akash_debug", "on service provider list update: " + localizedServiceList.size());
+                if(mCurrentUser.getLocation() != null && mMap != null){
+                    Map<String,String> location = mCurrentUser.getLocation();
+                    String latitude = location.get(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE);
+                    String longitude = location.get(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE);
+                    updateLocalizedServiceList(latitude,longitude);
+                }
+            }
+        });
+    }
+
+    private  void updateLocalizedServiceList(String latitude,String longitude){
+
+        double centerLat = Double.parseDouble(latitude);
+        double centerLng = Double.parseDouble(longitude);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Service> localizedServiceListTemp = new ArrayList<>();
+                for(Service service:serviceProvidersList){
+
+                    double endLat = Double.parseDouble(Objects.requireNonNull(service.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE)));
+                    double endLng = Double.parseDouble(Objects.requireNonNull(service.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE)));
+                    float[] results = new float[1];
+                    Location.distanceBetween(centerLat,centerLng,endLat,endLng,results);
+                    float distanceInMeters = results[0];
+                    if(distanceInMeters<1000000){
+                        localizedServiceListTemp.add(service);
+                    }
+                }
+                localizedServiceList = localizedServiceListTemp;
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setMarkerOfLocalizedServices();
+                    }
+                });
+
+            }
+
+        }).start();
+
+    }
+
+    private void setMarkerOfLocalizedServices() {
+        Log.d("akash_debug", "on set marker update: " + localizedServiceList.size());
+        for(Service service:localizedServiceList){
+            Map<String,String> location = service.getLocation();
+            double lat = Double.parseDouble(location.get(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE));
+            double lng = Double.parseDouble(location.get(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE));
+            LatLng latLng = new LatLng(lat,lng);
+            Marker something = mMap.addMarker(new MarkerOptions().draggable(true).position(latLng).title(service.getUser_name()));
+            Log.d("akash_debug", "setMarkerOfLocalizedServices: " + (mMap != null));
+        }
     }
 
     public static void hideSoftKeyboard(Activity activity) {
@@ -202,15 +295,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
             // Permission has already been granted
             if(mMap == null){
                 setUpMap();
-            }else{
-                GoogleMapHelper.markCurrentLocation(getContext(),mMap);
-//                if(mCurrentUser != null){
-//                    if(mCurrentUser.getLatLng() != null){
-//                        markUserLocationInMap();
-//                    }else{
-//                        GoogleMapHelper.markCurrentLocation(getContext(),mMap);
-//                    }
-//                }
             }
 
         }
@@ -234,6 +318,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if(mCurrentUser.getLocation()!= null){
+            String latitude = mCurrentUser.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LATITUDE);
+            String longitude = mCurrentUser.getLocation().get(FirebaseUtilClass.ENTRY_LOCATION_LONGITUDE);
+            if( latitude != null && longitude != null){
+                double lat = Double.parseDouble(latitude);
+                double lng = Double.parseDouble(longitude);
+                LatLng position = new LatLng(lat,lng);
+                if(userLocation == null){
+                    userLocation = mMap.addMarker(new MarkerOptions().draggable(true).position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+                }else{
+                    userLocation.setPosition(position);
+                }
+
+            }
+        }
         GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
 //        if(mCurrentUser != null){
 //            if(mCurrentUser != null){
@@ -245,6 +344,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 //                }
 //            }
 //        }
+        setUpLocalizedServices();
 
     }
 

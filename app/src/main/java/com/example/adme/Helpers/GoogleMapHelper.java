@@ -283,8 +283,7 @@ public class GoogleMapHelper {
                 locationProviderClient.getLastLocation().addOnSuccessListener((Activity) context, location -> {
                     if(location != null){
                         LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
-                        mMap.clear();
-                        mMap.addMarker(new MarkerOptions().position(currentLocation).draggable(true).title(context.getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
+                        mMap.addMarker(new MarkerOptions().position(currentLocation).title(context.getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
                         Log.i(TAG, "run: "+location.getLongitude() + " " + location.getLatitude());
                     }

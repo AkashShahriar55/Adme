@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.adme.Activities.ui.home.HomeFragment;
+import com.example.adme.Activities.ui.home.HomeViewModel;
 import com.example.adme.Activities.ui.income.IncomeFragment;
 import com.example.adme.Activities.ui.leaderboard.LeaderBoardFragment;
 import com.example.adme.Activities.ui.profile.ProfileFragment;
@@ -21,14 +22,18 @@ import com.example.adme.Helpers.Constants;
 import com.example.adme.Helpers.User;
 import com.example.adme.Architecture.UserDataModel;
 import com.example.adme.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.functions.FirebaseFunctionsException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 
@@ -42,6 +47,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
     private String label = null;
     private boolean isClient = false;
     private User mCurrentUser;
+    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
 
     final Fragment fragment1 = new TodayFragment();
     final Fragment fragment2 = new LeaderBoardFragment();
@@ -68,6 +74,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
         getMode();
         mCurrentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
 
+
         if(isClient){
             setContentView(R.layout.activity_landing_client);
             BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -76,10 +83,12 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment5, "5").commit();
-                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment6, "6").hide(fragment6).commit();
-                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment3, "3").hide(fragment3).commit();
-                    fm.beginTransaction().add(R.id.nav_host_fragment, fragment4, "4").hide(fragment4).commit();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.add(R.id.nav_host_fragment, fragment5, "5");
+                    ft.add(R.id.nav_host_fragment, fragment6, "6").hide(fragment6);
+                    ft.add(R.id.nav_host_fragment, fragment3, "3").hide(fragment3);
+                    ft.add(R.id.nav_host_fragment, fragment4, "4").hide(fragment4);
+                    ft.commit();
                     active = fragment5;
                 }
             });
@@ -240,6 +249,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("akash_debug", "navigation selected: ");
                         fm.beginTransaction().hide(active).show(fragment5).commit();
                         active = fragment5;
                     }
