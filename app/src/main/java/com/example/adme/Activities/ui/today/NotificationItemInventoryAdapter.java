@@ -77,6 +77,7 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
                     Intent intent = new Intent(context, ServiceProviderQuotationActivity.class);
                     intent.putExtra("reference", notification.getReference());
                     context.startActivity(intent);
+                    CookieTechUtilityClass.setSharedPreferences("notification", notification.getTime(), context);
                 }
             });
         } else if(notification.getType().equals("rating")){
@@ -87,6 +88,7 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
                     Intent intent = new Intent(context, RatingAndHistoryActicity.class);
                     intent.putExtra("reference", notification.getReference());
                     context.startActivity(intent);
+                    CookieTechUtilityClass.setSharedPreferences("rating", notification.getTime(), context);
                 }
             });
         } else {
@@ -97,6 +99,8 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
 
         if(!notification.isSeen()){
             holder.cl_view.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent_blue));
+        } else {
+            holder.cl_view.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
         }
         holder.notification_text.setText(notification.getText());
         holder.time.setText(CookieTechUtilityClass.getTimeDifference(notification.getTime(), String.valueOf(Calendar.getInstance().getTimeInMillis())));

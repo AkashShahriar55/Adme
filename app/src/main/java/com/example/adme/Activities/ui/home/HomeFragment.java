@@ -283,10 +283,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     }
 
     private void goToSearchFragment() {
-        Fragment searchFragment = new SearchFragment();
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.add(R.id.nav_host_fragment, searchFragment,"searchFragment");
-        fragmentTransaction.commit();
+//        Fragment searchFragment = new SearchFragment();
+//        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.add(R.id.nav_host_fragment, searchFragment,"searchFragment");
+//        fragmentTransaction.commit();
+        Intent intent = new Intent(getActivity(), ServiceProviderSearchActivity.class);
+        startActivity(intent);
     }
 }

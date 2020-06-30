@@ -35,10 +35,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl2"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="300dp"
         android:layout_marginTop="2dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/cl3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +47,7 @@
             android:id="@+id/tv_week_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="32dp"
             android:text="154.75"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -63,7 +62,7 @@
             android:layout_width="@dimen/cal_size"
             android:layout_height="@dimen/cal_size"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
@@ -75,7 +74,7 @@
             android:id="@+id/img_calender2"
             android:layout_width="@dimen/cal_size"
             android:layout_height="@dimen/cal_size"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="32dp"
             android:clickable="true"
             android:focusable="true"
@@ -141,9 +140,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -187,18 +185,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl3"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
         android:layout_margin="1dp"
-        android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/cl6"
+        android:background="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/cl5"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/cl4">
+        app:layout_constraintStart_toEndOf="@+id/cl4"
+        app:layout_constraintTop_toBottomOf="@+id/cl2">
 
         <TextView
             android:id="@+id/tv_req_val"
@@ -241,13 +237,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl4"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="110dp"
         android:layout_margin="1dp"
-        android:background="@color/white"
+        android:layout_marginTop="69dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        app:layout_constraintBottom_toTopOf="@+id/cl6"
+        android:background="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/cl3"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -294,13 +290,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl5"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="110dp"
         android:layout_margin="1dp"
-        android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        app:layout_constraintBottom_toTopOf="@+id/cl7"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/cl3"
@@ -347,19 +342,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl6"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="1dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/cv_1"
+        android:background="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/cl7"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl4">
 
         <TextView
             android:id="@+id/doller_sign2"
@@ -367,8 +360,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:text="$"
-            android:textColor="@color/sv_primary"
             android:textStyle="bold"
+            android:textColor="@color/sv_primary"
             app:layout_constraintEnd_toStartOf="@+id/tv_tot_income_val"
             app:layout_constraintTop_toTopOf="@+id/tv_tot_income_val" />
 
@@ -410,19 +403,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl7"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginLeft="1dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp"
         android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/cv_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/cl6">
+        app:layout_constraintStart_toEndOf="@+id/cl6"
+        app:layout_constraintTop_toBottomOf="@+id/cl5">
 
         <TextView
             android:id="@+id/doller_sign3"
@@ -430,8 +421,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:text="$"
-            android:textColor="@color/red"
             android:textStyle="bold"
+            android:textColor="@color/red"
             app:layout_constraintEnd_toStartOf="@+id/tv_tot_due_val"
             app:layout_constraintTop_toTopOf="@+id/tv_tot_due_val" />
 
@@ -472,16 +463,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_1"
+        app:cardElevation="0dp"
         android:layout_width="0dp"
         android:layout_height="@dimen/profile_card_height"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/cv_2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl6">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -540,15 +531,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_2"
+        app:cardElevation="0dp"
         android:layout_width="0dp"
         android:layout_height="@dimen/profile_card_height"
+        android:layout_marginTop="5dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cv_1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

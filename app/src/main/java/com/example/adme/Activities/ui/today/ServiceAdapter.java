@@ -11,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adme.Architecture.FirebaseUtilClass;
@@ -58,7 +59,7 @@ public class ServiceAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewHold
         serviceHolder.tv_description.setText(service_snap.get(FirebaseUtilClass.ENTRY_MAIN_SERVICE_DESCRIPTION));
         serviceHolder.tv_reviews.setText(service_snap.get(FirebaseUtilClass.ENTRY_SERVICE_REVIEWS));
         serviceHolder.rb_rating.setRating(Float.parseFloat(service_snap.get(FirebaseUtilClass.ENTRY_SERVICE_RATING)));
-        serviceHolder.viewServiceButton.setOnClickListener(new View.OnClickListener() {
+        serviceHolder.ct_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,ViewServiceDetails.class);
@@ -80,6 +81,7 @@ public class ServiceAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewHold
         Button viewServiceButton;
         TextView tv_category,tv_description,tv_reviews;
         RatingBar rb_rating;
+        ConstraintLayout ct_parent;
         public ServiceViewHolder(@NonNull View itemView) {
             super(itemView);
             viewServiceButton = itemView.findViewById(R.id.view_service_button);
@@ -87,6 +89,7 @@ public class ServiceAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewHold
             tv_description = itemView.findViewById(R.id.tv_description);
             tv_reviews = itemView.findViewById(R.id.tv_reviews);
             rb_rating = itemView.findViewById(R.id.rb_rating);
+            ct_parent = itemView.findViewById(R.id.ct_parent);
         }
     }
 

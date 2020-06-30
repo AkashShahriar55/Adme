@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -44,6 +45,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class GoogleMapHelper {
 
@@ -189,33 +192,39 @@ public class GoogleMapHelper {
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
 
-            for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList();
-                lineOptions = new PolylineOptions();
+            try {
+                for (int i = 0; i < result.size(); i++) {
+                    points = new ArrayList();
+                    lineOptions = new PolylineOptions();
 
-                List<HashMap<String,String>> path = result.get(i);
+                    List<HashMap<String, String>> path = result.get(i);
 
-                for (int j = 0; j < path.size(); j++) {
-                    HashMap<String,String> point = path.get(j);
+                    for (int j = 0; j < path.size(); j++) {
+                        HashMap<String, String> point = path.get(j);
 
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
+                        double lat = Double.parseDouble(point.get("lat"));
+                        double lng = Double.parseDouble(point.get("lng"));
+                        LatLng position = new LatLng(lat, lng);
 
-                    points.add(position);
+                        points.add(position);
+                    }
+
+                    lineOptions.add(origin);
+                    lineOptions.addAll(points);
+                    lineOptions.add(dest);
+                    lineOptions.width(10);
+                    lineOptions.color(Color.parseColor("#3f5aa6"));
+                    lineOptions.geodesic(true);
+
                 }
 
-                lineOptions.add(origin);
-                lineOptions.addAll(points);
-                lineOptions.add(dest);
-                lineOptions.width(10);
-                lineOptions.color(Color.parseColor("#3f5aa6"));
-                lineOptions.geodesic(true);
+                // Drawing polyline in the Google Map for the i-th route
+                mMap.addPolyline(lineOptions);
 
+            }catch (Exception e){
+                Log.d(TAG, "downloadJson: cannot download Map route. May not connect to internet. "+e);
+                Toast.makeText(getApplicationContext(), "Please, check your internet connection", Toast.LENGTH_SHORT).show();
             }
-
-// Drawing polyline in the Google Map for the i-th route
-            mMap.addPolyline(lineOptions);
         }
     }
 
