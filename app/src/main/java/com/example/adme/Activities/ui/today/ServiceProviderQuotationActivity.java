@@ -30,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.adme.Activities.ui.home.ServiceProviderDetailsActivity;
+import com.example.adme.Activities.ui.income.InvoiceActivity;
 import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.AppointmentRef;
@@ -56,12 +57,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ServiceProviderQuotationActivity  extends AppCompatActivity  implements OnMapReadyCallback {
@@ -71,7 +75,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     private GoogleMap mMap;
     private TextView tv_distance,tv_clint_time,tv_clint_money,tv_clint_name,tv_clint_address,tv_clint_text,tv_service_title,tv_service_list,tv_money,tv_state;
     private EditText tv_service_time, tv_service_date, tv_service_money,tv_service_quotation;
-    private Button send_button,bt_approve,bt_decline;
+    private Button send_button,bt_approve,bt_decline,bt_create_invoice,bt_cancel_appointment;
     private ImageView im_state;
     private Calendar myCalendar;
     private TextInputLayout til_service_time,til_service_date;
@@ -87,11 +91,28 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quotation_details_fragment);
+
+        String from = getIntent().getStringExtra("from");
+        if(from.equals("AppointmentAdapter")){
+            appointment = new Gson().fromJson(getIntent().getStringExtra("appointment"), Appointment.class);
+            appointmentID = appointment.getAppointmentID();
+            MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
+                @Override
+                public boolean queueIdle() {
+                    updateView();
+                    updateMap();
+                    seenNotification();
+                    return false;
+                }
+            };
+            Looper.myQueue().addIdleHandler(handler);
+        } else {
+            appointmentID = getIntent().getStringExtra("reference");
+            getFirebaseData();
+        }
+
 //        checkPermission();
         initializeFields();
-
-        appointmentID = getIntent().getStringExtra("reference");
-        getFirebaseData();
     }
 
     private void initializeFields() {
@@ -273,6 +294,57 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                             }
                         });
 
+            }
+        });
+
+        //bt_cancel_appointment button setting
+        bt_cancel_appointment = findViewById(R.id.bt_cancel_appointment);
+        bt_cancel_appointment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED);
+                db.collection("Adme_Appointment_list").document(appointmentID)
+                        .set(appointment)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "appointment successfully written!");
+
+                                createNotification(
+                                        appointment.getService_provider_name()+" canceled your appointment",
+                                        FirebaseUtilClass.MODE_CLIENT+"",
+                                        appointment.getClint_ref()+"",
+                                        "Appointment canceled"
+                                );
+
+                                createNotification(
+                                        "You've canceled an appointment",
+                                        FirebaseUtilClass.MODE_SERVICE_PROVIDER+"",
+                                        appointment.getService_provider_ref()+"",
+                                        "Appointment canceled successful."
+                                );
+
+                                onBackPressed();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error writing document", e);
+                            }
+                        });
+
+            }
+        });
+
+        //bt_create_invoice button setting
+        bt_create_invoice = findViewById(R.id.bt_create_invoice);
+        bt_create_invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ServiceProviderQuotationActivity.this, InvoiceActivity.class);
+                intent.putExtra("appointment", new Gson().toJson(appointment));
+                startActivity(intent);
             }
         });
 

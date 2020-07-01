@@ -104,6 +104,9 @@ public class FirebaseUtilClass {
     public static final String APPOINTMENT_STATE_CLINT_CANCELED = "clientCanceled";
     public static final String APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED = "serviceProviderCanceled";
 
+    public static final String ENTRY_EDITABLE = "Editable";
+    public static final String ENTRY_NOT_EDITABLE = "notEditable";
+
     public static final String VALUE_USER_PHOTO = "user_photo";
     public static final String VALUE_DEFAULT_AVATAR = "default_avatar";
 

@@ -120,4 +120,7 @@ dependencies {
     //For Country Code Picker
     implementation 'com.hbb20:ccp:2.3.9'
     implementation 'androidx.work:work-runtime:2.1.0'
+
+    //invoice
+    implementation project(path: ':invoice')
 }
