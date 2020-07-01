@@ -218,7 +218,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         RecyclerView.LayoutManager review_layoutManager =  new LinearLayoutManager(ServiceProviderDetailsActivity.this);
         review_recyclerView.setLayoutManager(review_layoutManager);
         review_recyclerView.setHasFixedSize(true);
-        reviewAdapter = new RatingHistoryAdapter();
+        reviewAdapter = new RatingHistoryAdapter(this);
 //        review_recyclerView.setAdapter(reviewAdapter);
 
         //send button setting

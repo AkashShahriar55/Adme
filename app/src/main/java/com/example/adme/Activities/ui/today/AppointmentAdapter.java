@@ -22,6 +22,7 @@ import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.AppointmentRef;
 import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.R;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -90,7 +91,9 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             public void onClick(View v) {
                 Log.i(TAG, "onClick: ");
                 Intent intent = new Intent(context, ServiceProviderQuotationActivity.class);
-                intent.putExtra("reference", appointment.getAppointmentID());
+//                intent.putExtra("reference", appointment.getAppointmentID());
+                intent.putExtra("from", "AppointmentAdapter");
+                intent.putExtra("appointment", new Gson().toJson(appointment));
                 context.startActivity(intent);
             }
         });

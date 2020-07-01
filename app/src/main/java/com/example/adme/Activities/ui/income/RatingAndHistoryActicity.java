@@ -45,9 +45,11 @@ public class RatingAndHistoryActicity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        adapter = new RatingHistoryAdapter();
+        adapter = new RatingHistoryAdapter(this);
         recyclerView.setAdapter(adapter);
 
         img_back.setOnClickListener(v -> onBackPressed());
+
+
     }
 }

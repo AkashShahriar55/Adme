@@ -27,6 +27,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:clickable="true"
+            app:backgroundTint="@android:color/white"
+            app:fabSize="mini"
+            android:tooltipText="Call Clint"
+            app:maxImageSize="18dp"
+            android:scaleType="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_call_black_24dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionbt_create_invoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:clickable="true"
+            android:contentDescription="Call"
+            app:fabSize="mini"
+            app:backgroundTint="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/floatingActionButton"
+            app:srcCompat="@drawable/ic_arrow_back_black" />
+
         <FrameLayout
             android:id="@+id/map"
             android:layout_width="match_parent"
@@ -36,7 +66,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+        </FrameLayout>
 
         <ImageView
             android:visibility="gone"
@@ -448,30 +480,50 @@
                         app:srcCompat="@drawable/ic_attach_money_black_24dp" />
 
                     <TextView
-                        android:visibility="gone"
                         android:id="@+id/tv_state"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="State Canceled"
                         android:textSize="15sp"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="@+id/tv_money"
                         app:layout_constraintTop_toBottomOf="@+id/tv_money" />
 
                     <ImageView
-                        android:visibility="gone"
                         android:id="@+id/im_state"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_marginTop="3dp"
                         android:tint="@color/color_active"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="@+id/imageView29"
                         app:layout_constraintTop_toTopOf="@+id/tv_state"
                         app:srcCompat="@drawable/ic_help" />
 
+                    <Button
+                        android:id="@+id/bt_create_invoice"
+                        android:layout_width="0dp"
+                        android:layout_height="58dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Create Invoice"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_state" />
+
+                    <Button
+                        android:id="@+id/bt_cancel_appointment"
+                        android:layout_width="0dp"
+                        android:layout_height="58dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Cancel Appointment"
+                        app:layout_constraintEnd_toEndOf="@+id/bt_create_invoice"
+                        app:layout_constraintStart_toStartOf="@+id/bt_create_invoice"
+                        app:layout_constraintTop_toBottomOf="@+id/bt_create_invoice" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+                <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
 <!--                    android:id="@+id/ct_muiz"-->
 <!--                    android:layout_width="0dp"-->
 <!--                    android:layout_height="wrap_content"-->

@@ -75,6 +75,7 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, ServiceProviderQuotationActivity.class);
+                    intent.putExtra("from", "NotificationItemInventoryAdapter");
                     intent.putExtra("reference", notification.getReference());
                     context.startActivity(intent);
                     CookieTechUtilityClass.setSharedPreferences("notification", notification.getTime(), context);
