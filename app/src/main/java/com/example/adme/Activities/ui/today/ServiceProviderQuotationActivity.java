@@ -54,6 +54,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -76,6 +77,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     private TextView tv_distance,tv_clint_time,tv_clint_money,tv_clint_name,tv_clint_address,tv_clint_text,tv_service_title,tv_service_list,tv_money,tv_state;
     private EditText tv_service_time, tv_service_date, tv_service_money,tv_service_quotation;
     private Button send_button,bt_approve,bt_decline,bt_create_invoice,bt_cancel_appointment;
+    private FloatingActionButton fab_back,fab_call;
     private ImageView im_state;
     private Calendar myCalendar;
     private TextInputLayout til_service_time,til_service_date;
@@ -120,6 +122,9 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
 
         bottomSheet = findViewById(R.id.appointment_bottom_details);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        fab_back = findViewById(R.id.fab_back);
+        fab_call = findViewById(R.id.fab_call);
 
         tv_distance = findViewById(R.id.tv_distance);
         tv_clint_time = findViewById(R.id.tv_clint_time);
@@ -348,6 +353,20 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
             }
         });
 
+        fab_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        fab_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         if(mMap == null){
             setUpMap();
         }
@@ -424,6 +443,9 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                         tv_state.setText("State : Quotation sent to client");
                     }else{
                         tv_state.setText("State : Active Appointment");
+                        fab_call.setVisibility(View.VISIBLE);
+                        bt_create_invoice.setVisibility(View.VISIBLE);
+                        bt_cancel_appointment.setVisibility(View.VISIBLE);
                     }
                 } else {
                     inputField.setVisibility(View.GONE);
