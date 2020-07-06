@@ -28,7 +28,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:visibility="gone"
+            android:id="@+id/fab_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -44,17 +45,17 @@
             app:srcCompat="@drawable/ic_call_black_24dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionbt_create_invoice"
+            android:id="@+id/fab_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
             android:clickable="true"
             android:contentDescription="Call"
-            app:fabSize="mini"
             app:backgroundTint="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
+            app:fabSize="mini"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/floatingActionButton"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_arrow_back_black" />
 
         <FrameLayout
@@ -502,6 +503,7 @@
                         app:srcCompat="@drawable/ic_help" />
 
                     <Button
+                        android:visibility="gone"
                         android:id="@+id/bt_create_invoice"
                         android:layout_width="0dp"
                         android:layout_height="58dp"
@@ -512,6 +514,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_state" />
 
                     <Button
+                        android:visibility="gone"
                         android:id="@+id/bt_cancel_appointment"
                         android:layout_width="0dp"
                         android:layout_height="58dp"
