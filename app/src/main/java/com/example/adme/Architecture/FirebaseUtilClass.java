@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,6 +24,9 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -44,6 +48,7 @@ public class FirebaseUtilClass {
     public static final String USER_MAIN_DATA_COLLECTION_NAME = "Main_Data";
     public static final String SERVICE_PROVIDER_DOCUMENT_NAME = "Service_Provider_Data";
     public static final String COLLECTION_ADME_SERVICE_LIST = "Adme_Service_list";
+    public static final String ENTRY_USER_STATUS = "status";
 
     public static final String MODE_CLIENT = "Client";
     public static final String MODE_SERVICE_PROVIDER = "ServiceProvider";
@@ -122,6 +127,7 @@ public class FirebaseUtilClass {
     private String user_id;
     private CollectionReference servicesRef;
     private FirebaseStorage storage;
+    private FirebaseFunctions mFunctions;
 
     public FirebaseUtilClass() {
         userData = new MutableLiveData<>();
@@ -129,6 +135,7 @@ public class FirebaseUtilClass {
         userRef = db.collection(USER_COLLECTION_ID);
         servicesRef = db.collection(COLLECTION_ADME_SERVICE_LIST);
         mAuth = FirebaseAuth.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
         storage = FirebaseStorage.getInstance("gs://adme-bf48a.appspot.com");
     }
 
@@ -142,23 +149,23 @@ public class FirebaseUtilClass {
 
 
     public MutableLiveData<List<Service>> getServices() {
-        fetchUserServices();
+        servicesRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                List<Service> serviceList = new ArrayList<>();
+                if(queryDocumentSnapshots != null){
+                    for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots){
+                        serviceList.add(documentSnapshot.toObject(Service.class));
+                    }
+                }
+
+                services.setValue(serviceList);
+            }
+        });
         return services;
     }
 
     private void fetchUserData() {
-        userRef.document(user_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot != null){
-                    User user = documentSnapshot.toObject(User.class);
-                    user.setmUserId(user_id);
-                    userData.setValue(user);
-                }
-
-            }
-        });
-
         userRef.document(user_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -166,7 +173,6 @@ public class FirebaseUtilClass {
                     User user = documentSnapshot.toObject(User.class);
                     user.setmUserId(user_id);
                     userData.setValue(user);
-                    Log.d("akash_debug", "onEvent: "+userData.getValue().getService_reference().size());
                 }
             }
         });
@@ -261,8 +267,7 @@ public class FirebaseUtilClass {
         return null;
     }
 
-    public void fetchUserServices(){
-    }
+
 
     DatabaseOperationListener uploadUserServiceListener;
     public void uploadUserService(Service service,DatabaseOperationListener listener){
@@ -309,18 +314,6 @@ public class FirebaseUtilClass {
 
 
     public MutableLiveData<Service> getServiceData(String service_id){
-        servicesRef.document(service_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot != null){
-                    Service service = documentSnapshot.toObject(Service.class);
-                    service.setmServiceId(documentSnapshot.getId());
-                    serviceData.setValue(service);
-                }
-
-            }
-        });
-
         servicesRef.document(service_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -382,6 +375,7 @@ public class FirebaseUtilClass {
     }
 
 
+
     public boolean checkIfAlreadyLoggedIn(){
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
@@ -404,6 +398,9 @@ public class FirebaseUtilClass {
         void userAlreadyExists(User user);
         void onUserCreatedSuccessfully(User user);
     }
+
+
+
 
 
     //for profile update
@@ -518,6 +515,24 @@ public class FirebaseUtilClass {
             }
         });
     }
+
+
+    public void updateUserStatus(String userId,String status){
+        userRef.document(userId).update(FirebaseUtilClass.ENTRY_USER_STATUS,status).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
+
+
 
 
     //for profile ends

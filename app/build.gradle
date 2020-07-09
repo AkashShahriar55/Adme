@@ -115,6 +115,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
     implementation 'com.google.firebase:firebase-storage:19.1.1'
+    implementation 'com.google.firebase:firebase-functions:19.0.2'
 
     //For Country Code Picker
     implementation 'com.hbb20:ccp:2.3.9'

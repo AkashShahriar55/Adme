@@ -1,13 +1,18 @@
 package com.example.adme.Architecture;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
 
+import java.util.List;
+
 public class DataRepository {
     private MutableLiveData<User> userData;
     private MutableLiveData<Service> serviceData;
+    private MutableLiveData<List<Service>> allServiceList;
     private FirebaseUtilClass firebaseUtilClass;
 
     public DataRepository() {
@@ -34,6 +39,7 @@ public class DataRepository {
     // for profile update ends
 
     public MutableLiveData<User> getUserData() {
+        Log.d("akash_debug", "getUserData: ");
         userData = firebaseUtilClass.getUserData();
         return userData;
     }
@@ -41,5 +47,10 @@ public class DataRepository {
     public MutableLiveData<Service> getServiceData(String service_id){
         serviceData = firebaseUtilClass.getServiceData(service_id);
         return  serviceData;
+    }
+
+    public MutableLiveData<List<Service>> getAllServiceList(){
+        allServiceList = firebaseUtilClass.getServices();
+        return allServiceList;
     }
 }
