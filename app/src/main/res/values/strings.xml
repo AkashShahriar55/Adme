@@ -94,4 +94,26 @@
     <string name="continue_txt">Continue</string>
     <string name="adme_user">Adme User</string>
 
+    // invoice
+    <string name="invoice_summary">Invoice Summary</string>
+    <string name="edit">Edit</string>
+    <string name="invoice_total">Invoice Total</string>
+    <string name="customer_profile">Customer Profile</string>
+    <string name="customer_address">Customer Address</string>
+    <string name="issue_date">Issue Date</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="done">Done</string>
+    <string name="service_provider">Service Provider</string>
+    <string name="service_category">Service Category</string>
+    <string name="vat">Vat</string>
+    <string name="total">Total</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="send_invoice">Send Invoice</string>
+    <string name="download">Download</string>
+    <string name="share">Share</string>
+    <string name="x">X</string>
+    <string name="discount">Discount</string>
+
 </resources>

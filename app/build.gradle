@@ -121,5 +121,5 @@ dependencies {
     implementation 'androidx.work:work-runtime:2.1.0'
 
     //invoice
-    implementation project(path: ':invoice')
+//    implementation project(path: ':invoice')
 }

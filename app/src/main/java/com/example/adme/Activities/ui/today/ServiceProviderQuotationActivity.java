@@ -28,16 +28,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.adme.Activities.ui.home.ServiceProviderDetailsActivity;
 import com.example.adme.Activities.ui.income.InvoiceActivity;
 import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Architecture.UserDataModel;
 import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.AppointmentRef;
 import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.Notification;
+import com.example.adme.Helpers.User;
 import com.example.adme.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -88,11 +91,15 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     private View bottomSheet;
     private BottomSheetBehavior bottomSheetBehavior;
     String appointmentID="";
+    UserDataModel userDataModel;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quotation_details_fragment);
+        userDataModel = new ViewModelProvider(this).get(UserDataModel.class);
+        userDataModel.getCurrentUser().observe(this, user -> { currentUser = user; });
 
         String from = getIntent().getStringExtra("from");
         if(from.equals("AppointmentAdapter")){
@@ -307,38 +314,71 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
         bt_cancel_appointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED);
-                db.collection("Adme_Appointment_list").document(appointmentID)
-                        .set(appointment)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "appointment successfully written!");
+                if(isClientMode()){
+                    appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_CANCELED);
+                    db.collection("Adme_Appointment_list").document(appointmentID)
+                            .set(appointment)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "appointment successfully written!");
 
-                                createNotification(
-                                        appointment.getService_provider_name()+" canceled your appointment",
-                                        FirebaseUtilClass.MODE_CLIENT+"",
-                                        appointment.getClint_ref()+"",
-                                        "Appointment canceled"
-                                );
+                                    createNotification(
+                                            appointment.getClint_name()+" canceled your request",
+                                            FirebaseUtilClass.MODE_SERVICE_PROVIDER+"",
+                                            appointment.getService_provider_ref()+"",
+                                            "Appointment canceled successful."
+                                    );
 
-                                createNotification(
-                                        "You've canceled an appointment",
-                                        FirebaseUtilClass.MODE_SERVICE_PROVIDER+"",
-                                        appointment.getService_provider_ref()+"",
-                                        "Appointment canceled successful."
-                                );
+                                    createNotification(
+                                            "You've canceled an appointment",
+                                            FirebaseUtilClass.MODE_CLIENT+"",
+                                            appointment.getClint_ref()+"",
+                                            "Appointment canceled successful."
+                                    );
 
-                                onBackPressed();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error writing document", e);
-                            }
-                        });
+                                    onBackPressed();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+                } else {
+                    appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED);
+                    db.collection("Adme_Appointment_list").document(appointmentID)
+                            .set(appointment)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "appointment successfully written!");
 
+                                    createNotification(
+                                            appointment.getService_provider_name() + " canceled your appointment",
+                                            FirebaseUtilClass.MODE_CLIENT + "",
+                                            appointment.getClint_ref() + "",
+                                            "Appointment canceled"
+                                    );
+
+                                    createNotification(
+                                            "You've canceled an appointment",
+                                            FirebaseUtilClass.MODE_SERVICE_PROVIDER + "",
+                                            appointment.getService_provider_ref() + "",
+                                            "Appointment canceled successful."
+                                    );
+
+                                    onBackPressed();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+                }
             }
         });
 
@@ -350,6 +390,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                 Intent intent = new Intent(ServiceProviderQuotationActivity.this, InvoiceActivity.class);
                 intent.putExtra("appointment", new Gson().toJson(appointment));
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -373,11 +414,6 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     }
 
     public void updateView() {
-//        Intent intent = getIntent();
-//        appointment = intent.getParcelableExtra("appointment");
-//        assert appointment != null;
-//        tv_distance,tv_clint_time,tv_clint_money,tv_clint_name,tv_clint_address,tv_clint_text,tv_service_title,tv_service_list,
-
         runOnUiThread(new Runnable(){
             public void run() {
                 if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND) && !isClientMode()) {
@@ -441,6 +477,9 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                         tv_state.setText("State : Request sent to service provider");
                     }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND)){
                         tv_state.setText("State : Quotation sent to client");
+                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_INVOICE_SEND)){
+                        tv_state.setText("State : Invoice sent to client");
+                        fab_call.setVisibility(View.VISIBLE);
                     }else{
                         tv_state.setText("State : Active Appointment");
                         fab_call.setVisibility(View.VISIBLE);
@@ -476,6 +515,8 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                         tv_state.setText("State : Quotation sent to client");
                     }else{
                         tv_state.setText("State : Active Appointment");
+                        fab_call.setVisibility(View.VISIBLE);
+                        bt_cancel_appointment.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -484,42 +525,24 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
 
     public void seenNotification(){
         String notiID = CookieTechUtilityClass.getSharedPreferences("notification", this);
+        String mUserId = CookieTechUtilityClass.getSharedPreferences("mUserId", this);
+
         db = FirebaseFirestore.getInstance();
-
-        String reference = "";
-        if(isClientMode()){
-            reference = appointment.getClint_ref();
-        }else {
-            reference = appointment.getService_provider_ref();
-        }
-        String finalReference = reference;
-
-        db.collection("Adme_User/"+ finalReference +"/notification_list")
+        db.collection("Adme_User/"+ mUserId +"/notification_list")
                 .document(notiID)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .update("seen", true)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Notification noti = documentSnapshot.toObject(Notification.class);
-                        noti.setSeen(true);
-                        db.collection("Adme_User/"+ finalReference +"/notification_list")
-                                .document(notiID)
-                                .set(noti)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "Notification successfully written!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error writing document", e);
-                                    }
-                                });
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
                     }
                 });
-
     }
 
     private void getFirebaseData() {
@@ -554,6 +577,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
         appointment.setPrice_needed(requestedMoney);
         appointment.setService_provider_text(tv_service_quotation.getText().toString());
         appointment.setState(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND);
+        appointment.setService_provider_phone(currentUser.getContacts().get(FirebaseUtilClass.ENTRY_PHONE_NO));
 
         String givenDateString = tv_service_time.getText().toString()+" "+tv_service_date.getText().toString();
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa dd MMM yyyy");
@@ -800,7 +824,8 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     public boolean isClientMode(){
         SharedPreferences preferences=getSharedPreferences("Settings", MODE_PRIVATE);
         if(preferences.getBoolean("isClient",true)){
-            return true;
+            String mUserId = CookieTechUtilityClass.getSharedPreferences("mUserId", this);
+            return appointment.getClint_ref().equals(mUserId);
         } else {
             return false;
         }

@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.adme.Activities.ui.income.RatingAndHistoryActicity;
+import com.example.adme.Activities.ui.invoice.Invoice;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.Notification;
 import com.example.adme.R;
@@ -69,7 +71,7 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
         final Notification notification = itemList.get(position);
 
         Drawable saveIcon;
-        if(notification.getType().equals("appointment")){
+        if(notification.getType().equals(FirebaseUtilClass.NOTIFICATION_APPOINTMENT_TYPE)){
             saveIcon = context.getResources().getDrawable(R.drawable.ic_business_center_black_24dp);
             holder.cl_view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,7 +83,20 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
                     CookieTechUtilityClass.setSharedPreferences("notification", notification.getTime(), context);
                 }
             });
-        } else if(notification.getType().equals("rating")){
+        } else if(notification.getType().equals(FirebaseUtilClass.NOTIFICATION_INVOICE_TYPE)){
+            saveIcon = context.getResources().getDrawable(R.drawable.ic_terms);
+            holder.cl_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, Invoice.class);
+                    intent.putExtra("from", "NotificationItemInventoryAdapter");
+                    intent.putExtra("reference", notification.getReference());
+                    intent.putExtra("mode", FirebaseUtilClass.ENTRY_NOT_EDITABLE);
+                    context.startActivity(intent);
+                    CookieTechUtilityClass.setSharedPreferences("notification", notification.getTime(), context);
+                }
+            });
+        } else if(notification.getType().equals(FirebaseUtilClass.NOTIFICATION_RATING_TYPE)){
             saveIcon = context.getResources().getDrawable(R.drawable.ic_star_black_24dp);
             holder.cl_view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,7 +104,7 @@ public class NotificationItemInventoryAdapter extends RecyclerView.Adapter<Notif
                     Intent intent = new Intent(context, RatingAndHistoryActicity.class);
                     intent.putExtra("reference", notification.getReference());
                     context.startActivity(intent);
-                    CookieTechUtilityClass.setSharedPreferences("rating", notification.getTime(), context);
+                    CookieTechUtilityClass.setSharedPreferences("notification", notification.getTime(), context);
                 }
             });
         } else {

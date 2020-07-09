@@ -1,12 +1,5 @@
-package com.blz.cookietech.invoice;
+package com.example.adme.Activities.ui.invoice;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -28,9 +23,24 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Helpers.Appointment;
+import com.example.adme.Helpers.CookieTechUtilityClass;
+import com.example.adme.Helpers.Notification;
+import com.example.adme.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,11 +57,12 @@ public class Invoice extends AppCompatActivity{
     private EditText customer_email;
     private EditText customer_address;
     private EditText et_discount_amount;
-    private Button btn_send_invoice;
+    private Button btn_send_invoice,bt_ok;
     private ScrollView root_scrollView;
     private TextView invoice_total,total_amount;
     CustomerDetails detailsForServices;
     ArrayList<Services> serviceList;
+    Appointment appointment;
     String receiver_email="";
     String service_id="";
     FirebaseFirestore db;
@@ -67,14 +78,22 @@ public class Invoice extends AppCompatActivity{
         setSupportActionBar(toolbar);
         root_scrollView = findViewById(R.id.root_scrollView);
 
-        detailsForServices = getIntent().getParcelableExtra("service_details");
-        assert detailsForServices != null;
-        receiver_email = detailsForServices.getCustomer_email();
-        service_id = detailsForServices.getService_id();
+        String from = getIntent().getStringExtra("from");
+        if(from.equals("InvoiceActivity")){
+            detailsForServices = getIntent().getParcelableExtra("service_details");
+            assert detailsForServices != null;
+            receiver_email = detailsForServices.getCustomer_email();
+            service_id = detailsForServices.getService_id();
 
-        serviceList = getIntent().getParcelableArrayListExtra("service_list");
-        assert serviceList != null;
-        CreateInvoiceForService(detailsForServices,serviceList);
+            serviceList = getIntent().getParcelableArrayListExtra("service_list");
+            assert serviceList != null;
+            CreateInvoiceForService(detailsForServices,serviceList);
+
+            appointment = new Gson().fromJson(getIntent().getStringExtra("appointment"), Appointment.class);
+        } else {
+            String invoiceID = getIntent().getStringExtra("reference");
+            getFirebaseData(invoiceID);
+        }
 
         String mode = getIntent().getStringExtra("mode");
         if(mode.equals("notEditable")){
@@ -93,45 +112,42 @@ public class Invoice extends AppCompatActivity{
             }
         });
 
+        btn_send_invoice = findViewById(R.id.btn_send_invoice);
         btn_send_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                btn_send_invoice.setVisibility(View.GONE);
-//                GeneratePdf();
-
                 if(detailsForServices.getAppointment_id()!=null){
                     InvoiceItem invoiceItem = new InvoiceItem(detailsForServices, serviceList);
-
                     db = FirebaseFirestore.getInstance();
                     db.collection("Adme_Invoice_List").document(detailsForServices.getAppointment_id())
                             .set(invoiceItem)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "invoiceItem successfully written!");
                                     isEditable=false;
-                                    onBackPressed();
-//                                    Intent myIntent = new Intent(Invoice.this,Class.forName("com.example.adme.Activities.LandingActivity"));
-//                                    startActivity(myIntent );
+                                    btn_send_invoice.setVisibility(View.GONE);
+                                    Log.d(TAG, "invoiceItem successfully written!");
                                     db.collection("Adme_Appointment_list")
                                             .document(detailsForServices.getAppointment_id())
-                                            .update("invoiceID", detailsForServices.getAppointment_id())
+                                            .update(
+                                                    "invoiceID", detailsForServices.getAppointment_id(),
+                                                    "state", FirebaseUtilClass.APPOINTMENT_STATE_INVOICE_SEND
+                                            )
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     Log.d(TAG, "DocumentSnapshot successfully updated!");
                                                     createNotification(
-                                                            appointment.getService_provider_name() + " canceled your appointment",
+                                                            appointment.getService_provider_name() + " send you invoice",
                                                             FirebaseUtilClass.MODE_CLIENT + "",
                                                             appointment.getClint_ref() + "",
-                                                            "Appointment canceled"
+                                                            "Invoice send"
                                                     );
-
                                                     createNotification(
-                                                            "You've canceled an appointment",
+                                                            "You've send an invoice",
                                                             FirebaseUtilClass.MODE_SERVICE_PROVIDER + "",
                                                             appointment.getService_provider_ref() + "",
-                                                            "Appointment canceled successful."
+                                                            "Invoice send successful."
                                                     );
                                                     onBackPressed();
                                                 }
@@ -153,7 +169,68 @@ public class Invoice extends AppCompatActivity{
                 }
             }
         });
+
+        bt_ok = findViewById(R.id.bt_ok);
+        bt_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
+
+    private void getFirebaseData(String invoiceID) {
+        db = FirebaseFirestore.getInstance();
+        db.collection("Adme_Invoice_List").document(invoiceID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        InvoiceItem invoiceItem = documentSnapshot.toObject(InvoiceItem.class);
+
+                        detailsForServices = invoiceItem.getCustomerDetails();
+                        assert detailsForServices != null;
+                        receiver_email = detailsForServices.getCustomer_email();
+                        service_id = detailsForServices.getService_id();
+
+                        serviceList = invoiceItem.getSelectServicesList();
+                        assert serviceList != null;
+
+                        MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
+                            @Override
+                            public boolean queueIdle() {
+                                CreateInvoiceForService(detailsForServices,serviceList);
+                                seenNotification();
+                                return false;
+                            }
+                        };
+                        Looper.myQueue().addIdleHandler(handler);
+                    }
+                });
+    }
+
+    public void seenNotification(){
+        String notiID = CookieTechUtilityClass.getSharedPreferences("notification", this);
+        String mUserId = CookieTechUtilityClass.getSharedPreferences("mUserId", this);
+
+        db = FirebaseFirestore.getInstance();
+        db.collection("Adme_User/"+ mUserId +"/notification_list")
+                .document(notiID)
+                .update("seen", true)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
     public void createNotification(String text, String mode, String reference, String toastText){
         String newDocumentID = String.valueOf(Calendar.getInstance().getTimeInMillis());
         Notification notification = new Notification();
@@ -161,8 +238,8 @@ public class Invoice extends AppCompatActivity{
         notification.setTime(newDocumentID);
         notification.setText(text);
         notification.setMode(mode);
-        notification.setType(FirebaseUtilClass.NOTIFICATION_APPOINTMENT_TYPE);
-        notification.setReference(appointmentID);
+        notification.setType(FirebaseUtilClass.NOTIFICATION_INVOICE_TYPE);
+        notification.setReference(detailsForServices.getAppointment_id());
 
         db.collection("Adme_User/"+ reference +"/notification_list")
                 .document(newDocumentID)
@@ -181,8 +258,8 @@ public class Invoice extends AppCompatActivity{
                     }
                 });
     }
-    private void GeneratePdf() {
 
+    private void GeneratePdf() {
         View view = findViewById(R.id.root_scrollView);
 
         int totalHeight = root_scrollView.getChildAt(0).getHeight();
@@ -222,10 +299,7 @@ public class Invoice extends AppCompatActivity{
             e.printStackTrace();
         }
 
-
     }
-
-
 
     private  void SharePdf(File file) {
 
@@ -242,8 +316,6 @@ public class Invoice extends AppCompatActivity{
 
 
     }
-
-
 
     private Bitmap getBitmapFromView(View view, int totalHeight, int totalWidth) {
         Bitmap returnedBitmap = Bitmap.createBitmap(totalWidth,totalHeight , Bitmap.Config.ARGB_8888);
@@ -265,7 +337,6 @@ public class Invoice extends AppCompatActivity{
         TextView subtotal = findViewById(R.id.subtotal);
         TextView total_vat = findViewById(R.id.total_vat);
         TextView txt_vat = findViewById(R.id.txt_vat);
-        btn_send_invoice = findViewById(R.id.btn_send_invoice);
 
 
         sumTotal = 0;
@@ -421,6 +492,5 @@ public class Invoice extends AppCompatActivity{
         invoice_total.setText(totalWithDiscount);
         total_amount.setText(totalWithDiscount);
     }
-
 
 }

@@ -412,19 +412,19 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         setServiceOnBottomSheet();
     }
 
-    private void initia() {
-        SelectServiceItem selectServiceItem1=new SelectServiceItem("Pattern Paint","It is call pattern paint.","90");
-        SelectServiceItem selectServiceItem2=new SelectServiceItem("Rubber Paint","It is call Rubber paint.","70");
-        SelectServiceItem selectServiceItem3=new SelectServiceItem("Artist Paint","It is call Artist paint.","110");
-        selectServiceList.add(selectServiceItem1);
-        selectServiceList.add(selectServiceItem2);
-        selectServiceList.add(selectServiceItem3);
-        runOnUiThread(new Runnable(){
-            public void run() {
-                service_adapter.notifyDataSetChanged();
-            }
-        });
-    }
+//    private void initia() {
+//        SelectServiceItem selectServiceItem1=new SelectServiceItem("Pattern Paint","It is call pattern paint.","90");
+//        SelectServiceItem selectServiceItem2=new SelectServiceItem("Rubber Paint","It is call Rubber paint.","70");
+//        SelectServiceItem selectServiceItem3=new SelectServiceItem("Artist Paint","It is call Artist paint.","110");
+//        selectServiceList.add(selectServiceItem1);
+//        selectServiceList.add(selectServiceItem2);
+//        selectServiceList.add(selectServiceItem3);
+//        runOnUiThread(new Runnable(){
+//            public void run() {
+//                service_adapter.notifyDataSetChanged();
+//            }
+//        });
+//    }
 
     public void setServiceOnBottomSheet(){
         selected_service_text = "No Service Added";
@@ -459,6 +459,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     private void setFirebaseData(String doc){
         Appointment appointment= new Appointment();
 
+        appointment.setServiceID(service.getmServiceId());
         appointment.setClint_name(currentUser.getUser_name());
         appointment.setClint_phone(currentUser.getContacts().get(FirebaseUtilClass.ENTRY_PHONE_NO));
         appointment.setClint_ref(currentUser.getmUserId());

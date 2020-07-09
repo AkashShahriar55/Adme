@@ -13,6 +13,7 @@ public class Appointment {
     private String price_needed;
     private String price_requested;
     private String service_provider_name;
+    private String service_provider_phone;
     private String service_provider_ref;
     private String service_provider_text;
     private String service_provider_time;
@@ -20,9 +21,34 @@ public class Appointment {
     private String state;
     private MyPlaces clint_location;
     private MyPlaces service_provider_location;
+    private String serviceID;
+    private String invoiceID;
     private String appointmentID;
 
     public Appointment(){}
+
+    public Appointment(String clint_name, String clint_phone, String clint_ref, String clint_text, String clint_time, String distance, String price_needed, String price_requested, String service_provider_name, String service_provider_phone, String service_provider_ref, String service_provider_text, String service_provider_time, String services, String state, MyPlaces clint_location, MyPlaces service_provider_location, String serviceID, String invoiceID, String appointmentID) {
+        this.clint_name = clint_name;
+        this.clint_phone = clint_phone;
+        this.clint_ref = clint_ref;
+        this.clint_text = clint_text;
+        this.clint_time = clint_time;
+        this.distance = distance;
+        this.price_needed = price_needed;
+        this.price_requested = price_requested;
+        this.service_provider_name = service_provider_name;
+        this.service_provider_phone = service_provider_phone;
+        this.service_provider_ref = service_provider_ref;
+        this.service_provider_text = service_provider_text;
+        this.service_provider_time = service_provider_time;
+        this.services = services;
+        this.state = state;
+        this.clint_location = clint_location;
+        this.service_provider_location = service_provider_location;
+        this.serviceID = serviceID;
+        this.invoiceID = invoiceID;
+        this.appointmentID = appointmentID;
+    }
 
     public Appointment(String clint_name, String clint_phone, String clint_ref, String clint_text, String clint_time, String distance, String price_needed, String price_requested, String service_provider_name, String service_provider_ref, String service_provider_text, String service_provider_time, String state, String services, MyPlaces clint_location) {
         this.clint_name = clint_name;
@@ -205,6 +231,30 @@ public class Appointment {
 
     public void setService_provider_location(MyPlaces service_provider_location) {
         this.service_provider_location = service_provider_location;
+    }
+
+    public String getService_provider_phone() {
+        return service_provider_phone;
+    }
+
+    public void setService_provider_phone(String service_provider_phone) {
+        this.service_provider_phone = service_provider_phone;
+    }
+
+    public String getServiceID() {
+        return serviceID;
+    }
+
+    public void setServiceID(String serviceID) {
+        this.serviceID = serviceID;
+    }
+
+    public String getInvoiceID() {
+        return invoiceID;
+    }
+
+    public void setInvoiceID(String invoiceID) {
+        this.invoiceID = invoiceID;
     }
 
     @Exclude

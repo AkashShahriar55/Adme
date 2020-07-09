@@ -39,6 +39,7 @@ public class HomeViewModel extends ViewModel {
                         } else {
                             for (QueryDocumentSnapshot doc : value) {
                                 Service sv = doc.toObject(Service.class);
+                                sv.setmServiceId(doc.getId());
                                 serviceProvidersList.add(sv);
                                 Log.d(TAG, "onEvent setQueryValue: "+sv.getUser_name());
                             }

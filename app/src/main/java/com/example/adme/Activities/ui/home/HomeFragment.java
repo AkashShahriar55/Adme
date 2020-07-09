@@ -38,6 +38,8 @@ import com.example.adme.Activities.ui.today.NotificationActivity;
 import com.example.adme.Activities.ui.today.Notification_Fragment;
 import com.example.adme.Activities.ui.today.TodayViewModel;
 import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Architecture.UserDataModel;
+import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
@@ -76,6 +78,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     private ServiceSearchAdapter serviceSearchAdapter;
     private CardView cv_search;
     private User mCurrentUser;
+    UserDataModel userDataModel;
 
 
     public static HomeFragment newInstance() {
@@ -120,14 +123,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // TODO: Use the ViewModel
-//        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-//        mViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-////                textView.setText(s);
-//            }
-//        });
+        userDataModel = new ViewModelProvider(this).get(UserDataModel.class);
+        userDataModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                mCurrentUser = user;
+                CookieTechUtilityClass.setSharedPreferences("mUserId", user.getmUserId(), getContext());
+            }
+        });
 
         locationButton.setOnClickListener(v -> checkPermission());
         client_notification_btn.setOnClickListener(v -> goToNotificationFragment());

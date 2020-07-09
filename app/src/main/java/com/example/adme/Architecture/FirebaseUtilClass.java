@@ -89,6 +89,7 @@ public class FirebaseUtilClass {
     public static final String ENTRY_SERVICE_REVIEWS = "reviews";
 
     public static final String NOTIFICATION_APPOINTMENT_TYPE = "appointment";
+    public static final String NOTIFICATION_INVOICE_TYPE = "invoice";
     public static final String NOTIFICATION_RATING_TYPE = "rating";
     public static final String NOTIFICATION_NONE_TYPE = "none";
 
@@ -98,6 +99,7 @@ public class FirebaseUtilClass {
     public static final String APPOINTMENT_STATE_FINISHED = "finished";
     public static final String APPOINTMENT_STATE_CLINT_CANCELED = "clientCanceled";
     public static final String APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED = "serviceProviderCanceled";
+    public static final String APPOINTMENT_STATE_INVOICE_SEND = "invoiceSent";
 
     public static final String ENTRY_EDITABLE = "Editable";
     public static final String ENTRY_NOT_EDITABLE = "notEditable";
