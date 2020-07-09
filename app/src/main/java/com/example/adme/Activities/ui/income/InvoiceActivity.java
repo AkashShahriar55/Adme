@@ -19,9 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blz.cookietech.invoice.CustomerDetails;
-import com.blz.cookietech.invoice.Invoice;
-import com.blz.cookietech.invoice.Services;
+import com.example.adme.Activities.ui.invoice.CustomerDetails;
+import com.example.adme.Activities.ui.invoice.Invoice;
+import com.example.adme.Activities.ui.invoice.Services;
 import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.CookieTechUtilityClass;
@@ -87,7 +87,7 @@ public class InvoiceActivity extends AppCompatActivity implements InvoiceCreateA
         layoutManager = new LinearLayoutManager(this);
         select_service_recyclerView.setLayoutManager(layoutManager);
         select_service_recyclerView.setHasFixedSize(true);
-        services_adapter = new InvoiceCreateAdapter(this, selectServicesList,this);
+        services_adapter = new InvoiceCreateAdapter(InvoiceActivity.this, selectServicesList,this);
         select_service_recyclerView.setAdapter(services_adapter);
 
         img_back.setOnClickListener(v -> onBackPressed());
@@ -151,35 +151,27 @@ public class InvoiceActivity extends AppCompatActivity implements InvoiceCreateA
         bt_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String due_date = CookieTechUtilityClass.getTimeDate(appointment.getService_provider_time(), "dd MMM yyyy");
-                String customer_name = appointment.getClint_name();
-                String customer_phone = appointment.getClint_phone();
-                String customer_email = "";
-                String customer_address = appointment.getClint_location().getName();
-                String service_provider = appointment.getService_provider_name();
-                String service_category = "";
-                String service_id = appointment.getAppointmentID();
-                double vat = 0.0;
-                double discount = 0.0;
+                CustomerDetails detailsForServices = new CustomerDetails();
 
-                CustomerDetails detailsForServices = new CustomerDetails(
-                        due_date,
-                        customer_name,
-                        customer_phone,
-                        customer_email,
-                        customer_address,
-                        service_provider,
-                        service_category,
-                        service_id,
-                        vat,
-                        discount
-                );
+                detailsForServices.setAppointment_id(appointment.getAppointmentID());
+                detailsForServices.setService_id(appointment.getServiceID());
+                detailsForServices.setDue_date(CookieTechUtilityClass.getTimeDate(appointment.getService_provider_time(), "dd MMM yyyy"));
+                detailsForServices.setCustomer_name(appointment.getClint_name());
+                detailsForServices.setCustomer_phone(appointment.getClint_phone());
+                detailsForServices.setCustomer_email("");
+                detailsForServices.setCustomer_address(appointment.getClint_location().getName());
+                detailsForServices.setService_provider(appointment.getService_provider_name());
+                detailsForServices.setVat(0.0);
+                detailsForServices.setDiscount(0.0);
 
                 Intent intent = new Intent(InvoiceActivity.this, Invoice.class);
                 intent.putExtra("service_details", detailsForServices);
                 intent.putExtra("service_list", selectServicesList);
+                intent.putExtra("appointment", new Gson().toJson(appointment));
                 intent.putExtra("mode", FirebaseUtilClass.ENTRY_EDITABLE);
+                intent.putExtra("from", "InvoiceActivity");
                 startActivity(intent);
+                finish();
             }
         });
 

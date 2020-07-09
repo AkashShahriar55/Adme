@@ -1,9 +1,7 @@
-package com.blz.cookietech.invoice;
+package com.example.adme.Activities.ui.invoice;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.ArrayList;
 
 public class CustomerDetails implements Parcelable {
 

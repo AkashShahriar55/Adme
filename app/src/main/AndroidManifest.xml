@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.UserInfoActivity"></activity>
+        <activity android:name=".Activities.UserInfoActivity" />
         <activity android:name=".Activities.FindLocationActivity" />
         <activity android:name=".Activities.AccessLocationActivity" />
         <activity android:name=".Activities.ui.today.ViewServiceDetails" />
@@ -36,11 +36,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".Activities.LandingActivity"
-            android:label="@string/title_activity_landing" />
+        <activity android:name=".Activities.LandingActivity"/>
         <activity android:name=".Activities.RegistrationActivity" />
-        <activity android:name=".Activities.LoginActivity" /> <!-- for handling profile starts -->
+        <activity android:name=".Activities.LoginActivity" />
+
+        <!-- for handling profile starts -->
         <activity android:name=".Activities.ui.profile.Contacts" />
         <activity android:name=".Activities.ui.profile.PrivacySettings" />
         <activity android:name=".Activities.ui.profile.AccountSubscriptions" />
@@ -48,14 +48,16 @@
         <activity android:name=".Activities.ui.profile.Helps" />
         <activity android:name=".Activities.ui.profile.NotificationSettings" />
         <activity android:name=".Activities.ui.profile.ManageProfile" />
-        <activity android:name=".Activities.ui.profile.ChangePassword" /> <!-- for handling profile ends -->
+        <activity android:name=".Activities.ui.profile.ChangePassword" />
+        <!-- for handling profile ends -->
+
         <activity
             android:name=".Activities.ui.today.ServiceProviderQuotationActivity"
-            android:theme="@style/AppTheme2" />
+            android:theme="@style/AppTheme2" >
+        </activity>
         <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -67,7 +69,8 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name">
+        </activity>
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -79,7 +82,9 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity> <!-- for income -->
+        </activity>
+
+        <!-- for income -->
         <activity android:name=".Activities.ui.income.RatingAndHistoryActicity" />
         <activity android:name=".Activities.ui.income.MoneyHistoryActicity" />
         <activity android:name=".Activities.ui.today.NotificationActivity" />
@@ -87,27 +92,21 @@
         <activity
             android:name=".Activities.ui.home.ServiceProviderDetailsActivity"
             android:theme="@style/AppTheme2">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
 
-        <activity android:name=".Activities.ui.income.InvoiceActivity"
+        <!-- for invoice -->
+        <activity
+            android:name=".Activities.ui.income.InvoiceActivity"
             android:theme="@style/AppTheme2">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
-
+        <activity
+            android:name=".Activities.ui.invoice.Invoice"
+            android:theme="@style/AppTheme2">
+        </activity>
 
         <!-- for notification messaging / -->
-
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+             See README(https://goo.gl/l4GJaQ) for more. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification" />

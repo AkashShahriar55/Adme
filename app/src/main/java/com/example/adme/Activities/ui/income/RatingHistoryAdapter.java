@@ -12,10 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blz.cookietech.invoice.CustomerDetails;
-import com.blz.cookietech.invoice.Invoice;
-import com.blz.cookietech.invoice.Services;
-import com.example.adme.Activities.ui.today.ServiceProviderQuotationActivity;
+import com.example.adme.Activities.ui.invoice.CustomerDetails;
+import com.example.adme.Activities.ui.invoice.Invoice;
+import com.example.adme.Activities.ui.invoice.Services;
 import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.R;
 

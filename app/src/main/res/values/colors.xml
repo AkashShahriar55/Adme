@@ -49,4 +49,11 @@
 
     <color name="transparent_black">#99000000</color>
     <color name="transparent_blue">#40BACAFF</color>
+
+
+    // invoice
+    <color name="text_color_grey">#757575</color>
+    <color name="text_color_deep_gray">#212121</color>
+    <color name="txt_dark">#454545</color>
+
 </resources>

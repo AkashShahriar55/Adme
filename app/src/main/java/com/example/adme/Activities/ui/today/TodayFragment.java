@@ -35,6 +35,7 @@ import com.example.adme.Activities.LandingActivity;
 import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.AppointmentRef;
+import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.UiHelper;
@@ -127,6 +128,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             public void onChanged(User user) {
                 mCurrentUser = user;
                 todayViewModel.fatchActiveAppointmentList(user.getmUserId());
+                CookieTechUtilityClass.setSharedPreferences("mUserId", user.getmUserId(), getContext());
                 Log.d("view-model", "onChanged:  bottom details" + user.getStatus());
                 if(user.getService_reference().size() > 0){
                     services = user.getService_reference();

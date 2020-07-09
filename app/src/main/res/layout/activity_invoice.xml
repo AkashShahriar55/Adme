@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    android:descendantFocusability="beforeDescendants"
-    tools:context=".Invoice">
+    android:descendantFocusability="beforeDescendants">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -28,6 +27,7 @@
         android:id="@+id/root_scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/default_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -35,7 +35,6 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.0"
         android:scrollbars="none" >
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -270,7 +269,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.05" />
+                    app:layout_constraintGuide_begin="21dp" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline2"
@@ -279,8 +278,7 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.95" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+            
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/service_portion"
                 android:layout_width="0dp"
@@ -507,27 +505,39 @@
             <Button
                 android:id="@+id/btn_send_invoice"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="66dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/send_invoice_btn_background"
                 android:backgroundTint="@color/sv_primary"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:text="@string/send_invoice"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/service_portion" />
 
+            <Button
+                android:visibility="gone"
+                android:id="@+id/bt_ok"
+                android:layout_width="0dp"
+                android:layout_height="66dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="OK"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/service_portion" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+        
     </ScrollView>
 
 

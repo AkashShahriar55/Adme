@@ -1,3 +1,3 @@
 rootProject.name='Adme'
 include ':app'
-include ':invoice'
+//include ':invoice'
