@@ -157,6 +157,7 @@ public class InvoiceActivity extends AppCompatActivity implements InvoiceCreateA
                 detailsForServices.setService_id(appointment.getServiceID());
                 detailsForServices.setDue_date(CookieTechUtilityClass.getTimeDate(appointment.getService_provider_time(), "dd MMM yyyy"));
                 detailsForServices.setCustomer_name(appointment.getClint_name());
+                detailsForServices.setCustomer_ref(appointment.getClint_ref());
                 detailsForServices.setCustomer_phone(appointment.getClint_phone());
                 detailsForServices.setCustomer_email("");
                 detailsForServices.setCustomer_address(appointment.getClint_location().getName());

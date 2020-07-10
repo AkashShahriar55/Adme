@@ -57,6 +57,12 @@ public class ServiceProviderSearchActivity extends AppCompatActivity  implements
         initializeFields();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
     private void initializeFields() {
         search_service_rv = findViewById(R.id.rv_service_result);
         serviceSearchAdapter = new ServiceSearchAdapter(this, serviceProvidersList,this);
