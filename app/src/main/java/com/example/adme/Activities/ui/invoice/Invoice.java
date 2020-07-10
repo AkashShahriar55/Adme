@@ -2,6 +2,7 @@ package com.example.adme.Activities.ui.invoice;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -57,7 +58,7 @@ public class Invoice extends AppCompatActivity{
     private EditText customer_email;
     private EditText customer_address;
     private EditText et_discount_amount;
-    private Button btn_send_invoice,bt_ok;
+    private Button btn_send_invoice,bt_ok,bt_decline;
     private ScrollView root_scrollView;
     private TextView invoice_total,total_amount;
     CustomerDetails detailsForServices;
@@ -112,13 +113,14 @@ public class Invoice extends AppCompatActivity{
             }
         });
 
+        db = FirebaseFirestore.getInstance();
+
         btn_send_invoice = findViewById(R.id.btn_send_invoice);
         btn_send_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(detailsForServices.getAppointment_id()!=null){
-                    InvoiceItem invoiceItem = new InvoiceItem(detailsForServices, serviceList);
-                    db = FirebaseFirestore.getInstance();
+                    InvoiceItem invoiceItem = new InvoiceItem(detailsForServices, serviceList, FirebaseUtilClass.ENTRY_PENDING);
                     db.collection("Adme_Invoice_List").document(detailsForServices.getAppointment_id())
                             .set(invoiceItem)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -156,6 +158,7 @@ public class Invoice extends AppCompatActivity{
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
                                                     Log.w(TAG, "Error updating document", e);
+                                                    Toast.makeText(getApplicationContext(), "Please, check internet connection.", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 }
@@ -164,8 +167,12 @@ public class Invoice extends AppCompatActivity{
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.w(TAG, "Error writing document", e);
+                                    Toast.makeText(getApplicationContext(), "Please, check internet connection.", Toast.LENGTH_SHORT).show();
                                 }
                             });
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Please, check internet connection.(Appointment_id null)", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -174,7 +181,55 @@ public class Invoice extends AppCompatActivity{
         bt_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                db.collection("Adme_Appointment_list")
+                        .document(detailsForServices.getAppointment_id())
+                        .update("state", FirebaseUtilClass.APPOINTMENT_STATE_FINISHED)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                db.collection("Adme_Invoice_List")
+                                        .document(detailsForServices.getAppointment_id())
+                                        .update("state", FirebaseUtilClass.ENTRY_FINISHED)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                                Intent intent = new Intent(Invoice.this, GiveRatingActivity.class);
+                                                intent.putExtra("clintUserName", detailsForServices.getCustomer_name());
+                                                intent.putExtra("serviceProviderUserName", detailsForServices.getService_provider());
+                                                intent.putExtra("totalPrice", invoice_total.getText().toString());
+                                                intent.putExtra("invoiceID", detailsForServices.getAppointment_id());
+                                                intent.putExtra("serviceID", detailsForServices.getService_id());
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error updating document", e);
+                                                Toast.makeText(getApplicationContext(), "Please, check internet connection.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error updating document", e);
+                                Toast.makeText(getApplicationContext(), "Please, check internet connection.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
+            }
+        });
+
+        bt_decline = findViewById(R.id.bt_decline);
+        bt_decline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }
@@ -195,6 +250,11 @@ public class Invoice extends AppCompatActivity{
 
                         serviceList = invoiceItem.getSelectServicesList();
                         assert serviceList != null;
+
+                        if(invoiceItem.getState().equals(FirebaseUtilClass.ENTRY_PENDING)  && isClientMode()){
+                            bt_ok.setVisibility(View.VISIBLE);
+                            bt_decline.setVisibility(View.VISIBLE);
+                        }
 
                         MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
                             @Override
@@ -491,6 +551,16 @@ public class Invoice extends AppCompatActivity{
         String totalWithDiscount = "$" + (sumTotal - discount);
         invoice_total.setText(totalWithDiscount);
         total_amount.setText(totalWithDiscount);
+    }
+
+    public boolean isClientMode(){
+        SharedPreferences preferences=getSharedPreferences("Settings", MODE_PRIVATE);
+        if(preferences.getBoolean("isClient",true)){
+            String mUserId = CookieTechUtilityClass.getSharedPreferences("mUserId", this);
+            return detailsForServices.getCustomer_ref().equals(mUserId);
+        } else {
+            return false;
+        }
     }
 
 }

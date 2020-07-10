@@ -16,17 +16,26 @@ import com.example.adme.Activities.ui.invoice.CustomerDetails;
 import com.example.adme.Activities.ui.invoice.Invoice;
 import com.example.adme.Activities.ui.invoice.Services;
 import com.example.adme.Architecture.FirebaseUtilClass;
+import com.example.adme.Helpers.CookieTechUtilityClass;
+import com.example.adme.Helpers.RatingItem;
 import com.example.adme.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RatingHistoryAdapter extends RecyclerView.Adapter<RatingHistoryAdapter.RatingHistoryViewHolder> {
-    Context context;
+    private Context context;
+    private List<RatingItem> ratingItemList;
 
     public RatingHistoryAdapter(Context context) {
         this.context=context;
+    }
+
+    public RatingHistoryAdapter(Context context, List<RatingItem> ratingItemList) {
+        this.context=context;
+        this.ratingItemList=ratingItemList;
     }
 
     @NonNull
@@ -38,40 +47,19 @@ public class RatingHistoryAdapter extends RecyclerView.Adapter<RatingHistoryAdap
 
     @Override
     public void onBindViewHolder(@NonNull RatingHistoryViewHolder holder, int position) {
+        final RatingItem ratingItem = ratingItemList.get(position);
 
+        holder.tv_name.setText(ratingItem.getClintName());
+        holder.tv_time.setText(CookieTechUtilityClass.getTimeDate(ratingItem.getTime(), "hh:mm aa, dd MMM yyyy"));
+        holder.ratingBar.setRating(ratingItem.getRating());
+        holder.tv_detail.setText(ratingItem.getComment());
+        holder.tv_money.setText(ratingItem.getTotalPrice());
         holder.ct_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Services> services = new ArrayList<>();
-                services.add(new Services("Wall painting",50));
-                services.add(new Services("Room Painting",90,3));
-
-                String due_date = "12/7/2020";
-                String customer_name = "Amanullah Asraf";
-                String customer_phone = "+8801521304517";
-                String customer_email ="amanullahoasraf@gmail.com";
-                String customer_address = "57/3, Gulshan, Dhaka";
-                String service_provider = "Akash Shahriar";
-                String service_category = "Paint Job";
-                String service_id = "101";
-                double vat =0;
-                double discount =20;
-
-                CustomerDetails detailsForServices = new CustomerDetails(
-                        due_date,
-                        customer_name,
-                        customer_phone,
-                        customer_email,
-                        customer_address,
-                        service_provider,
-                        service_category,
-                        service_id,vat,
-                        discount
-                );
-
                 Intent intent = new Intent(context, Invoice.class);
-                intent.putExtra("service_details", detailsForServices);
-                intent.putExtra("service_list", services);
+                intent.putExtra("from", "NotificationItemInventoryAdapter");
+                intent.putExtra("reference", ratingItem.getInvoiceID());
                 intent.putExtra("mode", FirebaseUtilClass.ENTRY_NOT_EDITABLE);
                 context.startActivity(intent);
             }
@@ -80,7 +68,8 @@ public class RatingHistoryAdapter extends RecyclerView.Adapter<RatingHistoryAdap
 
     @Override
     public int getItemCount() {
-        return 5;
+        return ratingItemList.size();
+//        return 5;
     }
 
 

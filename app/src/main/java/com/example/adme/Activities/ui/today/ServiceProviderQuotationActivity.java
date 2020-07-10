@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.MessageQueue;
@@ -93,6 +94,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     String appointmentID="";
     UserDataModel userDataModel;
     User currentUser;
+    String phone = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -404,7 +406,12 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
         fab_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(phone.equals("")){
+                    Toast.makeText(getApplicationContext(), "Phone number not found", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    startActivity(intent);
+                }
             }
         });
 
@@ -451,6 +458,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                     tv_service_list.setText(servicetext);
                     tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
                 } else if(!isClientMode()) {
+                    phone = appointment.getClint_phone();
                     inputField.setVisibility(View.GONE);
                     tv_state.setVisibility(View.VISIBLE);
                     im_state.setVisibility(View.VISIBLE);
@@ -487,6 +495,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                         bt_cancel_appointment.setVisibility(View.VISIBLE);
                     }
                 } else {
+                    phone = appointment.getService_provider_phone();
                     inputField.setVisibility(View.GONE);
                     tv_state.setVisibility(View.VISIBLE);
                     im_state.setVisibility(View.VISIBLE);
@@ -553,6 +562,7 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         appointment = documentSnapshot.toObject(Appointment.class);
+                        appointment.setAppointmentID(appointmentID);
                         MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
                             @Override
                             public boolean queueIdle() {
@@ -596,41 +606,13 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
-
                         createNotification(
-                                appointment.getClint_name()+" response to your request",
+                                appointment.getService_provider_name()+" response to your request",
                                 FirebaseUtilClass.MODE_CLIENT+"",
                                 appointment.getClint_ref()+"",
                                 "Successfully send quotation to client."
                         );
-
                         onBackPressed();
-
-//                        String newDocumentID = String.valueOf(Calendar.getInstance().getTimeInMillis());
-//                        Notification notification = new Notification();
-//                        notification.setSeen(false);
-//                        notification.setTime(newDocumentID);
-//                        notification.setText(appointment.getClint_name()+" response to your request");
-//                        notification.setMode(FirebaseUtilClass.MODE_CLIENT);
-//                        notification.setType(FirebaseUtilClass.NOTIFICATION_APPOINTMENT_TYPE);
-//                        notification.setReference(appointmentID);
-//
-//                        db.collection("Adme_User/"+appointment.getClint_ref()+"/notification_list")
-//                                .document(newDocumentID)
-//                                .set(notification)
-//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        Log.d(TAG, "Notification successfully written!");
-//                                        Toast.makeText(getApplicationContext(), "Successfully send quotation to client.", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        Log.w(TAG, "Error writing document", e);
-//                                    }
-//                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

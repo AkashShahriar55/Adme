@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -79,7 +80,8 @@ public class TodayViewModel extends ViewModel {
     public void fatchActiveAppointmentList(String userID) {
         db.collection("Adme_Appointment_list")
                 .whereEqualTo("service_provider_ref", userID)
-                .whereEqualTo("state", FirebaseUtilClass.APPOINTMENT_STATE_CLINT_APPROVED)
+                .whereIn("state", Arrays.asList(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_APPROVED, FirebaseUtilClass.APPOINTMENT_STATE_INVOICE_SEND))
+//                .whereEqualTo("state", FirebaseUtilClass.APPOINTMENT_STATE_CLINT_APPROVED)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {

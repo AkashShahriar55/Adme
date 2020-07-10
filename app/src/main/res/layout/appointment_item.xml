@@ -146,7 +146,8 @@
             android:layout_marginTop="3dp"
             android:tint="@color/color_active"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/imageView29"
+            app:layout_constraintEnd_toEndOf="@+id/imageView23"
+            app:layout_constraintStart_toStartOf="@+id/imageView23"
             app:layout_constraintTop_toTopOf="@+id/tv_state"
             app:srcCompat="@drawable/ic_help" />
 

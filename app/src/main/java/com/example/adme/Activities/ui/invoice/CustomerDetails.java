@@ -7,6 +7,7 @@ public class CustomerDetails implements Parcelable {
 
     private String due_date;
     private String customer_name;
+    private String customer_ref;
     private String customer_phone;
     private String customer_email;
     private String customer_address;
@@ -18,6 +19,21 @@ public class CustomerDetails implements Parcelable {
     private String appointment_id;
 
     public CustomerDetails(){}
+
+    public CustomerDetails(String due_date, String customer_name, String customer_ref, String customer_phone, String customer_email, String customer_address, String service_provider, String service_category, double vat, double discount, String service_id, String appointment_id) {
+        this.due_date = due_date;
+        this.customer_name = customer_name;
+        this.customer_ref = customer_ref;
+        this.customer_phone = customer_phone;
+        this.customer_email = customer_email;
+        this.customer_address = customer_address;
+        this.service_provider = service_provider;
+        this.service_category = service_category;
+        this.vat = vat;
+        this.discount = discount;
+        this.service_id = service_id;
+        this.appointment_id = appointment_id;
+    }
 
     public CustomerDetails(String due_date, String customer_name, String customer_phone, String customer_email, String customer_address, String service_provider, String service_category, double vat, double discount, String service_id, String appointment_id) {
         this.due_date = due_date;
@@ -62,6 +78,7 @@ public class CustomerDetails implements Parcelable {
     protected CustomerDetails(Parcel in) {
         due_date = in.readString();
         customer_name = in.readString();
+        customer_ref = in.readString();
         customer_phone = in.readString();
         customer_email = in.readString();
         customer_address = in.readString();
@@ -170,6 +187,14 @@ public class CustomerDetails implements Parcelable {
         this.service_category = service_category;
     }
 
+    public String getCustomer_ref() {
+        return customer_ref;
+    }
+
+    public void setCustomer_ref(String customer_ref) {
+        this.customer_ref = customer_ref;
+    }
+
     public void setVat(double vat) {
         this.vat = vat;
     }
@@ -183,6 +208,7 @@ public class CustomerDetails implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(due_date);
         dest.writeString(customer_name);
+        dest.writeString(customer_ref);
         dest.writeString(customer_phone);
         dest.writeString(customer_email);
         dest.writeString(customer_address);

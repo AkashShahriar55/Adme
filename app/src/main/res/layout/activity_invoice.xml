@@ -138,8 +138,7 @@
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/name"
                     app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                    app:layout_constraintTop_toTopOf="@+id/name"
-                    />
+                    app:layout_constraintTop_toTopOf="@+id/name" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -165,19 +164,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/name" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/email"
                     android:textColor="@color/txt_light"
                     android:textSize="14sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
                     app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                 <EditText
-                    android:visibility="gone"
                     android:id="@+id/customer_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -186,6 +184,7 @@
                     android:padding="4dp"
                     android:textColor="@color/txt_dark"
                     android:textSize="14sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/textView8"
                     app:layout_constraintEnd_toStartOf="@+id/guideline4"
                     app:layout_constraintTop_toTopOf="@+id/textView8" />
@@ -278,7 +277,7 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.95" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-            
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/service_portion"
                 android:layout_width="0dp"
@@ -382,8 +381,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:textColor="@color/txt_light"
                         android:text="@string/discount"
+                        android:textColor="@color/txt_light"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txt_vat" />
 
@@ -391,14 +390,14 @@
                         android:id="@+id/et_discount_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$0.0"
-                        android:inputType="numberDecimal"
                         android:background="@null"
                         android:enabled="false"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
                         android:padding="4dp"
+                        android:text="$0.0"
                         android:textColor="@color/txt_dark"
                         android:textSize="14sp"
-                        android:maxLines="1"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_discount"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_discount" />
@@ -440,7 +439,6 @@
                     app:layout_constraintStart_toEndOf="@+id/textView14" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/textView17"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -448,6 +446,7 @@
                     android:text="@string/service_category"
                     android:textColor="@color/txt_light"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@+id/service_category"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -455,12 +454,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/service_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/txt_highlight"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     app:layout_constraintBaseline_toBaselineOf="@+id/textView17"
                     app:layout_constraintEnd_toStartOf="@+id/guideline8"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -511,8 +510,6 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/send_invoice_btn_background"
                 android:backgroundTint="@color/sv_primary"
-                android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:text="@string/send_invoice"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -527,11 +524,26 @@
                 android:id="@+id/bt_ok"
                 android:layout_width="0dp"
                 android:layout_height="66dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="OK"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/bt_decline"
+                app:layout_constraintTop_toBottomOf="@+id/service_portion" />
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/bt_decline"
+                android:layout_width="0dp"
+                android:layout_height="66dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="Decline"
+                app:layout_constraintEnd_toStartOf="@+id/bt_ok"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/service_portion" />
 

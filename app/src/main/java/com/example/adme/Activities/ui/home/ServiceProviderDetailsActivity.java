@@ -3,6 +3,7 @@ package com.example.adme.Activities.ui.home;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.adme.Activities.ui.income.IncomeViewModel;
 import com.example.adme.Activities.ui.income.RatingHistoryAdapter;
 import com.example.adme.Activities.ui.today.ViewServiceImageSliderAdapter;
 import com.example.adme.Architecture.FirebaseUtilClass;
@@ -43,6 +45,7 @@ import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
 import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.Notification;
+import com.example.adme.Helpers.RatingItem;
 import com.example.adme.Helpers.SelectServiceItem;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.User;
@@ -90,7 +93,9 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     SelectServiceAdapter service_adapter;
     RatingHistoryAdapter reviewAdapter;
     private List<SelectServiceItem> selectServiceList = new ArrayList<>();
+    private List<RatingItem> ratingItemList = new ArrayList<>();
     RecyclerView select_service_recyclerView,review_recyclerView;
+    ConstraintLayout empty_recyclerview;
     CircleImageView circleImageView;
     RatingBar ratingBar;
     List<String> selectServices = new ArrayList<>();
@@ -106,6 +111,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     String selected_service_text;
     String servicetext="";
     UserDataModel userDataModel;
+    IncomeViewModel incomeViewModel;
     User currentUser;
 
 
@@ -113,8 +119,38 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.client_view_service_provider);
-        userDataModel = new ViewModelProvider(this).get(UserDataModel.class);
-        userDataModel.getCurrentUser().observe(this, user -> { currentUser = user; });
+
+        service = getIntent().getParcelableExtra("serviceProviderObject");
+        assert service != null;
+
+        incomeViewModel = new ViewModelProvider(this).get(IncomeViewModel.class);
+        incomeViewModel.getUserData().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                currentUser = user;
+            }
+        });
+        incomeViewModel.setRating_list(service.getmServiceId());
+        incomeViewModel.getRating_list().observe(this, new Observer<List<RatingItem>>() {
+            @Override
+            public void onChanged(List<RatingItem> ratingItems) {
+                Log.d(TAG, " onEvent getRating_list: "+ratingItems.size());
+                ratingItemList.clear();
+                ratingItemList.addAll(ratingItems);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        reviewAdapter.notifyDataSetChanged();
+                        if(ratingItemList.size() == 0){
+                            empty_recyclerview.setVisibility(View.VISIBLE);
+                        }else{
+                            empty_recyclerview.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+        });
+
         initializeFields();
     }
 
@@ -143,6 +179,13 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         til_service_added= (TextInputLayout) findViewById(R.id.textInputLayout51);
         til_service_time= (TextInputLayout) findViewById(R.id.textInputLayout2);
         til_service_date= (TextInputLayout) findViewById(R.id.textInputLayout5);
+
+        empty_recyclerview = findViewById(R.id.empty_recyclerview);
+        if(ratingItemList.size() == 0){
+            empty_recyclerview.setVisibility(View.VISIBLE);
+        }else{
+            empty_recyclerview.setVisibility(View.GONE);
+        }
 
         myCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date1 = new DatePickerDialog.OnDateSetListener() {
@@ -218,7 +261,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         RecyclerView.LayoutManager review_layoutManager =  new LinearLayoutManager(ServiceProviderDetailsActivity.this);
         review_recyclerView.setLayoutManager(review_layoutManager);
         review_recyclerView.setHasFixedSize(true);
-        reviewAdapter = new RatingHistoryAdapter(this);
+        reviewAdapter = new RatingHistoryAdapter(this, ratingItemList);
 //        review_recyclerView.setAdapter(reviewAdapter);
 
         //send button setting
@@ -227,20 +270,15 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
             @Override
             public void onClick(View view) {
                 if(!isInputError()){
-                    setFirebaseData("appointment10");
+                    setFirebaseData();
                 }
             }
         });
-
 
         updateView();
     }
 
     public void updateView() {
-        Intent intent = getIntent();
-        service = intent.getParcelableExtra("serviceProviderObject");
-        assert service != null;
-
         tv_username.setText(service.getUser_name());
         tv_work_done.setText(service.getReviews());
         tv_catagory.setText(service.getCategory());
@@ -456,7 +494,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
 //        Log.d(TAG, servicetext+" setServiceOnBottomSheet: "+lines[0]);
     }
 
-    private void setFirebaseData(String doc){
+    private void setFirebaseData(){
         Appointment appointment= new Appointment();
 
         appointment.setServiceID(service.getmServiceId());

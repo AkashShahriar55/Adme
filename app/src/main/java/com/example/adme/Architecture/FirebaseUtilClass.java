@@ -109,6 +109,9 @@ public class FirebaseUtilClass {
     public static final String ENTRY_EDITABLE = "Editable";
     public static final String ENTRY_NOT_EDITABLE = "notEditable";
 
+    public static final String ENTRY_PENDING = "pending";
+    public static final String ENTRY_FINISHED = "finished";
+
     public static final String VALUE_USER_PHOTO = "user_photo";
     public static final String VALUE_DEFAULT_AVATAR = "default_avatar";
 

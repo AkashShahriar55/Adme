@@ -396,5 +396,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Servic
 //        fragmentTransaction.commit();
         Intent intent = new Intent(getActivity(), ServiceProviderSearchActivity.class);
         startActivity(intent);
+        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

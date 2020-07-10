@@ -71,7 +71,6 @@ public class HomeViewModel extends ViewModel {
         return queryResult;
     }
 
-
     public MutableLiveData<User> getUserData() {
         return userData;
     }

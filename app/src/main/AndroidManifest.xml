@@ -103,6 +103,10 @@
             android:name=".Activities.ui.invoice.Invoice"
             android:theme="@style/AppTheme2">
         </activity>
+        <activity
+            android:name=".Activities.ui.invoice.GiveRatingActivity"
+            android:theme="@style/AppTheme2">
+        </activity>
 
         <!-- for notification messaging / -->
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
