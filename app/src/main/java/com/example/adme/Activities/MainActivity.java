@@ -34,26 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-        //for getting token of the device
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("token failed", "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        //String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d("token", token);
-                        //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
-                    }
-                });
+        firebaseUtilClass.registerDeviceTokenToServer();
 
 
 

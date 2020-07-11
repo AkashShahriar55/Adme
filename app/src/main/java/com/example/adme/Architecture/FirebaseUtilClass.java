@@ -27,6 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -223,7 +225,7 @@ public class FirebaseUtilClass {
 
                     String joined = String.valueOf(Objects.requireNonNull(user.getMetadata()).getCreationTimestamp());
                     String user_id = user.getUid();
-                    User new_user = new User(username,email,phone,profile_photo_url,joined,user_id);
+                    User new_user = new User(username,email,phone,profile_photo_url,joined,user_id,"");
                     /*** Insert into fireStore database**/
                     userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
                         Log.d(TAG, "onSuccess: successfully created user");
@@ -385,6 +387,46 @@ public class FirebaseUtilClass {
             return true;
         }
         return false;
+    }
+
+    public void registerDeviceTokenToServer() {
+        //for getting token of the device
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("token failed", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        updateDeviceTokenToServer(token);
+
+                        // Log and toast
+                        //String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d("token", token);
+                        //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void updateDeviceTokenToServer(String token) {
+        FirebaseUser currentUser = getCurrentUser();
+
+        userRef.document(currentUser.getUid()).update("device_token",token).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "update device token onComplete: ");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "update device token onFailed: "+e.getMessage());
+            }
+        });
     }
 
     public interface UpdateLocationInfoCommunicator{

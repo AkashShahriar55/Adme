@@ -28,16 +28,18 @@ public class User implements Parcelable {
     private Map<String,String> service_provider_info = new HashMap<>();
     private Map<String,String> client_info = new HashMap<>();
     private List<Map<String,String>> service_reference = new ArrayList<>();
+    private String device_token;
 
 
     public User() {
     }
 
-    public User(String mUsername, String mEmail, String phone, String profile_image_url, String mJoined, String mUserId) {
+    public User(String mUsername, String mEmail, String phone, String profile_image_url, String mJoined, String mUserId, String device_token) {
         this.user_name = mUsername;
         this.joined = mJoined;
         this.mUserId = mUserId;
         this.profile_image_url = profile_image_url;
+        this.device_token = device_token;
 
         mode = FirebaseUtilClass.MODE_CLIENT;
         status = FirebaseUtilClass.STATUS_ONLINE;
@@ -65,6 +67,7 @@ public class User implements Parcelable {
         status = in.readString();
         mUserId = in.readString();
         profile_image_url = in.readString();
+        device_token = in.readString();
 
 
         int service_count = in.readInt();
@@ -232,6 +235,7 @@ public class User implements Parcelable {
         dest.writeString(status);
         dest.writeString(mUserId);
         dest.writeString(profile_image_url);
+        dest.writeString(device_token);
 
         int service_count = service_reference.size();
         dest.writeInt(service_count);

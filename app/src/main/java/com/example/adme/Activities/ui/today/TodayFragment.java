@@ -4,13 +4,26 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.MessageQueue;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -45,6 +58,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -154,10 +168,17 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
                         }else{
                             empty_recyclerview_appointment.setVisibility(View.GONE);
                         }
+
+                        updateMapMarkers();
                     }
                 });
             }
         });
+
+    }
+
+    private void updateMapMarkers() {
+
 
     }
 
@@ -425,7 +446,34 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         });
 
 
+        LatLng dhaka = new LatLng(23.777176,90.399452);
+        Marker maarker = mMap.addMarker(new MarkerOptions().position(dhaka).title("test").icon(BitmapDescriptorFactory.fromBitmap(generateMarkerBitmap())));
 
+        setMarkerBounce(maarker);
+
+
+
+    }
+
+    private void setMarkerBounce(final Marker marker) {
+        final Handler handler = new Handler();
+        final long startTime = SystemClock.uptimeMillis();
+        final long duration = 2000;
+        final Interpolator interpolator = new BounceInterpolator();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - startTime;
+                float t = Math.max(1 - interpolator.getInterpolation((float) elapsed/duration), 0);
+                marker.setAnchor(0.5f, 1.0f +  t);
+
+                if (t > 0.0) {
+                    handler.postDelayed(this, 16);
+                } else {
+                    setMarkerBounce(marker);
+                }
+            }
+        });
     }
 
     private void updateCurrentAppointmentsPin() {
@@ -495,6 +543,42 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         }
         bottomSheetBehavior.setPeekHeight(oldPeekHeight, true);
 //        Log.d(TAG, "onViewCreated: "+bottomSheetBehavior.getPeekHeight());
+    }
+
+    public Bitmap generateMarkerBitmap(){
+        Bitmap background = Bitmap.createBitmap(200,200,Bitmap.Config.ARGB_8888);
+        Canvas mainCanvas = new Canvas(background);
+
+
+        Bitmap markerImage = BitmapFactory.decodeResource(getResources(),R.drawable.marker_with_photo);
+        markerImage = Bitmap.createScaledBitmap(markerImage,200,200,false);
+        mainCanvas.drawBitmap(markerImage,0,0,null);
+
+        Bitmap roundedImage = Bitmap.createBitmap(130,
+                130, Bitmap.Config.ARGB_8888);
+        Canvas profileImageCanvas = new Canvas(roundedImage);
+        Bitmap mainProfileImage = BitmapFactory.decodeResource(getResources(),R.drawable.test_image);
+        mainProfileImage = Bitmap.createScaledBitmap(mainProfileImage,130,130,false);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, 130, 130);
+
+
+        paint.setAntiAlias(true);
+        profileImageCanvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        profileImageCanvas.drawCircle(65, 65,
+                65, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        profileImageCanvas.drawBitmap(mainProfileImage, rect, rect, paint);
+
+        mainCanvas.drawBitmap(roundedImage,35,8,null);
+
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(background);
+        Bitmap result = bitmapDrawable.getBitmap();
+        return result;
     }
 
 
