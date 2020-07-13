@@ -50,6 +50,7 @@ import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.AppointmentRef;
 import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
+import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.Service;
 import com.example.adme.Helpers.UiHelper;
 import com.example.adme.Helpers.User;
@@ -169,7 +170,10 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
                             empty_recyclerview_appointment.setVisibility(View.GONE);
                         }
 
-                        updateMapMarkers();
+                        if(mMap != null){
+                            updateMapMarkers();
+                        }
+
                     }
                 });
             }
@@ -178,7 +182,15 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void updateMapMarkers() {
-
+        for(Appointment appointment:appointmentList){
+            mMap.clear();
+            MyPlaces location = appointment.getClint_location();
+            float latitude = Float.parseFloat(location.getLatitude());
+            float longitude = Float.parseFloat(location.getLongitude());
+            LatLng position = new LatLng(latitude,longitude);
+            Bitmap mainProfileImage = BitmapFactory.decodeResource(getResources(),R.drawable.test_image);
+            Marker marker = mMap.addMarker(new MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromBitmap(generateMarkerBitmap(mainProfileImage))).title(appointment.getClint_name()));
+        }
 
     }
 
@@ -446,10 +458,11 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         });
 
 
-        LatLng dhaka = new LatLng(23.777176,90.399452);
-        Marker maarker = mMap.addMarker(new MarkerOptions().position(dhaka).title("test").icon(BitmapDescriptorFactory.fromBitmap(generateMarkerBitmap())));
 
-        setMarkerBounce(maarker);
+
+        if(!appointmentList.isEmpty()){
+            updateMapMarkers();
+        }
 
 
 
@@ -545,7 +558,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
 //        Log.d(TAG, "onViewCreated: "+bottomSheetBehavior.getPeekHeight());
     }
 
-    public Bitmap generateMarkerBitmap(){
+    public Bitmap generateMarkerBitmap(Bitmap profile_photo){
         Bitmap background = Bitmap.createBitmap(200,200,Bitmap.Config.ARGB_8888);
         Canvas mainCanvas = new Canvas(background);
 
@@ -557,8 +570,8 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         Bitmap roundedImage = Bitmap.createBitmap(130,
                 130, Bitmap.Config.ARGB_8888);
         Canvas profileImageCanvas = new Canvas(roundedImage);
-        Bitmap mainProfileImage = BitmapFactory.decodeResource(getResources(),R.drawable.test_image);
-        mainProfileImage = Bitmap.createScaledBitmap(mainProfileImage,130,130,false);
+        //Bitmap mainProfileImage = BitmapFactory.decodeResource(getResources(),R.drawable.test_image);
+        profile_photo = Bitmap.createScaledBitmap(profile_photo,130,130,false);
 
         final int color = 0xff424242;
         final Paint paint = new Paint();
@@ -572,7 +585,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         profileImageCanvas.drawCircle(65, 65,
                 65, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        profileImageCanvas.drawBitmap(mainProfileImage, rect, rect, paint);
+        profileImageCanvas.drawBitmap(profile_photo, rect, rect, paint);
 
         mainCanvas.drawBitmap(roundedImage,35,8,null);
 

@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        firebaseUtilClass.registerDeviceTokenToServer();
 
 
 
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if(firebaseUtilClass.checkIfAlreadyLoggedIn()){
                             startLandingActivity();
+
                         }else{
                             ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,bannerLogo,"banner_logo");
                             Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);

@@ -73,7 +73,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
         super.onCreate(savedInstanceState);
         getMode();
         mCurrentUser = getIntent().getParcelableExtra(FirebaseUtilClass.CURRENT_USER_ID);
-
+        firebaseUtilClass.registerDeviceTokenToServer();
 
         if(isClient){
             setContentView(R.layout.activity_landing_client);

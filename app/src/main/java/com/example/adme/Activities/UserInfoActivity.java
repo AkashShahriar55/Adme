@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,7 +31,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private static final int IMAGE_PICK_CODE = 11;
     private CircleImageView choose_photo,profile_photo;
     private EditText edt_profile_username;
-    private Button profile_continue_btn, profile_skip_btn;
+    private Button profile_continue_btn;
 
 
     @Override
@@ -40,8 +42,12 @@ public class UserInfoActivity extends AppCompatActivity {
         initializeFields();
 
         choose_photo.setOnClickListener(v -> uploadImage());
-
-        profile_skip_btn.setOnClickListener(v -> startAccessLocationActivity());
+        profile_continue_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAccessLocationActivity();
+            }
+        });
     }
 
     @Override
@@ -54,6 +60,7 @@ public class UserInfoActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
         if(user.getPhotoUrl() != null){
+            Log.d("akash_debug", "setUserInfo: " + user.getPhotoUrl());
             Glide.with(UserInfoActivity.this).load(user.getPhotoUrl()).into(profile_photo);
         }
 
@@ -72,7 +79,6 @@ public class UserInfoActivity extends AppCompatActivity {
         profile_photo = findViewById(R.id.profile_photo);
         edt_profile_username = findViewById(R.id.edt_profile_username);
         profile_continue_btn = findViewById(R.id.profile_continue_btn);
-        profile_skip_btn = findViewById(R.id.profile_skip_btn);
 
 
     }

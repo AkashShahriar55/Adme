@@ -100,22 +100,4 @@
         app:layout_constraintStart_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toBottomOf="@+id/edt_profile_username" />
 
-    <Button
-        android:id="@+id/profile_skip_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/skip_now_btn"
-        android:drawableEnd="@drawable/ic_arrow_forward_blue_24_dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/skip_now"
-        android:textColor="@color/skip_now_txt"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline22"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline15" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

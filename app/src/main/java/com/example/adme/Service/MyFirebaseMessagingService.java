@@ -18,6 +18,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import com.example.adme.Activities.MainActivity;
+import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -27,6 +28,7 @@ import java.util.Map;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
 
     /**
      * Called when message is received.
@@ -97,7 +99,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(token);
+        firebaseUtilClass.updateDeviceTokenToServer(token);
     }
     // [END on_new_token]
 

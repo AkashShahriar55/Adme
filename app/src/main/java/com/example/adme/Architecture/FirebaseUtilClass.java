@@ -1,5 +1,6 @@
 package com.example.adme.Architecture;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -118,6 +119,8 @@ public class FirebaseUtilClass {
     public static final String VALUE_DEFAULT_AVATAR = "default_avatar";
 
     public static final String ENTRY_FEATURE_IMAGES = "feature_images";
+
+    public static final String STORAGE_FOLDER_PROFILE_PICTURE = "profile_picture";
 
 
 
@@ -413,10 +416,10 @@ public class FirebaseUtilClass {
                 });
     }
 
-    private void updateDeviceTokenToServer(String token) {
-        FirebaseUser currentUser = getCurrentUser();
+    public void updateDeviceTokenToServer(String token) {
+        String user_id = mAuth.getCurrentUser().getUid();
 
-        userRef.document(currentUser.getUid()).update("device_token",token).addOnCompleteListener(new OnCompleteListener<Void>() {
+        userRef.document(user_id).update("device_token",token).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Log.d(TAG, "update device token onComplete: ");
@@ -442,7 +445,15 @@ public class FirebaseUtilClass {
     public interface CreateUserCommunicator{
         void userAlreadyExists(User user);
         void onUserCreatedSuccessfully(User user);
+
     }
+
+
+    public void updateProfilePhoto(Uri uri){
+        StorageReference profile_pic_storage_ref = storage.getReference().child(STORAGE_FOLDER_PROFILE_PICTURE);
+
+    }
+
 
 
 
