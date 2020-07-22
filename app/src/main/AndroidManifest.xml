@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.adme">
+    package="com.cookietech.adme">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -19,11 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.UserInfoActivity" />
-        <activity android:name=".Activities.FindLocationActivity" />
-        <activity android:name=".Activities.AccessLocationActivity" />
-        <activity android:name=".Activities.ui.today.ViewServiceDetails" />
-        <activity android:name=".Activities.ui.today.AddServicesActivity" />
+        <activity android:name="com.cookietech.adme.Activities.UserInfoActivity" />
+        <activity android:name="com.cookietech.adme.Activities.FindLocationActivity" />
+        <activity android:name="com.cookietech.adme.Activities.AccessLocationActivity" />
+        <activity android:name="com.cookietech.adme.Activities.ui.today.ViewServiceDetails" />
+        <activity android:name="com.cookietech.adme.Activities.ui.today.AddServicesActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,26 +36,26 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activities.LandingActivity"/>
-        <activity android:name=".Activities.RegistrationActivity" />
-        <activity android:name=".Activities.LoginActivity" />
+        <activity android:name="com.cookietech.adme.Activities.LandingActivity"/>
+        <activity android:name="com.cookietech.adme.Activities.RegistrationActivity" />
+        <activity android:name="com.cookietech.adme.Activities.LoginActivity" />
 
         <!-- for handling profile starts -->
-        <activity android:name=".Activities.ui.profile.Contacts" />
-        <activity android:name=".Activities.ui.profile.PrivacySettings" />
-        <activity android:name=".Activities.ui.profile.AccountSubscriptions" />
-        <activity android:name=".Activities.ui.profile.ChangeMode" />
-        <activity android:name=".Activities.ui.profile.Helps" />
-        <activity android:name=".Activities.ui.profile.NotificationSettings" />
-        <activity android:name=".Activities.ui.profile.ManageProfile" />
-        <activity android:name=".Activities.ui.profile.ChangePassword" />
+        <activity android:name="com.cookietech.adme.Activities.ui.profile.Contacts" />
+        <activity android:name="com.cookietech.adme.Activities.ui.profile.PrivacySettings" />
+        <activity android:name="com.cookietech.adme.Activities.ui.profile.AccountSubscriptions" />
+        <activity android:name="com.cookietech.adme.Activities.ui.profile.ChangeMode" />
+        <activity android:name="com.cookietech.adme.Activities.ui.profile.Helps" />
+        <activity android:name="com.cookietech.adme.Activities.ui.profile.NotificationSettings" />
+        <activity android:name="com.cookietech.adme.Activities.ui.profile.ManageProfile" />
+        <activity android:name="com.cookietech.adme.Activities.ui.profile.ChangePassword" />
         <!-- for handling profile ends -->
 
         <activity
-            android:name=".Activities.ui.today.ServiceProviderQuotationActivity"
+            android:name="com.cookietech.adme.Activities.ui.today.ServiceProviderQuotationActivity"
             android:theme="@style/AppTheme2" >
         </activity>
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name="com.cookietech.adme.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -85,26 +85,26 @@
         </activity>
 
         <!-- for income -->
-        <activity android:name=".Activities.ui.income.RatingAndHistoryActicity" />
-        <activity android:name=".Activities.ui.income.MoneyHistoryActicity" />
-        <activity android:name=".Activities.ui.today.NotificationActivity" />
-        <activity android:name=".Activities.ui.home.ServiceProviderSearchActivity" />
+        <activity android:name="com.cookietech.adme.Activities.ui.income.RatingAndHistoryActicity" />
+        <activity android:name="com.cookietech.adme.Activities.ui.income.MoneyHistoryActicity" />
+        <activity android:name="com.cookietech.adme.Activities.ui.today.NotificationActivity" />
+        <activity android:name="com.cookietech.adme.Activities.ui.home.ServiceProviderSearchActivity" />
         <activity
-            android:name=".Activities.ui.home.ServiceProviderDetailsActivity"
+            android:name="com.cookietech.adme.Activities.ui.home.ServiceProviderDetailsActivity"
             android:theme="@style/AppTheme2">
         </activity>
 
         <!-- for invoice -->
         <activity
-            android:name=".Activities.ui.income.InvoiceActivity"
+            android:name="com.cookietech.adme.Activities.ui.income.InvoiceActivity"
             android:theme="@style/AppTheme2">
         </activity>
         <activity
-            android:name=".Activities.ui.invoice.Invoice"
+            android:name="com.cookietech.adme.Activities.ui.invoice.Invoice"
             android:theme="@style/AppTheme2">
         </activity>
         <activity
-            android:name=".Activities.ui.invoice.GiveRatingActivity"
+            android:name="com.cookietech.adme.Activities.ui.invoice.GiveRatingActivity"
             android:theme="@style/AppTheme2">
         </activity>
 
@@ -121,7 +121,7 @@
             android:resource="@color/colorAccent" />
 
         <service
-            android:name=".Service.MyFirebaseMessagingService"
+            android:name="com.cookietech.adme.Service.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
