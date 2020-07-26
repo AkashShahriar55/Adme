@@ -69,8 +69,8 @@
             android:layout_marginTop="3dp"
             android:src="@drawable/ic_build_black_24dp"
             android:tint="@color/txt_highlight"
-            app:layout_constraintEnd_toEndOf="@+id/imageView22"
-            app:layout_constraintStart_toStartOf="@+id/imageView22"
+            app:layout_constraintEnd_toEndOf="@+id/imageView20"
+            app:layout_constraintStart_toStartOf="@+id/imageView20"
             app:layout_constraintTop_toTopOf="@+id/tv_service_title" />
 
         <TextView
@@ -102,8 +102,8 @@
             android:layout_marginTop="10dp"
             android:text="Kitchen light not running. Take bulb if need.. there is many more text here . so that we can do more. lets check what happen if there is more text here"
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@+id/tv_clint_address"
-            app:layout_constraintStart_toStartOf="@+id/tv_clint_address"
+            app:layout_constraintEnd_toEndOf="@+id/tv_time"
+            app:layout_constraintStart_toStartOf="@+id/tv_time"
             app:layout_constraintTop_toBottomOf="@+id/tv_clint_address" />
 
         <TextView
@@ -113,7 +113,7 @@
             android:layout_marginTop="10dp"
             android:text="Services :"
             android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_clint_text"
+            app:layout_constraintStart_toStartOf="@+id/tv_time"
             app:layout_constraintTop_toBottomOf="@+id/tv_clint_text" />
 
         <TextView
@@ -135,8 +135,7 @@
             android:layout_marginTop="10dp"
             android:text="State Canceled"
             android:textSize="15sp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/tv_service_list"
+            app:layout_constraintStart_toStartOf="@+id/tv_time"
             app:layout_constraintTop_toBottomOf="@+id/tv_service_list" />
 
         <ImageView
@@ -144,8 +143,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginTop="3dp"
-            android:tint="@color/color_active"
-            android:visibility="gone"
+            android:tint="@color/txt_highlight"
             app:layout_constraintEnd_toEndOf="@+id/imageView23"
             app:layout_constraintStart_toStartOf="@+id/imageView23"
             app:layout_constraintTop_toTopOf="@+id/tv_state"

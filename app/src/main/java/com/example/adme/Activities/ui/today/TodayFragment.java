@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adme.Activities.LandingActivity;
+import com.example.adme.Activities.ui.home.AllAppointActivity;
 import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.AppointmentRef;
@@ -89,6 +90,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
     RecyclerView appointmentRecyclerView,serviceRecyclerView;
     Button todayAddService;
 
+    Button bt_all_appointment;
     ConstraintLayout empty_recyclerview,empty_recyclerview_appointment;
     CoordinatorLayout layout_coordinator;
     CardView bottom_details_toolbar;
@@ -96,6 +98,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
     ServiceAdapter serviceAdapter;
     boolean isMapLoaded=false;
     boolean isbottomSheetVisible=false;
+    boolean isShowbottomDetails=true;
     int oldPeekHeight;
 
     List<Map<String,String>> services = new ArrayList<>();
@@ -108,7 +111,6 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_today, container, false);
-
         return root;
     }
 
@@ -166,7 +168,7 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         layout_coordinator = view.findViewById(R.id.layout_coordinator);
         bottom_details_toolbar = view.findViewById(R.id.bottom_details_toolbar);
-
+        bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
 
         tv_income_today = view.findViewById(R.id.tv_income_today);
         tv_due =view.findViewById(R.id.tv_due);
@@ -215,7 +217,6 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             todayStatusSwitch.setTextColor(getResources().getColor(R.color.color_not_active));
         }
 
-
         todayStatusSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 buttonView.setText(R.string.online_status);
@@ -232,9 +233,10 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
             }
         });
 
-        bottomDetailsButton = view.findViewById(R.id.bottom_details_button);
-        bottomDetailsButton.setOnClickListener(v -> {
-            getActivity().onBackPressed();
+        bt_all_appointment = view.findViewById(R.id.bt_all_appointment);
+        bt_all_appointment.setOnClickListener(v -> {
+            Intent addServiceActivityIntent = new Intent(requireContext(), AllAppointActivity.class);
+            requireContext().startActivity(addServiceActivityIntent);
         });
 
         todayAddService = view.findViewById(R.id.today_add_service);
@@ -255,21 +257,41 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         bottomSheetBehavior.addBottomSheetCallback (new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN: {
-                        Log.d(TAG, "onStateChanged: STATE_HIDDEN");
-                        if(isbottomSheetVisible) {
-                            new UiHelper(requireContext()).setMargins(locationButton,0,0,0,70);
-                            locationButton.requestLayout();
-                            bottomSheetBehavior.setPeekHeight(bottom_details_toolbar.getHeight()+5, true);
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                        }
-                    }
-                    break;
+                Log.d(TAG, "onStateChanged: "+newState);
+                if (newState == BottomSheetBehavior.STATE_HIDDEN){
+                    bottomSheetBehavior.setPeekHeight(bottom_details_toolbar.getHeight()+5, true);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED){
+                    isShowbottomDetails=true;
+                    bottomDetailsButton.setRotation(0);
+                } else {
+                    isShowbottomDetails=false;
+                    bottomDetailsButton.setRotation(180);
+                }
+//                switch (newState) {
+//                    case BottomSheetBehavior.STATE_HIDDEN: {
+//                        Log.d(TAG, "onStateChanged: STATE_HIDDEN");
+//                        if(isbottomSheetVisible) {
+//                            new UiHelper(requireContext()).setMargins(locationButton,0,0,0,70);
+//                            locationButton.requestLayout();
+//                            bottomSheetBehavior.setPeekHeight(bottom_details_toolbar.getHeight()+5, true);
+//                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//                        }
+//                    }
+//                    break;
+//                }
             }
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
+        });
+
+        bottomDetailsButton.setOnClickListener(v -> {
+            if(isShowbottomDetails){
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
         });
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -312,6 +334,20 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         }else{
             empty_recyclerview.setVisibility(View.GONE);
         }
+
+
+        MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                appointmentRecyclerView.setAdapter(appointmentAdapter);
+                serviceRecyclerView.setAdapter(serviceAdapter);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                isbottomSheetVisible=true;
+                Log.d("LeaderBoardFragment", "queueIdle: called2");
+                return false;
+            }
+        };
+        Looper.myQueue().addIdleHandler(handler);
 
     }
 
@@ -371,8 +407,10 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
         } else {
             // Permission has already been granted
             if(mMap == null){
+                Log.d(TAG, "checkPermissionMap: map null");
                 setUpMap();
             }else{
+                Log.d(TAG, "checkPermissionMap: markCurrentLocation");
                 GoogleMapHelper.markCurrentLocation(requireContext(),mMap);
             }
 
@@ -474,25 +512,25 @@ public class TodayFragment extends Fragment implements OnMapReadyCallback, Googl
     @Override
     public void onMapLoaded() {
         isMapLoaded=true;
-        updateView();
+//        updateView();
     }
 
     public void updateView() {
-        if (isMapLoaded && !isbottomSheetVisible && ((LandingActivity)getActivity()).isTodayVisible()) {
-            MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
-                @Override
-                public boolean queueIdle() {
-                    new UiHelper(requireContext()).setMargins(locationButton,0,0,0,170);
-                    appointmentRecyclerView.setAdapter(appointmentAdapter);
-                    serviceRecyclerView.setAdapter(serviceAdapter);
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    isbottomSheetVisible=true;
-                    Log.d("LeaderBoardFragment", "queueIdle: called2");
-                    return false;
-                }
-            };
-            Looper.myQueue().addIdleHandler(handler);
-        }
+//        if (isMapLoaded && !isbottomSheetVisible && ((LandingActivity)getActivity()).isTodayVisible()) {
+//            MessageQueue.IdleHandler handler = new MessageQueue.IdleHandler() {
+//                @Override
+//                public boolean queueIdle() {
+//                    new UiHelper(requireContext()).setMargins(locationButton,0,0,0,300);
+//                    appointmentRecyclerView.setAdapter(appointmentAdapter);
+//                    serviceRecyclerView.setAdapter(serviceAdapter);
+//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//                    isbottomSheetVisible=true;
+//                    Log.d("LeaderBoardFragment", "queueIdle: called2");
+//                    return false;
+//                }
+//            };
+//            Looper.myQueue().addIdleHandler(handler);
+//        }
         bottomSheetBehavior.setPeekHeight(oldPeekHeight, true);
 //        Log.d(TAG, "onViewCreated: "+bottomSheetBehavior.getPeekHeight());
     }
