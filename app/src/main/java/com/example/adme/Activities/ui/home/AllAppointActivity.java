@@ -1,31 +1,28 @@
-package com.example.adme.Activities.ui.servicehistory;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
+package com.example.adme.Activities.ui.home;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Looper;
 import android.os.MessageQueue;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
-import com.example.adme.Activities.ui.home.AllAppointActivity;
-import com.example.adme.Activities.ui.home.AllAppointAdapter;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.adme.Activities.ui.income.IncomeViewModel;
 import com.example.adme.Activities.ui.today.AppointmentAdapter;
 import com.example.adme.Activities.ui.today.TodayViewModel;
 import com.example.adme.Helpers.Appointment;
+import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.LoadingDialog;
+import com.example.adme.Helpers.RatingItem;
+import com.example.adme.Helpers.UiHelper;
 import com.example.adme.Helpers.User;
 import com.example.adme.R;
 
@@ -34,32 +31,24 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ServiceHistoryFragment extends Fragment {
-    private static final String TAG = "ServiceHistoryFragment";
+public class AllAppointActivity extends AppCompatActivity {
+    private static final String TAG = "AllAppointActivity";
     ConstraintLayout empty_recyclerview_appointment;
     RecyclerView appointmentRecyclerView;
     RecyclerView.Adapter appointmentAdapter;
-    ServiceHistoryViewModel todayViewModel;
-    private User mCurrentUser ;
+    ImageView img_back;
+    TodayViewModel todayViewModel;
+    User mCurrentUser ;
     LoadingDialog dialog;
     List<Appointment> appointmentList = new ArrayList<>();
 
-    public static ServiceHistoryFragment newInstance() {
-        return new ServiceHistoryFragment();
-    }
-
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.service_history_fragment, container, false);
-        initializeFields(view);
-        return view;
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.layout_all_appointments);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        todayViewModel = new ViewModelProvider(requireActivity()).get(ServiceHistoryViewModel.class);
-        todayViewModel.getUserData().observe(getViewLifecycleOwner(), new Observer<User>() {
+        todayViewModel = new ViewModelProvider(this).get(TodayViewModel.class);
+        todayViewModel.getUserData().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 mCurrentUser = user;
@@ -68,7 +57,7 @@ public class ServiceHistoryFragment extends Fragment {
             }
         });
 
-        todayViewModel.getAllAppointmentList().observe(getViewLifecycleOwner(), new Observer<List<Appointment>>() {
+        todayViewModel.getAllAppointmentList().observe(this, new Observer<List<Appointment>>() {
             @Override
             public void onChanged(List<Appointment> appointments) {
                 Log.d(TAG, "onChanged: appointments "+appointments.size());
@@ -81,7 +70,7 @@ public class ServiceHistoryFragment extends Fragment {
                         // return Integer.valueOf(obj1.empId).compareTo(Integer.valueOf(obj2.empId)); // To compare integer values
                     }
                 });
-                requireActivity().runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         appointmentAdapter.notifyDataSetChanged();
@@ -94,21 +83,32 @@ public class ServiceHistoryFragment extends Fragment {
                 });
             }
         });
+
+        initializeFields();
     }
 
-    private void initializeFields(View view) {
-        empty_recyclerview_appointment = view.findViewById(R.id.empty_recyclerview_appointment);
-        appointmentRecyclerView = view.findViewById(R.id.appointment_container);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+    private void initializeFields() {
+        empty_recyclerview_appointment = findViewById(R.id.empty_recyclerview_appointment);
+        appointmentRecyclerView = findViewById(R.id.appointment_container);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(AllAppointActivity.this);
         appointmentRecyclerView.setHasFixedSize(true);
         appointmentRecyclerView.setLayoutManager(layoutManager);
-        appointmentAdapter = new AllAppointAdapter(getContext(), appointmentList);
+        appointmentAdapter = new AppointmentAdapter(AllAppointActivity.this, appointmentList);
 
         if(appointmentList.size() == 0){
             empty_recyclerview_appointment.setVisibility(View.VISIBLE);
         }else{
             empty_recyclerview_appointment.setVisibility(View.GONE);
         }
+
+        img_back = findViewById(R.id.img_back);
+        img_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         updateView();
     }
 
@@ -122,5 +122,6 @@ public class ServiceHistoryFragment extends Fragment {
         };
         Looper.myQueue().addIdleHandler(handler);
     }
+
 
 }

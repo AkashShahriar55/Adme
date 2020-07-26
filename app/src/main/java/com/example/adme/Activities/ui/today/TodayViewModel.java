@@ -34,6 +34,7 @@ public class TodayViewModel extends ViewModel {
     private MutableLiveData<User> userData;
 //    private MutableLiveData<List<AppointmentRef>> appointmentrefList;
     private MutableLiveData<List<Appointment>> appointmentList;
+    private MutableLiveData<List<Appointment>> allAppointmentList;
     private DataRepository repository;
     private FirebaseFirestore db;
 
@@ -42,6 +43,7 @@ public class TodayViewModel extends ViewModel {
         userData = repository.getUserData();
         db = FirebaseFirestore.getInstance();
         appointmentList = new MutableLiveData<List<Appointment>>();
+        allAppointmentList = new MutableLiveData<List<Appointment>>();
 //        appointmentrefList = new MutableLiveData<List<AppointmentRef>>();
     }
 
@@ -101,12 +103,41 @@ public class TodayViewModel extends ViewModel {
                 });
     }
 
+    public void fatchAllAppointmentList(String userID) {
+        db.collection("Adme_Appointment_list")
+                .whereEqualTo("service_provider_ref", userID)
+//                .whereIn("state", Arrays.asList(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_APPROVED, FirebaseUtilClass.APPOINTMENT_STATE_INVOICE_SEND))
+//                .whereEqualTo("state", FirebaseUtilClass.APPOINTMENT_STATE_CLINT_APPROVED)
+//                .orderBy("time", Query.Direction.DESCENDING).limit(20)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        List<Appointment> allappointmentlist = new ArrayList<>();
+                        if (e != null) {
+                            Log.w("TAG", "Listen failed.", e);
+                        } else {
+                            for (QueryDocumentSnapshot doc : value) {
+                                Appointment appointment = doc.toObject(Appointment.class);
+                                appointment.setAppointmentID(doc.getId());
+                                allappointmentlist.add(appointment);
+                                Log.d("TAG", "onSuccess appointments: "+allappointmentlist.size());
+                            }
+                            allAppointmentList.setValue(allappointmentlist);
+                        }
+                    }
+                });
+    }
+
 //    public LiveData<List<AppointmentRef>> getAppointmentRef() {
 //        return appointmentrefList;
 //    }
 
     public LiveData<List<Appointment>> getAppointmentList() {
         return appointmentList;
+    }
+
+    public LiveData<List<Appointment>> getAllAppointmentList() {
+        return allAppointmentList;
     }
 
     public MutableLiveData<User> getUserData() {

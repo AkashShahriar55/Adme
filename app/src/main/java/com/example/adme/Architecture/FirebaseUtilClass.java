@@ -106,6 +106,7 @@ public class FirebaseUtilClass {
     public static final String APPOINTMENT_STATE_FINISHED = "finished";
     public static final String APPOINTMENT_STATE_CLINT_CANCELED = "clientCanceled";
     public static final String APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED = "serviceProviderCanceled";
+    public static final String APPOINTMENT_STATE_TIMEOUT_CANCELED = "timeoutCanceled";
     public static final String APPOINTMENT_STATE_INVOICE_SEND = "invoiceSent";
 
     public static final String ENTRY_EDITABLE = "Editable";

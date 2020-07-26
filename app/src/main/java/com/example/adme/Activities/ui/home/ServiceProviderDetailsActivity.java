@@ -43,6 +43,7 @@ import com.example.adme.Architecture.UserDataModel;
 import com.example.adme.Helpers.Appointment;
 import com.example.adme.Helpers.CookieTechUtilityClass;
 import com.example.adme.Helpers.GoogleMapHelper;
+import com.example.adme.Helpers.LoadingDialog;
 import com.example.adme.Helpers.MyPlaces;
 import com.example.adme.Helpers.Notification;
 import com.example.adme.Helpers.RatingItem;
@@ -113,6 +114,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     UserDataModel userDataModel;
     IncomeViewModel incomeViewModel;
     User currentUser;
+    LoadingDialog dialog;
 
 
     @Override
@@ -319,6 +321,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
         runOnUiThread(new Runnable(){
             public void run() {
                 service_adapter.notifyDataSetChanged();
+                dialog = new LoadingDialog(ServiceProviderDetailsActivity.this,null,"Sending..");
             }
         });
 
@@ -495,6 +498,7 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
     }
 
     private void setFirebaseData(){
+        dialog.show();
         Appointment appointment= new Appointment();
 
         appointment.setServiceID(service.getmServiceId());
@@ -558,8 +562,10 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        dialog.hide();
                                         Log.d(TAG, "Notification successfully written!");
                                         Toast.makeText(getApplicationContext(), "Successfully send request to service provider.", Toast.LENGTH_SHORT).show();
+                                        onBackPressed();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -568,12 +574,12 @@ public class ServiceProviderDetailsActivity  extends AppCompatActivity implement
                                         Log.w(TAG, "Error writing document", e);
                                     }
                                 });
-                        onBackPressed();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        dialog.hide();
                         Log.w(TAG, "Error writing document", e);
                         Toast.makeText(getApplicationContext(), "Failed to send request. Please, try again.", Toast.LENGTH_SHORT).show();
                     }

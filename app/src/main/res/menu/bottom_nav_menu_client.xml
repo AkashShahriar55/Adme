@@ -9,9 +9,10 @@
     <item
         android:id="@+id/navigation_service_history"
         android:icon="@drawable/ic_service_history"
-        android:title="@string/title_service_history" />
+        android:title="@string/title_Bookings" />
 
     <item
+        android:visible="false"
         android:id="@+id/navigation_income"
         android:icon="@drawable/ic_income"
         android:title="@string/title_income" />

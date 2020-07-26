@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,8 +29,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.example.adme.Activities.ui.home.ServiceProviderDetailsActivity;
 import com.example.adme.Activities.ui.income.InvoiceActivity;
 import com.example.adme.Architecture.FirebaseUtilClass;
 import com.example.adme.Architecture.UserDataModel;
@@ -63,7 +60,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,7 +69,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ServiceProviderQuotationActivity  extends AppCompatActivity  implements OnMapReadyCallback {
+public class ServiceProviderQuotationActivity  extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "QuotationDetails";
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 15;
@@ -423,111 +419,154 @@ public class ServiceProviderQuotationActivity  extends AppCompatActivity  implem
     public void updateView() {
         runOnUiThread(new Runnable(){
             public void run() {
-                if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND) && !isClientMode()) {
-                    String servicetext = appointment.getServices();
-                    if (servicetext.contains(",,,")) {
-                        servicetext = servicetext.replace(",,,", "\n");
-                    }
-                    tv_distance.setText(appointment.getDistance() + " Miles");
-                    tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa, dd MMM yyyy"));
-                    tv_clint_money.setText("$ " + appointment.getPrice_requested());
-                    tv_clint_name.setText(appointment.getClint_name());
-                    String loc = appointment.getClint_location().getName().substring(0, appointment.getClint_location().getName().lastIndexOf(","));
-                    tv_clint_address.setText(loc);
-                    tv_clint_text.setText(appointment.getClint_text());
-                    tv_service_list.setText(servicetext);
-                    tv_money.setText("Requested Money : $" + appointment.getPrice_requested());
-                    tv_service_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa"));
-                    tv_service_date.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "dd MMM yyyy"));
-                } else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND) && isClientMode()) {
-                    bt_approve.setVisibility(View.VISIBLE);
-                    bt_decline.setVisibility(View.VISIBLE);
-                    inputField.setVisibility(View.GONE);
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    String servicetext = appointment.getServices();
-                    if (servicetext.contains(",,,")) {
-                        servicetext = servicetext.replace(",,,", "\n");
-                    }
-                    tv_distance.setText(appointment.getDistance() + " Miles");
-                    tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getService_provider_time(), "hh:mm aa, dd MMM yyyy"));
-                    tv_clint_money.setText("$ " + appointment.getPrice_needed());
-                    tv_clint_name.setText(appointment.getService_provider_name());
-                    String loc = appointment.getService_provider_location().getName().substring(0, appointment.getService_provider_location().getName().lastIndexOf(","));
-                    tv_clint_address.setText(loc);
-                    tv_clint_text.setText(appointment.getService_provider_text());
-                    tv_service_list.setText(servicetext);
-                    tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
-                } else if(!isClientMode()) {
-                    phone = appointment.getClint_phone();
-                    inputField.setVisibility(View.GONE);
-                    tv_state.setVisibility(View.VISIBLE);
-                    im_state.setVisibility(View.VISIBLE);
-                    String servicetext = appointment.getServices();
-                    if (servicetext.contains(",,,")) {
-                        servicetext = servicetext.replace(",,,", "\n");
-                    }
-                    tv_service_list.setText(servicetext);
-                    tv_distance.setText(appointment.getDistance() + " Miles");
-                    tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa, dd MMM yyyy"));
-                    tv_clint_money.setText("$ " + appointment.getPrice_needed());
-                    tv_clint_name.setText(appointment.getClint_name());
-                    String loc = appointment.getClint_location().getName().substring(0, appointment.getClint_location().getName().lastIndexOf(","));
-                    tv_clint_address.setText(loc);
-                    tv_clint_text.setText(appointment.getClint_text());
-                    tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
-                    if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_FINISHED)){
-                        tv_state.setText("State : Finished");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_CANCELED)){
-                        tv_state.setText("State : Canceled by client");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED)){
-                        tv_state.setText("State : Canceled by service provider");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND)){
+                if(!isClientMode()) {
+                    if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND)) {
+                        String servicetext = appointment.getServices();
+                        if (servicetext.contains(",,,")) {
+                            servicetext = servicetext.replace(",,,", "\n");
+                        }
+                        tv_distance.setText(appointment.getDistance() + " Miles");
+                        tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa, dd MMM yyyy"));
+                        tv_clint_money.setText("$ " + appointment.getPrice_requested());
+                        tv_clint_name.setText(appointment.getClint_name());
+                        String loc = appointment.getClint_location().getName().substring(0, appointment.getClint_location().getName().lastIndexOf(","));
+                        tv_clint_address.setText(loc);
+                        if (appointment.getClint_text().trim().equals("")) {
+                            tv_clint_text.setText("No quotation written");
+                        } else {
+                            tv_clint_text.setText(appointment.getClint_text());
+                        }
+                        tv_service_list.setText(servicetext);
+                        tv_money.setText("Requested Money : $" + appointment.getPrice_requested());
+                        tv_service_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa"));
+                        tv_service_date.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "dd MMM yyyy"));
                         tv_state.setText("State : Request sent to service provider");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND)){
-                        tv_state.setText("State : Quotation sent to client");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_INVOICE_SEND)){
-                        tv_state.setText("State : Invoice sent to client");
-                        fab_call.setVisibility(View.VISIBLE);
-                    }else{
-                        tv_state.setText("State : Active Appointment");
-                        fab_call.setVisibility(View.VISIBLE);
-                        bt_create_invoice.setVisibility(View.VISIBLE);
-                        bt_cancel_appointment.setVisibility(View.VISIBLE);
+                    } else {
+                        phone = appointment.getClint_phone();
+                        inputField.setVisibility(View.GONE);
+                        tv_state.setVisibility(View.VISIBLE);
+                        im_state.setVisibility(View.VISIBLE);
+                        String servicetext = appointment.getServices();
+                        if (servicetext.contains(",,,")) {
+                            servicetext = servicetext.replace(",,,", "\n");
+                        }
+                        tv_service_list.setText(servicetext);
+                        tv_distance.setText(appointment.getDistance() + " Miles");
+                        tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa, dd MMM yyyy"));
+                        tv_clint_money.setText("$ " + appointment.getPrice_needed());
+                        tv_clint_name.setText(appointment.getClint_name());
+                        String loc = appointment.getClint_location().getName().substring(0, appointment.getClint_location().getName().lastIndexOf(","));
+                        tv_clint_address.setText(loc);
+                        if (appointment.getClint_text().trim().equals("")) {
+                            tv_clint_text.setText("No quotation written");
+                        } else {
+                            tv_clint_text.setText(appointment.getClint_text());
+                        }
+                        tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
+                        if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_FINISHED)){
+                            tv_state.setText("State : Finished");
+                        }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_CANCELED)){
+                            tv_state.setText("State : Canceled by client");
+                        }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED)){
+                            tv_state.setText("State : Canceled by service provider");
+                        }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND)){
+                            tv_state.setText("State : Quotation sent to client");
+                        }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_INVOICE_SEND)){
+                            tv_state.setText("State : Invoice sent to client");
+                            fab_call.setVisibility(View.VISIBLE);
+                        }else if (appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_TIMEOUT_CANCELED)) {
+                            tv_state.setText("State : Service provider did not respond");
+                        }else{
+                            tv_state.setText("State : Active Appointment");
+                            fab_call.setVisibility(View.VISIBLE);
+                            bt_create_invoice.setVisibility(View.VISIBLE);
+                            bt_cancel_appointment.setVisibility(View.VISIBLE);
+                        }
                     }
                 } else {
-                    phone = appointment.getService_provider_phone();
-                    inputField.setVisibility(View.GONE);
-                    tv_state.setVisibility(View.VISIBLE);
-                    im_state.setVisibility(View.VISIBLE);
-                    String servicetext = appointment.getServices();
-                    if (servicetext.contains(",,,")) {
-                        servicetext = servicetext.replace(",,,", "\n");
-                    }
-                    tv_service_list.setText(servicetext);
-                    tv_distance.setText(appointment.getDistance() + " Miles");
-                    tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa, dd MMM yyyy"));
-                    tv_clint_money.setText("$ " + appointment.getPrice_needed());
-                    tv_clint_name.setText(appointment.getService_provider_name());
-                    String loc = appointment.getService_provider_location().getName().substring(0, appointment.getService_provider_location().getName().lastIndexOf(","));
-                    tv_clint_address.setText(loc);
-                    tv_clint_text.setText(appointment.getClint_text());
-                    tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
-                    if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_FINISHED)){
-                        tv_state.setText("State : Finished");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_CANCELED)){
-                        tv_state.setText("State : Canceled by client");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED)){
-                        tv_state.setText("State : Canceled by service provider");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND)){
-                        tv_state.setText("State : Request sent to service provider");
-                    }else if(appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND)){
-                        tv_state.setText("State : Quotation sent to client");
-                    }else{
-                        tv_state.setText("State : Active Appointment");
-                        fab_call.setVisibility(View.VISIBLE);
+                    if (appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_SEND)) {
+                        inputField.setVisibility(View.GONE);
+                        tv_state.setVisibility(View.VISIBLE);
+                        im_state.setVisibility(View.VISIBLE);
                         bt_cancel_appointment.setVisibility(View.VISIBLE);
+                        String servicetext = appointment.getServices();
+                        if (servicetext.contains(",,,")) {
+                            servicetext = servicetext.replace(",,,", "\n");
+                        }
+                        tv_distance.setText(appointment.getDistance() + " Miles");
+                        tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getClint_time(), "hh:mm aa, dd MMM yyyy"));
+                        tv_clint_money.setText("$ " + appointment.getPrice_requested());
+                        tv_clint_name.setText(appointment.getService_provider_name());
+                        String loc = appointment.getService_provider_location().getName().substring(0, appointment.getService_provider_location().getName().lastIndexOf(","));
+                        tv_clint_address.setText(loc);
+                        if (appointment.getClint_text().trim().equals("")) {
+                            tv_clint_text.setText("No quotation written");
+                        } else {
+                            tv_clint_text.setText(appointment.getClint_text());
+                        }
+                        tv_service_list.setText(servicetext);
+                        tv_money.setText("Requested Money : $" + appointment.getPrice_requested());
+                        tv_state.setText("State : Request sent to service provider");
+                    } else if (appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_SEND)) {
+                        bt_approve.setVisibility(View.VISIBLE);
+                        bt_decline.setVisibility(View.VISIBLE);
+                        inputField.setVisibility(View.GONE);
+                        String servicetext = appointment.getServices();
+                        if (servicetext.contains(",,,")) {
+                            servicetext = servicetext.replace(",,,", "\n");
+                        }
+                        tv_distance.setText(appointment.getDistance() + " Miles");
+                        tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getService_provider_time(), "hh:mm aa, dd MMM yyyy"));
+                        tv_clint_money.setText("$ " + appointment.getPrice_needed());
+                        tv_clint_name.setText(appointment.getService_provider_name());
+                        String loc = appointment.getService_provider_location().getName().substring(0, appointment.getService_provider_location().getName().lastIndexOf(","));
+                        tv_clint_address.setText(loc);
+                        if (appointment.getService_provider_text().trim().equals("")) {
+                            tv_clint_text.setText("No quotation written");
+                        } else {
+                            tv_clint_text.setText(appointment.getService_provider_text());
+                        }
+                        tv_service_list.setText(servicetext);
+                        tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
+                        tv_state.setText("State : Quotation sent to client");
+                    } else {
+                        phone = appointment.getService_provider_phone();
+                        inputField.setVisibility(View.GONE);
+                        tv_state.setVisibility(View.VISIBLE);
+                        im_state.setVisibility(View.VISIBLE);
+                        String servicetext = appointment.getServices();
+                        if (servicetext.contains(",,,")) {
+                            servicetext = servicetext.replace(",,,", "\n");
+                        }
+                        tv_service_list.setText(servicetext);
+                        tv_clint_time.setText(CookieTechUtilityClass.getTimeDate(appointment.getService_provider_time(), "hh:mm aa, dd MMM yyyy"));
+                        tv_distance.setText(appointment.getDistance() + " Miles");
+                        tv_clint_money.setText("$ " + appointment.getPrice_needed());
+                        tv_clint_name.setText(appointment.getService_provider_name());
+                        String loc = appointment.getService_provider_location().getName().substring(0, appointment.getService_provider_location().getName().lastIndexOf(","));
+                        tv_clint_address.setText(loc);
+                        if (appointment.getService_provider_text().trim().equals("")) {
+                            tv_clint_text.setText("No quotation written");
+                        } else {
+                            tv_clint_text.setText(appointment.getService_provider_text());
+                        }
+                        tv_money.setText("Needed Money : $" + appointment.getPrice_needed());
+                        if (appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_FINISHED)) {
+                            tv_state.setText("State : Finished");
+                        } else if (appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_CLINT_CANCELED)) {
+                            tv_state.setText("State : Canceled by client");
+                        } else if (appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_SERVICE_PROVIDER_CANCELED)) {
+                            tv_state.setText("State : Canceled by service provider");
+                        } else if (appointment.getState().equals(FirebaseUtilClass.APPOINTMENT_STATE_TIMEOUT_CANCELED)) {
+                            tv_state.setText("State : Service provider did not respond");
+                        } else {
+                            tv_state.setText("State : Active Appointment");
+                            fab_call.setVisibility(View.VISIBLE);
+                            bt_cancel_appointment.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
     }

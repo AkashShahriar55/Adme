@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,11 @@ public class LoadingDialog extends Dialog {
         setContentView(R.layout.custom_progress_dialog);
         setCancelable(false);
         titleTV = findViewById(R.id.custom_dialog_title);
-        titleTV.setText(title);
+        if(title==null){
+            titleTV.setVisibility(View.GONE);
+        } else {
+            titleTV.setText(title);
+        }
         progressTV = findViewById(R.id.tv_progress);
         progressTV.setText(progress);
 

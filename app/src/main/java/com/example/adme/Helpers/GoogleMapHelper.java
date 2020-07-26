@@ -284,14 +284,14 @@ public class GoogleMapHelper {
                     if(location != null){
                         LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
                         mMap.addMarker(new MarkerOptions().position(currentLocation).title(context.getString(R.string.your_current_location)).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_marker)));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, DEFAULT_ZOOM));
                         Log.i(TAG, "run: "+location.getLongitude() + " " + location.getLatitude());
                     }
 
                 }).addOnFailureListener((Activity) context, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Log.d(TAG, "checkPermissionMap: markCurrentLocation faild");
                     }
                 });
 
