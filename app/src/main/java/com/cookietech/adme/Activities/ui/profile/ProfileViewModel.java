@@ -11,7 +11,7 @@ public class ProfileViewModel extends ViewModel {
     private MutableLiveData<User> userData;
     private DataRepository repository;
     public ProfileViewModel() {
-        repository = new DataRepository();
+        repository = DataRepository.getInstance();
         userData = repository.getUserData();
     }
 

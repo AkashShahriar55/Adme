@@ -25,7 +25,7 @@ import java.util.Map;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
-    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    private FirebaseUtilClass firebaseUtilClass = FirebaseUtilClass.getInstance();
 
     /**
      * Called when message is received.

@@ -51,7 +51,7 @@ public class AccessLocationActivity extends AppCompatActivity implements GoogleM
     private GoogleMapHelper googleMapHelper = new GoogleMapHelper(this,this);
 
     //Firebase utility class
-    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    private FirebaseUtilClass firebaseUtilClass = FirebaseUtilClass.getInstance();
 
 
     User mCurrentUser;

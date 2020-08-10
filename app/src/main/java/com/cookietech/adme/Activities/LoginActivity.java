@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.cookietech.adme.Architecture.FirebaseUtilClass;
+import com.cookietech.adme.Helpers.CustomToast;
 import com.cookietech.adme.Helpers.LoadingDialog;
 import com.cookietech.adme.Helpers.User;
 import com.cookietech.adme.R;
@@ -30,6 +31,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -39,6 +41,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity implements FirebaseUtilClass.CreateUserCommunicator {
 
@@ -55,10 +58,10 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
     //create database reference
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    private FirebaseUtilClass firebaseUtilClass = FirebaseUtilClass.getInstance();
 
     private View contextView;
-
+    private User new_user;
     private boolean isLocationSettingShowed = false;
 
 
@@ -80,9 +83,15 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
         });
 
-        login_google_btn.setOnClickListener(v -> signInWithGoogle());
+        login_google_btn.setOnClickListener(v ->{
+            //signInWithGoogle();
+            startUserInfoActivity();
+        } );
 
-        login_facebook_btn.setOnClickListener(v -> signInWithFacebook());
+        login_facebook_btn.setOnClickListener(v ->{
+            //signInWithFacebook();
+            startUserInfoActivity();
+        } );
 
         login_phone_btn.setOnClickListener(v -> {
 
@@ -113,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
     private void startUserInfoActivity() {
         Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
+        intent.putExtra("user_data",new_user);
         startActivity(intent);
     }
 
@@ -129,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
         login_google_btn = findViewById(R.id.login_google_btn);
         login_facebook_btn = findViewById(R.id.login_facebook_btn);
         login_phone_btn= findViewById(R.id.login_phone_btn);
-        dialog = new LoadingDialog(this,"Logging in",null);
+        dialog = new LoadingDialog(this,"Logging in","Please wait...");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -223,7 +233,8 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
                         FirebaseUser user = mAuth.getCurrentUser();
 
                         assert user != null;
-                        firebaseUtilClass.createUser(user,this);
+                        createUser(user);
+
 
 
 
@@ -233,14 +244,45 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
 
-                        Toast.makeText(LoginActivity.this,"Authentication Failed. Please Try Again",Toast.LENGTH_SHORT).show();
+                        CustomToast.makeErrorToast(LoginActivity.this,"Authentication Failed. Please Try Again",Toast.LENGTH_SHORT).show();
                     }
 
                     // ...
                 });
     }
 
+    private void createUser(FirebaseUser user) {
+        String username;
+        String email = null;
+        String phone = null;
+        String profile_photo_url = "default_avatar";
+        String NULL = "";
 
+        if (user.getDisplayName() != null){
+            username = user.getDisplayName();
+        }
+        else{
+            username = "Adme User";
+        }
+
+        if(user.getEmail() != null){
+            email = user.getEmail();
+        }
+
+        if (user.getPhoneNumber() != null){
+            phone = user.getPhoneNumber();
+        }
+
+        if (user.getPhotoUrl() !=null){
+            profile_photo_url = "user_photo";
+        }
+
+        String joined = String.valueOf(Objects.requireNonNull(user.getMetadata()).getCreationTimestamp());
+        String user_id = user.getUid();
+        String phoneNoVerified = FirebaseUtilClass.ENTRY_PHONE_NO_NOT_VERIFIED;
+        new_user = new User(username,email,phone,profile_photo_url,joined,user_id,"",phoneNoVerified);
+        firebaseUtilClass.createUser(user,this,new_user);
+    }
 
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -254,12 +296,12 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         assert user != null;
-                        firebaseUtilClass.createUser(user,this);
+                        createUser(user);
                     } else {
                         // If sign in fails, display a message to the user.
                         dialog.show();
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                        CustomToast.makeErrorToast(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }
 
@@ -290,5 +332,16 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
         dialog.dismiss();
         startUserInfoActivity();
 
+    }
+
+    @Override
+    public void onUserCreationFailed(FirebaseUser user) {
+        user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                dialog.dismiss();
+                CustomToast.makeErrorToast(LoginActivity.this,"User creation Failed !",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

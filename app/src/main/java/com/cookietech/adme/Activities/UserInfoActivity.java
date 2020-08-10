@@ -4,22 +4,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cookietech.adme.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -30,8 +39,9 @@ public class UserInfoActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
     private static final int IMAGE_PICK_CODE = 11;
     private CircleImageView choose_photo,profile_photo;
-    private EditText edt_profile_username;
+    private TextInputLayout edt_profile_username;
     private Button profile_continue_btn;
+    private ConstraintLayout user_info_top_back;
 
 
     @Override
@@ -58,18 +68,20 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void setUserInfo() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
+        if(user == null){
+            return;
+        }
         if(user.getPhotoUrl() != null){
             Log.d("akash_debug", "setUserInfo: " + user.getPhotoUrl());
             Glide.with(UserInfoActivity.this).load(user.getPhotoUrl()).into(profile_photo);
         }
 
         if (user.getDisplayName() != null){
-            edt_profile_username.setText(user.getDisplayName());
+            edt_profile_username.getEditText().setText(user.getDisplayName());
         }
         else {
             String username = "Adme User";
-            edt_profile_username.setText(username);
+            edt_profile_username.getEditText().setText(username);
         }
     }
 
@@ -79,6 +91,7 @@ public class UserInfoActivity extends AppCompatActivity {
         profile_photo = findViewById(R.id.profile_photo);
         edt_profile_username = findViewById(R.id.edt_profile_username);
         profile_continue_btn = findViewById(R.id.profile_continue_btn);
+        user_info_top_back = findViewById(R.id.user_info_top_back);
 
 
     }

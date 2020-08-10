@@ -10,7 +10,7 @@ public class UserDataModel extends ViewModel {
     private FirebaseUtilClass firebaseUtilClass;
 
     public UserDataModel() {
-        firebaseUtilClass = new FirebaseUtilClass();
+        firebaseUtilClass = FirebaseUtilClass.getInstance();
         currentUser = firebaseUtilClass.getUserData();
     }
 

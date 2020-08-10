@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.cookietech.adme.Activities.UserInfoActivity" />
+        <activity android:name="com.cookietech.adme.Activities.UserInfoActivity"
+            android:theme="@style/AppTheme2"/>
         <activity android:name="com.cookietech.adme.Activities.FindLocationActivity" />
         <activity android:name="com.cookietech.adme.Activities.AccessLocationActivity" />
         <activity android:name="com.cookietech.adme.Activities.ui.today.ViewServiceDetails" />

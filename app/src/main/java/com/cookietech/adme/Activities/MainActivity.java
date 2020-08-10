@@ -13,7 +13,7 @@ import com.cookietech.adme.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    private FirebaseUtilClass firebaseUtilClass = FirebaseUtilClass.getInstance();
     private SharedPreferences firstUsePreferences;
     private boolean isLocationSettingShowed = false;
 

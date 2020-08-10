@@ -40,6 +40,9 @@ import java.util.Objects;
 public class FirebaseUtilClass {
 
 
+    public static final String ENTRY_IS_PHONE_NO_VERIFIED = "phone_no_verified";
+    public static final String ENTRY_PHONE_NO_VERIFIED = "verified";
+    public static final String ENTRY_PHONE_NO_NOT_VERIFIED = "not_verified";
     private static final String TAG = "FirebaseUtilClass";
 
     public static final String LOCATION = "langLat";
@@ -135,7 +138,17 @@ public class FirebaseUtilClass {
     private FirebaseStorage storage;
     private FirebaseFunctions mFunctions;
 
-    public FirebaseUtilClass() {
+    private static FirebaseUtilClass instance = null;
+
+    public static FirebaseUtilClass getInstance(){
+        if(instance == null){
+            instance =  new FirebaseUtilClass();
+        }
+        return instance;
+    }
+
+
+    private FirebaseUtilClass() {
         userData = new MutableLiveData<>();
         db = FirebaseFirestore.getInstance();
         userRef = db.collection(USER_COLLECTION_ID);
@@ -184,7 +197,7 @@ public class FirebaseUtilClass {
         });
     }
 
-    public void createUser(FirebaseUser user, CreateUserCommunicator communicator){
+    public void createUser(FirebaseUser user, CreateUserCommunicator communicator,User new_user){
         userRef.document(user.getUid()).get().addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()) {
                 DocumentSnapshot document = task1.getResult();
@@ -199,42 +212,21 @@ public class FirebaseUtilClass {
                     // User hasn't created yet
                     // create new user in database
                     Log.d(TAG, "No such document");
-                    String username;
-                    String email = null;
-                    String phone = null;
-                    String profile_photo_url = "default_avatar";
-                    String NULL = "";
 
-                    if (user.getDisplayName() != null){
-                        username = user.getDisplayName();
-                    }
-                    else{
-                        username = "Adme User";
-                    }
-
-                    if(user.getEmail() != null){
-                        email = user.getEmail();
-                    }
-
-                    if (user.getPhoneNumber() != null){
-                        phone = user.getPhoneNumber();
-                    }
-
-                    if (user.getPhotoUrl() !=null){
-                        profile_photo_url = "user_photo";
-                    }
-
-                    String joined = String.valueOf(Objects.requireNonNull(user.getMetadata()).getCreationTimestamp());
-                    String user_id = user.getUid();
-                    User new_user = new User(username,email,phone,profile_photo_url,joined,user_id,"");
                     /*** Insert into fireStore database**/
                     userRef.document(user.getUid()).set(new_user).addOnSuccessListener(aVoid -> {
                         Log.d(TAG, "onSuccess: successfully created user");
                         communicator.onUserCreatedSuccessfully(new_user);
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            communicator.onUserCreationFailed(user);
+                        }
                     });
                 }
             } else {
                 Log.d(TAG, "get failed with ", task1.getException());
+                communicator.onUserCreationFailed(user);
             }
 
         });
@@ -443,7 +435,7 @@ public class FirebaseUtilClass {
     public interface CreateUserCommunicator{
         void userAlreadyExists(User user);
         void onUserCreatedSuccessfully(User user);
-
+        void onUserCreationFailed(FirebaseUser user);
     }
 
 

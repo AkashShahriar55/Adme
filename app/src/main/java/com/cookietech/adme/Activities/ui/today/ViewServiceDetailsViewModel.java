@@ -12,7 +12,7 @@ public class ViewServiceDetailsViewModel extends ViewModel {
     private DataRepository repository;
 
     public ViewServiceDetailsViewModel(){
-        repository = new DataRepository();
+        repository = DataRepository.getInstance();
 
     }
 

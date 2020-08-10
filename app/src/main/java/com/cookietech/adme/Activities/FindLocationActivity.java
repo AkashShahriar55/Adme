@@ -44,7 +44,7 @@ public class FindLocationActivity extends AppCompatActivity implements GoogleMap
     private CollectionReference userRef = db.collection("Adme_User");
 
     //firebase helper
-    FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    FirebaseUtilClass firebaseUtilClass = FirebaseUtilClass.getInstance();
 
     private LoadingDialog dialog;
 

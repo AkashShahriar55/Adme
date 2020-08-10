@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "395431133177",
-    "firebase_url": "https://adme-development.firebaseio.com",
-    "project_id": "adme-development",
-    "storage_bucket": "adme-development.appspot.com"
+    "project_number": "521991296159",
+    "firebase_url": "https://adme-production.firebaseio.com",
+    "project_id": "adme-production",
+    "storage_bucket": "adme-production.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:395431133177:android:9dde88e84224ff94b98728",
+        "mobilesdk_app_id": "1:521991296159:android:ae4dd76fdbc68547163eaa",
         "android_client_info": {
           "package_name": "com.cookietech.adme"
         }
       },
       "oauth_client": [
         {
-          "client_id": "395431133177-p6nnhtcd1vvfgnvsvb4hjn4b5bpvmhab.apps.googleusercontent.com",
+          "client_id": "521991296159-sv73atipiqjmpkun0pmq7oiq1qnqe31v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyChN7z42fn2GCURMsKNSWGiw7JQIpV33_k"
+          "current_key": "AIzaSyAfC5H4WvMwT6YLlqojpsoXZLZ751BoBg4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "395431133177-p6nnhtcd1vvfgnvsvb4hjn4b5bpvmhab.apps.googleusercontent.com",
+              "client_id": "521991296159-sv73atipiqjmpkun0pmq7oiq1qnqe31v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

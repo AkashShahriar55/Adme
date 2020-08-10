@@ -4,67 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.UserInfoActivity">
+    tools:context=".Activities.UserInfoActivity"
+    tools:layout_editor_absoluteY="25dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_photo"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginBottom="32dp"
-        android:src="@mipmap/default_user_photo"
-        app:civ_border_color="@color/add_service_step_txt_gray"
-        app:civ_border_width="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
-        app:layout_constraintEnd_toStartOf="@+id/guideline22"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/guideline15"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40"
-        app:layout_constraintVertical_chainStyle="packed"
-        >
-
-    </de.hdodenhof.circleimageview.CircleImageView>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/choose_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:background="@drawable/choose_photo_ic_bacground"
-        android:padding="8dp"
-        android:src="@drawable/ic_camera_alt_black"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_photo"
-        app:layout_constraintEnd_toEndOf="@+id/profile_photo"
-        app:layout_constraintStart_toStartOf="@+id/profile_photo" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/username"
-        android:textColor="@color/sv_primary"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/edt_profile_username"
-        app:layout_constraintEnd_toStartOf="@+id/guideline22"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline15"
-        app:layout_constraintTop_toBottomOf="@+id/profile_photo" />
-
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edt_profile_username"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/profile_continue_btn"
+        android:layout_marginTop="20dp"
+        android:hint="Write a username"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toStartOf="@+id/guideline22"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        android:textSize="16sp"
-        android:hint="@string/adme_user"/>
+        app:layout_constraintTop_toBottomOf="@+id/profile_photo">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tv_service_quotation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edt_phone_number"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Write your phone number"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toStartOf="@+id/guideline22"
+        app:layout_constraintStart_toStartOf="@+id/guideline15"
+        app:layout_constraintTop_toBottomOf="@+id/edt_profile_username">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline15"
@@ -83,8 +62,8 @@
     <Button
         android:id="@+id/profile_continue_btn"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/login_btn"
         android:backgroundTint="@color/login_btn_color"
         android:paddingTop="12dp"
@@ -96,8 +75,63 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline22"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline15" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_info_top_back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_user_info_top_back"
+        app:layout_constraintBottom_toTopOf="@+id/guideline23"
+        app:layout_constraintEnd_toStartOf="@+id/guideline22"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
-        app:layout_constraintTop_toBottomOf="@+id/edt_profile_username" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:text="update your info"
+            android:textColor="#FFFFFF"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_photo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/test_image"
+        app:civ_border_color="@color/add_service_step_txt_gray"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/user_info_top_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_info_top_back">
+
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/choose_photo"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/choose_photo_ic_bacground"
+        android:padding="8dp"
+        android:src="@drawable/ic_camera_alt_black"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_photo"
+        app:layout_constraintEnd_toEndOf="@+id/profile_photo" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

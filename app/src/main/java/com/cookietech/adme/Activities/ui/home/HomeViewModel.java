@@ -24,7 +24,7 @@ public class HomeViewModel extends ViewModel {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private MutableLiveData<List<Service>> localizedServices = new MutableLiveData<>();
     private MutableLiveData<List<Service>> allServiceList = new MutableLiveData<>();
-    private DataRepository repository = new DataRepository();
+    private DataRepository repository = DataRepository.getInstance();
     private MutableLiveData<User> userData = new MutableLiveData<>();
 
     public HomeViewModel() {

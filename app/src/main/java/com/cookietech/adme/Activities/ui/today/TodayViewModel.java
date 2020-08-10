@@ -30,7 +30,7 @@ public class TodayViewModel extends ViewModel {
     private FirebaseFirestore db;
 
     public TodayViewModel() {
-        repository = new DataRepository();
+        repository = DataRepository.getInstance();
         userData = repository.getUserData();
         db = FirebaseFirestore.getInstance();
         appointmentList = new MutableLiveData<List<Appointment>>();

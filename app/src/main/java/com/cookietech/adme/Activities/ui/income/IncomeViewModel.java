@@ -29,7 +29,7 @@ public class IncomeViewModel extends ViewModel {
 
     public IncomeViewModel() {
         db = FirebaseFirestore.getInstance();
-        repository = new DataRepository();
+        repository = DataRepository.getInstance();
         userData = repository.getUserData();
         rating_list =  new MutableLiveData<>();
     }

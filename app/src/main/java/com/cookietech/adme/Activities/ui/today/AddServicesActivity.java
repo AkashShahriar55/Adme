@@ -73,7 +73,7 @@ public class AddServicesActivity extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance("gs://adme-bf48a.appspot.com");
     StorageReference service_portfolio_ref = storage.getReference().child(FirebaseUtilClass.STORAGE_FOLDER_SERVICE_PORTFOLIO);
     UploadTask uploadTask ;
-    FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    FirebaseUtilClass firebaseUtilClass =FirebaseUtilClass.getInstance();
     LoadingDialog dialog;
 
     private boolean isEditing = false;

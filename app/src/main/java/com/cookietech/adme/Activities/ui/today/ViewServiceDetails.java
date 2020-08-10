@@ -124,7 +124,7 @@ public class ViewServiceDetails extends AppCompatActivity implements OnMapReadyC
                     .apply(RequestOptions.circleCropTransform())
                     .into(circleImageView);
         }else if(mCurrentService.getPic_url().equals(FirebaseUtilClass.VALUE_USER_PHOTO)){
-            FirebaseUser user = new FirebaseUtilClass().getCurrentUser();
+            FirebaseUser user = FirebaseUtilClass.getInstance().getCurrentUser();
             Glide.with(ViewServiceDetails.this)
                     .load(user.getPhotoUrl())
                     .apply(RequestOptions.circleCropTransform())

@@ -47,7 +47,7 @@ public class AddServiceGallery extends Fragment implements AddServicesActivity.S
     private boolean isEditing;
     private List<String> imageUrls;
     private String serviceRef= "";
-    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    private FirebaseUtilClass firebaseUtilClass = FirebaseUtilClass.getInstance();
 
 
     public AddServiceGallery(Uri imageUris[],List<String> imageUrls,boolean isEditing,String serviceRef ) {

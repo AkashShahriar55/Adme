@@ -40,7 +40,7 @@ public class LandingActivity extends AppCompatActivity implements BottomNavigati
     private String label = null;
     private boolean isClient = false;
     private User mCurrentUser;
-    private FirebaseUtilClass firebaseUtilClass = new FirebaseUtilClass();
+    private FirebaseUtilClass firebaseUtilClass = FirebaseUtilClass.getInstance();
 
     final Fragment fragment1 = new TodayFragment();
     final Fragment fragment2 = new LeaderBoardFragment();

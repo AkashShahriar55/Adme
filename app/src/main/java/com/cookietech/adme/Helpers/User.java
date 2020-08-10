@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.cookietech.adme.Architecture.FirebaseUtilClass;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class User implements Parcelable {
     public User() {
     }
 
-    public User(String mUsername, String mEmail, String phone, String profile_image_url, String mJoined, String mUserId, String device_token) {
+    public User(String mUsername, String mEmail, String phone, String profile_image_url, String mJoined, String mUserId, String device_token,String phone_no_verified) {
         this.user_name = mUsername;
         this.joined = mJoined;
         this.mUserId = mUserId;
@@ -57,6 +58,7 @@ public class User implements Parcelable {
         contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_PRIVACY,FirebaseUtilClass.ENTRY_PRIVACY_PUBLIC);
         contacts.put(FirebaseUtilClass.ENTRY_EMAIL,mEmail);
         contacts.put(FirebaseUtilClass.ENTRY_EMAIL_PRIVACY,FirebaseUtilClass.ENTRY_PRIVACY_PUBLIC);
+        contacts.put(FirebaseUtilClass.ENTRY_PHONE_NO_VERIFIED,phone_no_verified);
 
 
     }

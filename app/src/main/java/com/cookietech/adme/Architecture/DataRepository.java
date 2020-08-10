@@ -1,5 +1,6 @@
 package com.cookietech.adme.Architecture;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -14,10 +15,22 @@ public class DataRepository {
     private MutableLiveData<Service> serviceData;
     private MutableLiveData<List<Service>> allServiceList;
     private FirebaseUtilClass firebaseUtilClass;
+    private static DataRepository instance;
 
-    public DataRepository() {
-        firebaseUtilClass = new FirebaseUtilClass();
+    public static DataRepository getInstance(){
+        if(instance == null)
+            instance = new DataRepository();
+        return instance;
     }
+
+    private DataRepository() {
+        firebaseUtilClass = FirebaseUtilClass.getInstance();
+    }
+
+
+
+
+
 
     //for profile update
     public void updateUserName(String name)
