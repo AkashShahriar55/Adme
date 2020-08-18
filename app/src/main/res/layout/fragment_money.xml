@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_background"
-    tools:context=".Activities.ui.income.MoneyHistoryActicity">
+    tools:context=".activities.ui.income.MoneyHistoryActicity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl1"

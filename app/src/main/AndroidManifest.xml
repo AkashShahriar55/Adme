@@ -19,12 +19,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.cookietech.adme.Activities.UserInfoActivity"
+        <activity android:name="com.cookietech.adme.activities.UserInfoActivity"
             android:theme="@style/AppTheme2"/>
-        <activity android:name="com.cookietech.adme.Activities.FindLocationActivity" />
-        <activity android:name="com.cookietech.adme.Activities.AccessLocationActivity" />
-        <activity android:name="com.cookietech.adme.Activities.ui.today.ViewServiceDetails" />
-        <activity android:name="com.cookietech.adme.Activities.ui.today.AddServicesActivity" />
+        <activity android:name="com.cookietech.adme.activities.FindLocationActivity" />
+        <activity android:name="com.cookietech.adme.activities.AccessLocationActivity" />
+        <activity android:name="com.cookietech.adme.activities.ui.today.ViewServiceDetails" />
+        <activity android:name="com.cookietech.adme.activities.ui.today.AddServicesActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -37,26 +37,26 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name="com.cookietech.adme.Activities.LandingActivity"/>
-        <activity android:name="com.cookietech.adme.Activities.RegistrationActivity" />
-        <activity android:name="com.cookietech.adme.Activities.LoginActivity" />
+        <activity android:name="com.cookietech.adme.activities.LandingActivity"/>
+        <activity android:name="com.cookietech.adme.activities.RegistrationActivity" />
+        <activity android:name="com.cookietech.adme.activities.LoginActivity" />
 
         <!-- for handling profile starts -->
-        <activity android:name="com.cookietech.adme.Activities.ui.profile.Contacts" />
-        <activity android:name="com.cookietech.adme.Activities.ui.profile.PrivacySettings" />
-        <activity android:name="com.cookietech.adme.Activities.ui.profile.AccountSubscriptions" />
-        <activity android:name="com.cookietech.adme.Activities.ui.profile.ChangeMode" />
-        <activity android:name="com.cookietech.adme.Activities.ui.profile.Helps" />
-        <activity android:name="com.cookietech.adme.Activities.ui.profile.NotificationSettings" />
-        <activity android:name="com.cookietech.adme.Activities.ui.profile.ManageProfile" />
-        <activity android:name="com.cookietech.adme.Activities.ui.profile.ChangePassword" />
+        <activity android:name="com.cookietech.adme.activities.ui.profile.Contacts" />
+        <activity android:name="com.cookietech.adme.activities.ui.profile.PrivacySettings" />
+        <activity android:name="com.cookietech.adme.activities.ui.profile.AccountSubscriptions" />
+        <activity android:name="com.cookietech.adme.activities.ui.profile.ChangeMode" />
+        <activity android:name="com.cookietech.adme.activities.ui.profile.Helps" />
+        <activity android:name="com.cookietech.adme.activities.ui.profile.NotificationSettings" />
+        <activity android:name="com.cookietech.adme.activities.ui.profile.ManageProfile" />
+        <activity android:name="com.cookietech.adme.activities.ui.profile.ChangePassword" />
         <!-- for handling profile ends -->
 
         <activity
-            android:name="com.cookietech.adme.Activities.ui.today.ServiceProviderQuotationActivity"
+            android:name="com.cookietech.adme.activities.ui.today.ServiceProviderQuotationActivity"
             android:theme="@style/AppTheme2" >
         </activity>
-        <activity android:name="com.cookietech.adme.Activities.MainActivity">
+        <activity android:name="com.cookietech.adme.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -86,26 +86,26 @@
         </activity>
 
         <!-- for income -->
-        <activity android:name="com.cookietech.adme.Activities.ui.income.RatingAndHistoryActicity" />
-        <activity android:name="com.cookietech.adme.Activities.ui.income.MoneyHistoryActicity" />
-        <activity android:name="com.cookietech.adme.Activities.ui.today.NotificationActivity" />
-        <activity android:name="com.cookietech.adme.Activities.ui.home.ServiceProviderSearchActivity" />
+        <activity android:name="com.cookietech.adme.activities.ui.income.RatingAndHistoryActicity" />
+        <activity android:name="com.cookietech.adme.activities.ui.income.MoneyHistoryActicity" />
+        <activity android:name="com.cookietech.adme.activities.ui.today.NotificationActivity" />
+        <activity android:name="com.cookietech.adme.activities.ui.home.ServiceProviderSearchActivity" />
         <activity
-            android:name="com.cookietech.adme.Activities.ui.home.ServiceProviderDetailsActivity"
+            android:name="com.cookietech.adme.activities.ui.home.ServiceProviderDetailsActivity"
             android:theme="@style/AppTheme2">
         </activity>
 
         <!-- for invoice -->
         <activity
-            android:name="com.cookietech.adme.Activities.ui.income.InvoiceActivity"
+            android:name="com.cookietech.adme.activities.ui.income.InvoiceActivity"
             android:theme="@style/AppTheme2">
         </activity>
         <activity
-            android:name="com.cookietech.adme.Activities.ui.invoice.Invoice"
+            android:name="com.cookietech.adme.activities.ui.invoice.Invoice"
             android:theme="@style/AppTheme2">
         </activity>
         <activity
-            android:name="com.cookietech.adme.Activities.ui.invoice.GiveRatingActivity"
+            android:name="com.cookietech.adme.activities.ui.invoice.GiveRatingActivity"
             android:theme="@style/AppTheme2">
         </activity>
 

@@ -66,4 +66,8 @@ public class DataRepository {
         allServiceList = firebaseUtilClass.getServices();
         return allServiceList;
     }
+
+    public boolean isAlreadyLoggedIn(){
+        return firebaseUtilClass.checkIfAlreadyLoggedIn();
+    }
 }

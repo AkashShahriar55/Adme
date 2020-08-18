@@ -7,24 +7,24 @@
 
     <fragment
         android:id="@+id/navigation_today"
-        android:name="com.cookietech.adme.Activities.ui.today.TodayFragment"
+        android:name="com.cookietech.adme.activities.ui.today.TodayFragment"
         android:label="@string/title_today"
         tools:layout="@layout/fragment_today" />
 
     <fragment
         android:id="@+id/navigation_leaderboard"
-        android:name="com.cookietech.adme.Activities.ui.leaderboard.LeaderBoardFragment"
+        android:name="com.cookietech.adme.activities.ui.leaderboard.LeaderBoardFragment"
         android:label="@string/title_leaderboard"
         tools:layout="@layout/fragment_leaderboard" />
 
     <fragment
         android:id="@+id/navigation_income"
-        android:name="com.cookietech.adme.Activities.ui.income.IncomeFragment"
+        android:name="com.cookietech.adme.activities.ui.income.IncomeFragment"
         android:label="@string/title_income"
         tools:layout="@layout/fragment_income" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.cookietech.adme.Activities.ui.profile.ProfileFragment"
+        android:name="com.cookietech.adme.activities.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

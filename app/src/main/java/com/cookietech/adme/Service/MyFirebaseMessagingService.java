@@ -14,7 +14,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.cookietech.adme.Activities.MainActivity;
+import com.cookietech.adme.activities.MainActivity;
 import com.cookietech.adme.Architecture.FirebaseUtilClass;
 import com.cookietech.adme.R;
 import com.google.firebase.messaging.FirebaseMessagingService;

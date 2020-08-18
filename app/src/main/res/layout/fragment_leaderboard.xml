@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.ui.leaderboard.LeaderBoardFragment"
+    tools:context=".activities.ui.leaderboard.LeaderBoardFragment"
     android:background="@color/default_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout

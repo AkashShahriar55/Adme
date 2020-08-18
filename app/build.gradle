@@ -31,6 +31,10 @@ android {
         targetCompatibility = 1.8
     }
 
+    viewBinding {
+        enabled = true
+    }
+
 }
 
 apply plugin: 'com.android.application'
@@ -45,20 +49,20 @@ def lottieVersion = '3.4.0'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation "com.google.android.material:material:1.1.0"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "com.google.android.material:material:1.2.0"
     //noinspection GradleCompatible
     implementation 'com.android.support:design:28.0.0'
-    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
-    implementation 'androidx.navigation:navigation-fragment:2.2.2'
-    implementation 'androidx.navigation:navigation-ui:2.2.2'
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-rc1"
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.0'
 
 
 
@@ -73,7 +77,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
 
     //For google
-    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
 
     //For picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -104,15 +108,15 @@ dependencies {
     //firebase
     //  Firebase SDK for Google Analytics.
     // Add the Firebase SDK for Google Analytics
-    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-analytics:17.5.0'
 
     // Add the SDK for Firebase Cloud Messaging
-    implementation 'com.google.firebase:firebase-messaging:20.2.1'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
 
     //  Crashlytics SDK.
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
-    implementation 'com.google.firebase:firebase-auth:19.3.1'
-    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'com.google.firebase:firebase-firestore:21.5.0'
     implementation 'com.google.guava:guava:27.0.1-android'
 
     //for loading animation
@@ -123,7 +127,7 @@ dependencies {
 
     //For Country Code Picker
     implementation 'com.hbb20:ccp:2.3.9'
-    implementation 'androidx.work:work-runtime:2.1.0'
+    implementation 'androidx.work:work-runtime:2.4.0'
 
     //invoice
 //    implementation project(path: ':invoice')
