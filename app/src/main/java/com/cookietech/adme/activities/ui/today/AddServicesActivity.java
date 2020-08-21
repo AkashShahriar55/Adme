@@ -70,7 +70,7 @@ public class AddServicesActivity extends AppCompatActivity {
     int main_count = 0,download_count = 0;
     private String serviceRef = null;
 
-    FirebaseStorage storage = FirebaseStorage.getInstance("gs://adme-bf48a.appspot.com");
+    FirebaseStorage storage = FirebaseStorage.getInstance("gs://adme-production.appspot.com");
     StorageReference service_portfolio_ref = storage.getReference().child(FirebaseUtilClass.STORAGE_FOLDER_SERVICE_PORTFOLIO);
     UploadTask uploadTask ;
     FirebaseUtilClass firebaseUtilClass =FirebaseUtilClass.getInstance();

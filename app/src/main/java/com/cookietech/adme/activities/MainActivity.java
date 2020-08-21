@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if(firebaseUtilClass.checkIfAlreadyLoggedIn()){
                             startLandingActivity();
+                            //startUserInfoActivity();
+                            //startAccessLocationActivity();
 
                         }else{
                             ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this,bannerLogo,"banner_logo");
@@ -78,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void startLandingActivity() {
         Intent intent = new Intent(MainActivity.this, LandingActivity.class);
+        startActivity(intent);
+    }
+
+    private void startUserInfoActivity() {
+        Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
         startActivity(intent);
     }
 }

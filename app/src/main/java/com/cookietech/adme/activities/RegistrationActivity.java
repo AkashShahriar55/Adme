@@ -151,15 +151,18 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
                 codeSent = true;
                 CustomToast.makeSuccessToast(RegistrationActivity.this,"A Verification Code is sent.",Toast.LENGTH_SHORT).show();
                 mVerificationId = verificationId;
+
                 mResendToken = token;
                 phoneText.setEnabled(false);
                 ccp.setEnabled(false);
+                goto_login_btn.setEnabled(false);
                 StartTimer();
                 reg_join_btn.setVisibility(View.GONE);
                 codeText.setVisibility(View.VISIBLE);
                 policy_text.setVisibility(View.GONE);
                 resend_code_btn.setVisibility(View.VISIBLE);
                 timer_txt.setVisibility(View.VISIBLE);
+
             }
         };
 
@@ -181,6 +184,8 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
                 policy_text.setVisibility(View.GONE);
                 resend_code_btn.setVisibility(View.VISIBLE);
                 timer_txt.setVisibility(View.VISIBLE);
+                phoneText.setEnabled(false);
+                ccp.setEnabled(false);
                 timeInMillSec = savedInstanceState.getLong(CURRENT_TIMER);
                 if(timeInMillSec == 0){
                     resend_code_btn.setEnabled(true);
@@ -213,6 +218,7 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
     private void sendVerificationCode() {
 
         phoneNumber = ccp.getFullNumberWithPlus();
+
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
                 120,                 // Timeout duration
@@ -237,6 +243,7 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
                 resend_code_btn.setEnabled(true);
                 timer_txt.setText(null);
                 timer_txt.setVisibility(View.GONE);
+                goto_login_btn.setEnabled(true);
 
             }
         }.start();
@@ -314,6 +321,10 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
     }
     private void startUserInfoActivity() {
         Intent intent = new Intent(RegistrationActivity.this, UserInfoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("login_method","phone");
+        //Toast.makeText(this, "called", Toast.LENGTH_SHORT).show();
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -461,6 +472,8 @@ public class RegistrationActivity extends AppCompatActivity implements FirebaseU
             }
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, verificationCodeString.toString());
             signInWithPhoneAuthCredential(credential);
+
+
         }
     }
 

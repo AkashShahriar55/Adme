@@ -71,7 +71,7 @@
             android:id="@+id/phoneNumberHolder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="64dp"
             android:background="@drawable/bg_registration_phone"
             android:padding="5dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
@@ -117,7 +117,8 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bar"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:maxLength="11"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

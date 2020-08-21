@@ -7,9 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.cookietech.adme.Helpers.LoadingDialog;
 import com.cookietech.adme.Helpers.MyPlaces;
 import com.cookietech.adme.Helpers.Service;
 import com.cookietech.adme.Helpers.User;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,7 +31,9 @@ import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,6 +141,7 @@ public class FirebaseUtilClass {
     private CollectionReference servicesRef;
     private FirebaseStorage storage;
     private FirebaseFunctions mFunctions;
+    private LoadingDialog dialog;
 
     private static FirebaseUtilClass instance = null;
 
@@ -155,7 +160,7 @@ public class FirebaseUtilClass {
         servicesRef = db.collection(COLLECTION_ADME_SERVICE_LIST);
         mAuth = FirebaseAuth.getInstance();
         mFunctions = FirebaseFunctions.getInstance();
-        storage = FirebaseStorage.getInstance("gs://adme-bf48a.appspot.com");
+        storage = FirebaseStorage.getInstance("gs://adme-production.appspot.com");
     }
 
     public MutableLiveData<User> getUserData() {
@@ -436,12 +441,6 @@ public class FirebaseUtilClass {
         void userAlreadyExists(User user);
         void onUserCreatedSuccessfully(User user);
         void onUserCreationFailed(FirebaseUser user);
-    }
-
-
-    public void updateProfilePhoto(Uri uri){
-        StorageReference profile_pic_storage_ref = storage.getReference().child(STORAGE_FOLDER_PROFILE_PICTURE);
-
     }
 
 

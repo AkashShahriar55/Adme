@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
 
     private void startUserInfoActivity() {
         Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
-        intent.putExtra("user_data",new_user);
+
         startActivity(intent);
     }
 
@@ -286,9 +286,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseUtilClas
             phone = user.getPhoneNumber();
         }
 
-        if (user.getPhotoUrl() !=null){
-            profile_photo_url = "user_photo";
-        }
+
 
         String joined = String.valueOf(Objects.requireNonNull(user.getMetadata()).getCreationTimestamp());
         String user_id = user.getUid();
